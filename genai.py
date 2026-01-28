@@ -566,7 +566,7 @@ elif active_tab == "📊 Data Visualization":
             ax.title.set_color("auto")
             ax.xaxis.label.set_color("auto")
             ax.yaxis.label.set_color("auto")
-            ax.tick_params(colors="auto")
+            
             ax.grid(alpha=0.25)
 
 
