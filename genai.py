@@ -374,7 +374,7 @@ elif active_tab == "📊 Data Visualization":
         # ---------- FIXED PIE FIG ----------
         def pie_figure():
             fig, ax = plt.subplots(
-                figsize=(2, 1.6),   # ✅ laptop friendly
+                figsize=(3.2, 3),   # ✅ laptop friendly
                 facecolor="#0E1117"
             )
             ax.set_facecolor("#0E1117")
@@ -407,7 +407,7 @@ elif active_tab == "📊 Data Visualization":
             plt.tight_layout()
             plt.tight_layout()
 
-            st.pyplot(fig, use_container_width=True)
+            st.pyplot(fig, use_container_width=False)
 
         # ================================
         # PROGRAMME-WISE AI USAGE
@@ -431,7 +431,7 @@ elif active_tab == "📊 Data Visualization":
                          pad=12)
             ax.axis("equal")
             plt.tight_layout()
-            st.pyplot(fig, use_container_width=True)
+            st.pyplot(fig, use_container_width=False)
 
 
         # ================================
@@ -460,7 +460,7 @@ elif active_tab == "📊 Data Visualization":
             ax.axis("equal")
             plt.tight_layout()
 
-            st.pyplot(fig, use_container_width=True)
+            st.pyplot(fig, use_container_width=False)
 
 # =========================================================
 # RELIABILITY
