@@ -733,9 +733,9 @@ elif active_tab == "📑 Tests":
             )
 
 
-   
+       
 # =========================================================
 # FOOTER
 # =========================================================
 st.markdown("---")
-st.caption("MSc Statistics | Dashboard Ready for Review")
+st.caption("Alpha Version | MSc Statistics | Dashboard Ready for Review")
