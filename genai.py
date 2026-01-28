@@ -501,9 +501,10 @@ elif active_tab == "📊 Data Visualization":
             counts = df2[col].value_counts().reset_index()
             counts.columns = ["AI Tool", "Number of Students"]
 
-            sns.set_theme(style="whitegrid", font_scale=1.1)
+            sns.set_theme(style="ticks", font_scale=1.1)
 
-            fig, ax = plt.subplots(figsize=(10, 6))
+            fig, ax = plt.subplots(figsize=(10, 6),facecolor="none")
+            ax.set_facecolor("none")
             sns.barplot(
                 data=counts,
                 x="AI Tool",
@@ -537,9 +538,10 @@ elif active_tab == "📊 Data Visualization":
                 value_name="Number of Students"
             )
 
-            sns.set_theme(style="whitegrid", font_scale=1.1)
+            sns.set_theme(style="ticks", font_scale=1.1)
 
-            fig, ax = plt.subplots(figsize=(12, 7))
+            fig, ax = plt.subplots(figsize=(12, 7),"none")
+            ax.set_facecolor("none")
             sns.barplot(
                 data=df3_long,
                 x="Usage Purpose",
