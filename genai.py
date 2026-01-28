@@ -409,26 +409,24 @@ elif active_tab == "📊 Data Visualization":
         # PROGRAMME-WISE AI USAGE
         # ================================
         elif pie_type == "Programme-wise AI Usage":
-
             sizes = [47, 112, 3, 59]
             labels = ["PG – Yes", "UG – Yes", "PG – No", "UG – No"]
-
             fig, ax = pie_figure()
-            ax.pie(
-                sizes,
-                labels=labels,
-                autopct="%1.1f%%",
-                startangle=90,
-                radius=0.68,
-                colors=["#4C72B0", "#55A868", "#C44E52", "#8172B3"],
-                wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-                textprops={"color": "white", "fontsize": 9}
-            )
-
-            ax.set_title("Programme-wise AI Usage Distribution", color="white", fontsize=12)
+            ax.pie(sizes,labels=labels,
+                   autopct="%1.1f%%",
+                   startangle=90,
+                   radius=0.68,
+                   colors=["#4C72B0", "#55A868", "#C44E52", "#8172B3"],
+                   wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
+                   textprops={"color": "white", "fontsize": 9})
+            ax.set_title("Programme-wise AI Usage Distribution",
+                         color="white",
+                         fontsize=12,
+                         pad=12)
             ax.axis("equal")
+            plt.tight_layout()
+            st.pyplot(fig, use_container_width=True)
 
-            st.pyplot(fig, use_container_width=False)
 
         # ================================
         # GENDER-WISE AI USAGE
