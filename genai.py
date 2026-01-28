@@ -402,6 +402,8 @@ elif active_tab == "📊 Data Visualization":
 
             ax.set_title("Overall AI Usage Among Students", color="white", fontsize=12)
             ax.axis("equal")
+            plt.tight_layout()
+            plt.tight_layout()
 
             st.pyplot(fig, use_container_width=False)
 
@@ -450,6 +452,7 @@ elif active_tab == "📊 Data Visualization":
 
             ax.set_title("Gender-wise AI Usage Distribution", color="white", fontsize=12)
             ax.axis("equal")
+            plt.tight_layout()
 
             st.pyplot(fig, use_container_width=False)
 
