@@ -374,7 +374,7 @@ elif active_tab == "📊 Data Visualization":
         # ---------- FIXED PIE FIG ----------
         def pie_figure():
             fig, ax = plt.subplots(
-                figsize=(2.6, 2.2),   # ✅ laptop friendly
+                figsize=(3.2, 2.8),   # ✅ laptop friendly
                 facecolor="#0E1117"
             )
             ax.set_facecolor("#0E1117")
