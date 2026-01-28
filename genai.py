@@ -277,6 +277,12 @@ elif active_tab == "📊 Data Visualization":
 
     st.header("Data Visualization")
 
+    # ---------- PIE FIGURE (DEFINED ONCE) ----------
+    def pie_figure():
+        fig, ax = plt.subplots(figsize=(3.2, 3), facecolor="#0E1117")
+        ax.set_facecolor("#0E1117")
+        return fig, ax
+
     viz_type = st.selectbox(
         "Select Visualization Type",
         [
@@ -367,22 +373,14 @@ elif active_tab == "📊 Data Visualization":
             ]
         )
 
-        def pie_figure():
-            fig, ax = plt.subplots(figsize=(3.2, 3), facecolor="#0E1117")
-            ax.set_facecolor("#0E1117")
-            return fig, ax
-
         if pie_type == "Overall AI Usage":
             sizes = [159, 62]
             labels = ["Yes", "No"]
 
             fig, ax = pie_figure()
             ax.pie(
-                sizes,
-                labels=labels,
-                autopct="%1.1f%%",
-                startangle=90,
-                radius=0.68,
+                sizes, labels=labels, autopct="%1.1f%%",
+                startangle=90, radius=0.68,
                 colors=["#4C72B0", "#DD8452"],
                 wedgeprops={"edgecolor": "#1f2937"},
                 textprops={"color": "white", "fontsize": 7}
@@ -397,11 +395,8 @@ elif active_tab == "📊 Data Visualization":
 
             fig, ax = pie_figure()
             ax.pie(
-                sizes,
-                labels=labels,
-                autopct="%1.1f%%",
-                startangle=90,
-                radius=0.68,
+                sizes, labels=labels, autopct="%1.1f%%",
+                startangle=90, radius=0.68,
                 colors=["#4C72B0", "#55A868", "#C44E52", "#8172B3"],
                 wedgeprops={"edgecolor": "#1f2937"},
                 textprops={"color": "white", "fontsize": 7}
@@ -416,11 +411,8 @@ elif active_tab == "📊 Data Visualization":
 
             fig, ax = pie_figure()
             ax.pie(
-                sizes,
-                labels=labels,
-                autopct="%1.1f%%",
-                startangle=90,
-                radius=0.68,
+                sizes, labels=labels, autopct="%1.1f%%",
+                startangle=90, radius=0.68,
                 colors=["#4C72B0", "#DD8452", "#55A868", "#C44E52"],
                 wedgeprops={"edgecolor": "#1f2937"},
                 textprops={"color": "white", "fontsize": 7}
@@ -436,7 +428,8 @@ elif active_tab == "📊 Data Visualization":
 
         st.subheader("AI Tools Used for Academic Purposes")
 
-        df2 = pd.read_excel("Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
+        df2 = pd.read_excel(
+            r"Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
             sheet_name="Sheet2"
         )
 
@@ -452,7 +445,7 @@ elif active_tab == "📊 Data Visualization":
         labels = counts.index
         sizes = counts.values
 
-        fig, ax = pie_figure()   # SAME SIZE AS OTHER PIE CHARTS
+        fig, ax = pie_figure()   # ✅ NOW DEFINED
 
         ax.pie(
             sizes,
@@ -477,7 +470,6 @@ elif active_tab == "📊 Data Visualization":
         plt.tight_layout()
         st.pyplot(fig, use_container_width=False)
 
-    
            
 # =========================================================
 # RELIABILITY
