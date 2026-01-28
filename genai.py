@@ -71,6 +71,9 @@ st.markdown("---")
 # =========================================================
 # NAVIGATION
 # =========================================================
+st.sidebar.title("📊 GenAI Project")
+st.sidebar.caption("MSc Statistics – Research Dashboard")
+
 tabs = [
     "📘 Overview",
     "🎯 Objectives",
@@ -82,8 +85,12 @@ tabs = [
     "🚀 What Next?"
 ]
 
-active_tab = st.radio("", tabs, horizontal=True)
-st.markdown("---")
+active_tab = st.sidebar.radio(
+    "Navigation",
+    tabs
+)
+
+
 
 # =========================================================
 # OVERVIEW
