@@ -402,7 +402,7 @@ elif active_tab == "📊 Data Visualization":
                 pctdistance=0.6
             )
 
-            ax.set_title("Overall AI Usage Among Students", color="white", fontsize=12)
+            ax.set_title("Overall AI Usage Among Students", color="white", fontsize=9)
             ax.axis("equal")
             plt.tight_layout()
             plt.tight_layout()
@@ -427,7 +427,7 @@ elif active_tab == "📊 Data Visualization":
                    pctdistance=0.6)
             ax.set_title("Programme-wise AI Usage Distribution",
                          color="white",
-                         fontsize=12,
+                         fontsize=9,
                          pad=12)
             ax.axis("equal")
             plt.tight_layout()
@@ -456,7 +456,7 @@ elif active_tab == "📊 Data Visualization":
                 pctdistance=0.6
             )
 
-            ax.set_title("Gender-wise AI Usage Distribution", color="white", fontsize=12)
+            ax.set_title("Gender-wise AI Usage Distribution", color="white", fontsize=9)
             ax.axis("equal")
             plt.tight_layout()
 
