@@ -550,6 +550,7 @@ elif active_tab == "📊 Data Visualization":
 
             st.plotly_chart(fig, use_container_width=True)
 
+
 # =========================================================
 # HYPOTHESES / TESTS TAB
 # =========================================================
@@ -733,9 +734,9 @@ elif active_tab == "📑 Tests":
             )
 
 
-       
+   
 # =========================================================
 # FOOTER
 # =========================================================
 st.markdown("---")
-st.caption("Alpha Version | MSc Statistics | Dashboard Ready for Review")
+st.caption("MSc Statistics | Dashboard Ready for Review")
