@@ -560,6 +560,16 @@ elif active_tab == "📊 Data Visualization":
             ax.set_ylabel("Number of Students")
             ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha="right")
             ax.legend(title="Usage Frequency")
+            legend = ax.legend(title="Usage Frequency")
+            legend.get_frame().set_facecolor("none")
+            legend.get_frame().set_edgecolor("none")
+            ax.title.set_color("auto")
+            ax.xaxis.label.set_color("auto")
+            ax.yaxis.label.set_color("auto")
+            ax.tick_params(colors="auto")
+            ax.grid(alpha=0.25)
+
+
 
             st.pyplot(fig)
 
