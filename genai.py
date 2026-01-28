@@ -420,24 +420,70 @@ elif active_tab == "📊 Data Visualization":
             st.pyplot(fig, use_container_width=False)
 
     # =====================================================
-    # 3. ACADEMIC PURPOSE – NESTED BAR CHARTS
+    # 3. ACADEMIC PURPOSE – PIE + BAR CHARTS
     # =====================================================
     elif viz_type == "AI Tools Used for Academic Purposes":
 
-        st.subheader("Academic Purpose–Based Visualizations")
+        st.subheader("AI Tools Used for Academic Purposes")
 
         academic_viz = st.selectbox(
             "Select Academic Visualization",
             [
-                "Most Frequently Used AI Tools",
-                "Frequency of GenAI Usage Across Academic Purposes"
+                "Pie Chart – AI Tools Used",
+                "Bar Chart – Most Frequently Used AI Tools",
+                "Grouped Bar Chart – Frequency vs Academic Purpose"
             ]
         )
 
         # ---------------------------------
-        # 3.1 BAR CHART – AI TOOLS FREQUENCY
+        # 3.1 PIE CHART (ADDED BACK ✅)
         # ---------------------------------
-        if academic_viz == "Most Frequently Used AI Tools":
+        if academic_viz == "Pie Chart – AI Tools Used":
+
+            df2 = pd.read_excel(
+                r"Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
+                sheet_name="Sheet2"
+            )
+
+            df2.columns = df2.columns.astype(str).str.strip()
+            col = df2.columns[0]
+
+            df2[col] = df2[col].replace({
+                "Perplexity": "Perplexity / Copilot",
+                "Copilot": "Perplexity / Copilot"
+            })
+
+            counts = df2[col].value_counts()
+            labels = counts.index
+            sizes = counts.values
+
+            fig, ax = pie_figure()
+            ax.pie(
+                sizes,
+                labels=labels,
+                autopct="%1.1f%%",
+                startangle=140,
+                radius=0.68,
+                colors=sns.color_palette("Spectral", len(labels)),
+                wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
+                textprops={"color": "white", "fontsize": 7},
+                labeldistance=1.05,
+                pctdistance=0.6
+            )
+
+            ax.set_title(
+                "Distribution of AI Tools Used for Academic Purposes",
+                color="white",
+                fontsize=9
+            )
+
+            ax.axis("equal")
+            st.pyplot(fig, use_container_width=False)
+
+        # ---------------------------------
+        # 3.2 BAR CHART – AI TOOLS FREQUENCY
+        # ---------------------------------
+        elif academic_viz == "Bar Chart – Most Frequently Used AI Tools":
 
             df2 = pd.read_excel(
                 r"Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
@@ -474,7 +520,7 @@ elif active_tab == "📊 Data Visualization":
             st.pyplot(fig)
 
         # ---------------------------------
-        # 3.2 GROUPED BAR – FREQUENCY vs PURPOSE
+        # 3.3 GROUPED BAR – FREQUENCY vs PURPOSE
         # ---------------------------------
         else:
 
@@ -515,7 +561,6 @@ elif active_tab == "📊 Data Visualization":
 
             st.pyplot(fig)
 
-           
 # =========================================================
 # RELIABILITY
 # =========================================================
