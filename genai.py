@@ -397,7 +397,9 @@ elif active_tab == "📊 Data Visualization":
                 radius=0.68,
                 colors=["#4C72B0", "#DD8452"],
                 wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-                textprops={"color": "white", "fontsize": 9}
+                textprops={"color": "white", "fontsize": 7},
+                labeldistance=1.05,
+                pctdistance=0.6
             )
 
             ax.set_title("Overall AI Usage Among Students", color="white", fontsize=12)
@@ -420,7 +422,9 @@ elif active_tab == "📊 Data Visualization":
                    radius=0.68,
                    colors=["#4C72B0", "#55A868", "#C44E52", "#8172B3"],
                    wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-                   textprops={"color": "white", "fontsize": 9})
+                   textprops={"color": "white", "fontsize": 7},
+                  labeldistance=1.05,
+                   pctdistance=0.6)
             ax.set_title("Programme-wise AI Usage Distribution",
                          color="white",
                          fontsize=12,
@@ -447,7 +451,9 @@ elif active_tab == "📊 Data Visualization":
                 radius=0.68,
                 colors=["#4C72B0", "#DD8452", "#55A868", "#C44E52"],
                 wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-                textprops={"color": "white", "fontsize": 9}
+                textprops={"color": "white", "fontsize": 7},
+                labeldistance=1.05,
+                pctdistance=0.6
             )
 
             ax.set_title("Gender-wise AI Usage Distribution", color="white", fontsize=12)
