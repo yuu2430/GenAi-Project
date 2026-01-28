@@ -82,9 +82,7 @@ tabs = [
     "📐 Sampling & Sample Size",
     "🧪 Pilot Survey",
     "📊 Data Visualization",
-    "🧠 Reliability",
-    "📑 Tests",
-    "🚀 What Next?"
+    "📑 Tests"
 ]
 
 active_tab = st.sidebar.radio(
