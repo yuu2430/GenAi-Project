@@ -269,23 +269,17 @@ elif active_tab == "🧪 Pilot Survey":
 
 
 # =========================================================
-# DATA VISUALIZATION
+# DATA VISUALIZATION (FINAL & CLEAN)
 # =========================================================
 elif active_tab == "📊 Data Visualization":
 
     st.header("Data Visualization")
 
-    # ---------- COMMON PIE FIG ----------
-    def pie_figure():
-        fig, ax = plt.subplots(figsize=(3.2, 3), facecolor="#0E1117")
-        ax.set_facecolor("#0E1117")
-        return fig, ax
-
     viz_type = st.selectbox(
         "Select Visualization Type",
         [
-            "Multiple Bar Chart (AI Tools vs Purpose)",
-            "Pie Charts (AI Usage Distribution)",
+            "Multiple Bar Chart – AI Tools vs Academic Purpose",
+            "Pie Charts – AI Usage Distribution",
             "AI Tools Used for Academic Purposes"
         ]
     )
@@ -293,7 +287,7 @@ elif active_tab == "📊 Data Visualization":
     # =====================================================
     # 1. MULTIPLE BAR CHART (AI TOOLS vs PURPOSE)
     # =====================================================
-    if viz_type == "Multiple Bar Chart (AI Tools vs Purpose)":
+    if viz_type == "Multiple Bar Chart – AI Tools vs Academic Purpose":
 
         st.subheader("Usage of AI Tools Across Academic Purposes")
 
@@ -329,38 +323,37 @@ elif active_tab == "📊 Data Visualization":
             for tool in ai_tools:
                 if tool in subset.columns:
                     records.append({
-                        "Purpose": purpose,
+                        "Academic Purpose": purpose,
                         "AI Tool": tool,
-                        "Count": int(subset[tool].sum())
+                        "Number of Students": int(subset[tool].sum())
                     })
 
         final_df = pd.DataFrame(records)
 
         fig = px.bar(
             final_df,
-            x="Purpose",
-            y="Count",
+            x="Academic Purpose",
+            y="Number of Students",
             color="AI Tool",
             barmode="group",
             text_auto=True,
-            title="Usage of AI Tools Across Academic Purposes"
+            title="Usage of AI Tools Across Academic Purposes",
+            template="plotly_dark"
         )
 
         fig.update_layout(
-            xaxis_title="Academic Purpose",
-            yaxis_title="Number of Students",
+            height=550,
             legend_title="AI Tool",
-            height=550
+            xaxis_title="Academic Purpose",
+            yaxis_title="Number of Students"
         )
 
         st.plotly_chart(fig, use_container_width=True)
 
     # =====================================================
-    # 2. PIE CHARTS (GENERAL USAGE)
+    # 2. PIE CHARTS – AI USAGE DISTRIBUTION
     # =====================================================
-    elif viz_type == "Pie Charts (AI Usage Distribution)":
-
-        st.subheader("AI Usage Distribution (Pie Charts)")
+    elif viz_type == "Pie Charts – AI Usage Distribution":
 
         pie_type = st.selectbox(
             "Select Pie Chart",
@@ -372,59 +365,66 @@ elif active_tab == "📊 Data Visualization":
         )
 
         if pie_type == "Overall AI Usage":
-            sizes = [159, 62]
-            labels = ["Yes", "No"]
-            fig, ax = pie_figure()
-            ax.pie(
-                sizes, labels=labels, autopct="%1.1f%%",
-                startangle=90, radius=0.68,
-                colors=["#4C72B0", "#DD8452"],
-                wedgeprops={"edgecolor": "#1f2937"},
-                textprops={"color": "white", "fontsize": 7}
+
+            df_pie = pd.DataFrame({
+                "Usage": ["Yes", "No"],
+                "Count": [159, 62]
+            })
+
+            fig = px.pie(
+                df_pie,
+                names="Usage",
+                values="Count",
+                title="Overall AI Usage Among Students",
+                template="plotly_dark",
+                hole=0.35
             )
-            ax.set_title("Overall AI Usage Among Students", color="white", fontsize=9)
-            ax.axis("equal")
-            st.pyplot(fig, use_container_width=False)
+
+            st.plotly_chart(fig, use_container_width=True)
 
         elif pie_type == "Programme-wise AI Usage":
-            sizes = [47, 112, 3, 59]
-            labels = ["PG – Yes", "UG – Yes", "PG – No", "UG – No"]
-            fig, ax = pie_figure()
-            ax.pie(
-                sizes, labels=labels, autopct="%1.1f%%",
-                startangle=90, radius=0.68,
-                colors=["#4C72B0", "#55A868", "#C44E52", "#8172B3"],
-                wedgeprops={"edgecolor": "#1f2937"},
-                textprops={"color": "white", "fontsize": 7}
+
+            df_pie = pd.DataFrame({
+                "Category": ["PG – Yes", "UG – Yes", "PG – No", "UG – No"],
+                "Count": [47, 112, 3, 59]
+            })
+
+            fig = px.pie(
+                df_pie,
+                names="Category",
+                values="Count",
+                title="Programme-wise AI Usage Distribution",
+                template="plotly_dark",
+                hole=0.35
             )
-            ax.set_title("Programme-wise AI Usage Distribution", color="white", fontsize=9)
-            ax.axis("equal")
-            st.pyplot(fig, use_container_width=False)
+
+            st.plotly_chart(fig, use_container_width=True)
 
         else:
-            sizes = [99, 29, 60, 33]
-            labels = ["Female – Yes", "Female – No", "Male – Yes", "Male – No"]
-            fig, ax = pie_figure()
-            ax.pie(
-                sizes, labels=labels, autopct="%1.1f%%",
-                startangle=90, radius=0.68,
-                colors=["#4C72B0", "#DD8452", "#55A868", "#C44E52"],
-                wedgeprops={"edgecolor": "#1f2937"},
-                textprops={"color": "white", "fontsize": 7}
+
+            df_pie = pd.DataFrame({
+                "Category": ["Female – Yes", "Female – No", "Male – Yes", "Male – No"],
+                "Count": [99, 29, 60, 33]
+            })
+
+            fig = px.pie(
+                df_pie,
+                names="Category",
+                values="Count",
+                title="Gender-wise AI Usage Distribution",
+                template="plotly_dark",
+                hole=0.35
             )
-            ax.set_title("Gender-wise AI Usage Distribution", color="white", fontsize=9)
-            ax.axis("equal")
-            st.pyplot(fig, use_container_width=False)
+
+            st.plotly_chart(fig, use_container_width=True)
 
     # =====================================================
-    # 3. ACADEMIC PURPOSE – PIE + BAR CHARTS
+    # 3. AI TOOLS USED FOR ACADEMIC PURPOSES
     # =====================================================
     elif viz_type == "AI Tools Used for Academic Purposes":
 
-        st.subheader("AI Tools Used for Academic Purposes")
-
         academic_viz = st.selectbox(
-            "Select Academic Visualization",
+            "Select Visualization",
             [
                 "Pie Chart – AI Tools Used",
                 "Bar Chart – Most Frequently Used AI Tools",
@@ -433,63 +433,16 @@ elif active_tab == "📊 Data Visualization":
         )
 
         # ---------------------------------
-        # 3.1 PIE CHART (ADDED BACK ✅)
+        # PIE CHART – AI TOOLS
         # ---------------------------------
         if academic_viz == "Pie Chart – AI Tools Used":
 
             df2 = pd.read_excel(
-                r"Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
+                "Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
                 sheet_name="Sheet2"
             )
 
-            df2.columns = df2.columns.astype(str).str.strip()
             col = df2.columns[0]
-
-            df2[col] = df2[col].replace({
-                "Perplexity": "Perplexity / Copilot",
-                "Copilot": "Perplexity / Copilot"
-            })
-
-            counts = df2[col].value_counts()
-            labels = counts.index
-            sizes = counts.values
-
-            fig, ax = pie_figure()
-            ax.pie(
-                sizes,
-                labels=labels,
-                autopct="%1.1f%%",
-                startangle=140,
-                radius=0.68,
-                colors=sns.color_palette("Spectral", len(labels)),
-                wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-                textprops={"color": "white", "fontsize": 7},
-                labeldistance=1.05,
-                pctdistance=0.6
-            )
-
-            ax.set_title(
-                "Distribution of AI Tools Used for Academic Purposes",
-                color="white",
-                fontsize=9
-            )
-
-            ax.axis("equal")
-            st.pyplot(fig, use_container_width=False)
-
-        # ---------------------------------
-        # 3.2 BAR CHART – AI TOOLS FREQUENCY
-        # ---------------------------------
-        elif academic_viz == "Bar Chart – Most Frequently Used AI Tools":
-
-            df2 = pd.read_excel(
-                r"Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
-                sheet_name="Sheet2"
-            )
-
-            df2.columns = df2.columns.astype(str).str.strip()
-            col = df2.columns[0]
-
             df2[col] = df2[col].replace({
                 "Perplexity": "Perplexity / Copilot",
                 "Copilot": "Perplexity / Copilot"
@@ -498,90 +451,79 @@ elif active_tab == "📊 Data Visualization":
             counts = df2[col].value_counts().reset_index()
             counts.columns = ["AI Tool", "Number of Students"]
 
-            sns.set_theme(style="whitegrid", font_scale=1.1)
-
-            fig, ax = plt.subplots(figsize=(10, 6))
-            sns.barplot(
-                data=counts,
-                x="AI Tool",
-                y="Number of Students",
-                palette="Spectral",
-                ax=ax
+            fig = px.pie(
+                counts,
+                names="AI Tool",
+                values="Number of Students",
+                title="Distribution of AI Tools Used for Academic Purposes",
+                template="plotly_dark",
+                hole=0.35
             )
 
-            ax.set_title("Most Frequently Used AI Tools for Academic Purposes", fontsize=14)
-            ax.set_xlabel("AI Tool")
-            ax.set_ylabel("Number of Students")
-            ax.set_xticklabels(ax.get_xticklabels(), rotation=25, ha="right")
-
-            st.pyplot(fig)
+            st.plotly_chart(fig, use_container_width=True)
 
         # ---------------------------------
-        # 3.3 GROUPED BAR – FREQUENCY vs PURPOSE
+        # BAR CHART – MOST USED TOOLS
+        # ---------------------------------
+        elif academic_viz == "Bar Chart – Most Frequently Used AI Tools":
+
+            df2 = pd.read_excel(
+                "Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
+                sheet_name="Sheet2"
+            )
+
+            col = df2.columns[0]
+            df2[col] = df2[col].replace({
+                "Perplexity": "Perplexity / Copilot",
+                "Copilot": "Perplexity / Copilot"
+            })
+
+            counts = df2[col].value_counts().reset_index()
+            counts.columns = ["AI Tool", "Number of Students"]
+
+            fig = px.bar(
+                counts,
+                x="AI Tool",
+                y="Number of Students",
+                text_auto=True,
+                title="Most Frequently Used AI Tools for Academic Purposes",
+                template="plotly_dark"
+            )
+
+            st.plotly_chart(fig, use_container_width=True)
+
+        # ---------------------------------
+        # GROUPED BAR – FREQUENCY vs PURPOSE
         # ---------------------------------
         else:
 
             df3 = pd.read_excel(
-                r"Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
+                "Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
                 sheet_name="Sheet3"
             )
 
             df3 = df3.rename(columns={df3.columns[0]: "Frequency"})
 
-            df3_long = df3.melt(
+            df_long = df3.melt(
                 id_vars="Frequency",
-                var_name="Usage Purpose",
+                var_name="Academic Purpose",
                 value_name="Number of Students"
             )
 
-            sns.set_theme(style="whitegrid", font_scale=1.1)
-
-            fig, ax = plt.subplots(figsize=(12, 7))
-            sns.barplot(
-                data=df3_long,
-                x="Usage Purpose",
+            fig = px.bar(
+                df_long,
+                x="Academic Purpose",
                 y="Number of Students",
-                hue="Frequency",
-                palette="Set2",
-                ax=ax
+                color="Frequency",
+                barmode="group",
+                text_auto=True,
+                title="Frequency of GenAI Usage Across Academic Purposes",
+                template="plotly_dark"
             )
 
-            ax.set_title(
-                "Frequency of GenAI Usage Across Academic Purposes",
-                fontsize=15,
-                weight="bold"
-            )
-            ax.set_xlabel("Academic Purpose")
-            ax.set_ylabel("Number of Students")
-            ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha="right")
-            ax.legend(title="Usage Frequency")
+            fig.update_layout(height=550)
 
-            st.pyplot(fig)
-
-# =========================================================
-# RELIABILITY
-# =========================================================
-elif active_tab == "🧠 Reliability":
-
-    st.header("Reliability Analysis")
-
-    st.info("Cronbach’s Alpha will be used to assess internal consistency.")
-
-    with st.expander("Interpretation Guidelines"):
-        st.markdown("""
-        - α ≥ 0.70 → Good reliability  
-        - 0.60 ≤ α < 0.70 → Acceptable  
-        - α < 0.60 → Requires revision  
-        """)
-
-    with st.expander("Constructs Tested"):
-        st.markdown("""
-        - Cognitive Offloading  
-        - Academic Behaviour  
-        - Critical Thinking  
-        - Creativity  
-        - Withdrawal  
-        """)
+            st.plotly_chart(fig, use_container_width=True)
 
 # =========================================================
 # HYPOTHESES / TESTS TAB
