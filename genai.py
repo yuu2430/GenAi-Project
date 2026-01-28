@@ -67,7 +67,7 @@ Rohan Shukla • Vaishali Sharma • Raiwant Kumar • Ashish Vaghela
 **Mentor:** Murlidharan Kunnumal  
 """)
 
-st.caption("Interactive Research Dashboard • Content & Design Finalised")
+st.caption("Project Dashboard")
 st.markdown("---")
 
 # =========================================================
