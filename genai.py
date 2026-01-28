@@ -206,18 +206,25 @@ elif active_tab == "📐 Sampling & Sample Size":
     st.subheader("Proportional Allocation Principle (Theoretical Basis)")
 
     st.latex(r"n_i = \frac{N_i}{N} \times n")
+    st.markdown("**Where:**")
+    st.latex(r"n_{\text{group}} \;=\; \text{Sample size for a faculty}")
+    st.latex(r"N_{\text{group}} \;=\; \text{Population size of that faculty}")
+    st.latex(r"N \;=\; 37{,}095")
+    st.latex(r"n \;=\; 221")
 
-    st.markdown("""
-    **Where:**  
-    - \( n_i \): Sample size for the *i-th* stratum  
-    - \( N_i \): Population size of the *i-th* stratum  
-    - \( N \): Total population (37,095)  
-    - \( n \): Total sample size (221)  
 
-    Proportional allocation was used as a **guiding framework** to ensure
-    fair representation across faculties. The table above shows the
-    **actual achieved sample**, classified by faculty, gender, and level of study (UG/PG).
-    """)
+    #st.markdown("""
+    #**Where:**  
+    #- \( n_i \): Sample size for the *i-th* stratum  
+    #- \( N_i \): Population size of the *i-th* stratum  
+    #- \( N \): Total population (37,095)  
+    #- \( n \): Total sample size (221)  
+
+    #Proportional allocation was used as a **guiding framework** to ensure
+    #fair representation across faculties. The table above shows the
+    #**actual achieved sample**, classified by faculty, gender, and level of study (UG/PG).
+    #""")
+
 
 # =========================================================
 # PILOT SURVEY
