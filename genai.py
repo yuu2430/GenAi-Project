@@ -298,7 +298,7 @@ elif active_tab == "📊 Data Visualization":
         st.subheader("Usage of AI Tools Across Academic Purposes")
 
         df = pd.read_excel(
-            "FINAL DATA OF PROJECT.xlsx",
+            "FINAL DATA OF PROJECT (1).xlsx",
             sheet_name="Sheet3"
         )
 
@@ -497,7 +497,7 @@ elif active_tab == "📑 Tests":
     st.subheader("Normality Assessment of AI Dependency Score")
 
     dep_df = pd.read_excel(
-        "FINAL DATA OF PROJECT.xlsx",
+        "FINAL DATA OF PROJECT (1).xlsx",
         sheet_name="Sheet5"
     )
 
