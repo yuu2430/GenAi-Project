@@ -265,10 +265,7 @@ elif active_tab == "🧪 Pilot Survey":
         - Reduced measurement and response bias  
         """)
 
-# =========================================================
-# DATA
-# DATA VISUALIZATION
-# =========================================================
+
 # =========================================================
 # DATA VISUALIZATION
 # =========================================================
@@ -276,91 +273,26 @@ elif active_tab == "📊 Data Visualization":
 
     st.header("Data Visualization")
 
-    import plotly.express as px
-    import matplotlib.pyplot as plt
-
-    # -----------------------------------------------------
-    # MAIN DROPDOWN: TYPE OF VISUALIZATION
-    # -----------------------------------------------------
     viz_type = st.selectbox(
         "Select Visualization Type",
         [
             "Multiple Bar Chart (AI Tools vs Purpose)",
-            "Pie Charts (AI Usage Distribution)"
+            "Pie Charts (AI Usage Distribution)",
+            "AI Tools Used for Academic Purposes"
         ]
     )
 
-    # =====================================================
-    # OPTION 1: MULTIPLE BAR CHART
-    # =====================================================
+    # =====================================
+    # BAR CHART
+    # =====================================
     if viz_type == "Multiple Bar Chart (AI Tools vs Purpose)":
-
         st.subheader("Usage of AI Tools Across Academic Purposes")
+        st.info("Bar chart code goes here")
 
-        df = pd.read_excel(
-            "FINAL DATA OF PROJECT (1).xlsx",
-            sheet_name="Sheet3"
-        )
-
-        df.columns = df.columns.astype(str).str.strip()
-        df = df.rename(columns={df.columns[0]: "Label"})
-
-        purposes = [
-            "Project / Assignment",
-            "Concept Learning",
-            "Writing / Summarizing",
-            "Exam Preparation",
-            "Research / Idea Generation",
-            "Programming / Coding"
-        ]
-
-        ai_tools = ["ChatGPT", "Gemini", "Copilot", "Perplexity"]
-
-        df["Purpose"] = df["Label"].where(df["Label"].isin(purposes)).ffill()
-
-        df = df[
-            (~df["Label"].isin(purposes)) &
-            (~df["Label"].str.contains("Grand Total", na=False))
-        ]
-
-        records = []
-        for purpose in purposes:
-            subset = df[df["Purpose"] == purpose]
-            for tool in ai_tools:
-                if tool in subset.columns:
-                    records.append({
-                        "Purpose": purpose,
-                        "AI Tool": tool,
-                        "Count": int(subset[tool].sum())
-                    })
-
-        final_df = pd.DataFrame(records)
-
-        fig = px.bar(
-            final_df,
-            x="Purpose",
-            y="Count",
-            color="AI Tool",
-            barmode="group",
-            text_auto=True,
-            title="Usage of AI Tools Across Academic Purposes"
-        )
-
-        fig.update_layout(
-            xaxis_title="Academic Purpose",
-            yaxis_title="Number of Students",
-            legend_title="AI Tool",
-            height=550
-        )
-
-        st.plotly_chart(fig, use_container_width=True)
-
-    # =====================================================
-    # OPTION 2: PIE CHARTS
-    # =====================================================
-    else:
-
-        st.subheader("AI Usage Distribution (Pie Charts)")
+    # =====================================
+    # PIE CHARTS
+    # =====================================
+    elif viz_type == "Pie Charts (AI Usage Distribution)":
 
         pie_type = st.selectbox(
             "Select Pie Chart",
@@ -371,141 +303,48 @@ elif active_tab == "📊 Data Visualization":
             ]
         )
 
-        # ---------- FIXED PIE FIG ----------
-        def pie_figure():
-            fig, ax = plt.subplots(
-                figsize=(3.2, 3),   # ✅ laptop friendly
-                facecolor="#0E1117"
-            )
-            ax.set_facecolor("#0E1117")
-            return fig, ax
-
-        # ================================
-        # OVERALL AI USAGE
-        # ================================
         if pie_type == "Overall AI Usage":
+            st.write("Overall pie code here")
 
-            sizes = [159, 62]
-            labels = ["Yes", "No"]
-
-            fig, ax = pie_figure()
-            ax.pie(
-                sizes,
-                labels=labels,
-                autopct="%1.1f%%",
-                startangle=90,
-                radius=0.68,
-                colors=["#4C72B0", "#DD8452"],
-                wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-                textprops={"color": "white", "fontsize": 7},
-                labeldistance=1.05,
-                pctdistance=0.6
-            )
-
-            ax.set_title("Overall AI Usage Among Students", color="white", fontsize=9)
-            ax.axis("equal")
-            plt.tight_layout()
-            plt.tight_layout()
-
-            st.pyplot(fig, use_container_width=False)
-
-        # ================================
-        # PROGRAMME-WISE AI USAGE
-        # ================================
         elif pie_type == "Programme-wise AI Usage":
-            sizes = [47, 112, 3, 59]
-            labels = ["PG – Yes", "UG – Yes", "PG – No", "UG – No"]
-            fig, ax = pie_figure()
-            ax.pie(sizes,labels=labels,
-                   autopct="%1.1f%%",
-                   startangle=90,
-                   radius=0.68,
-                   colors=["#4C72B0", "#55A868", "#C44E52", "#8172B3"],
-                   wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-                   textprops={"color": "white", "fontsize": 7},
-                  labeldistance=1.05,
-                   pctdistance=0.6)
-            ax.set_title("Programme-wise AI Usage Distribution",
-                         color="white",
-                         fontsize=9,
-                         pad=12)
-            ax.axis("equal")
-            plt.tight_layout()
-            st.pyplot(fig, use_container_width=False)
+            st.write("Programme-wise pie code here")
 
+        elif pie_type == "Gender-wise AI Usage":
+            st.write("Gender-wise pie code here")
 
-        # ================================
-        # GENDER-WISE AI USAGE
-        # ================================
-        else:
+    # =====================================
+    # NOTEBOOK GRAPH (NEW)
+    # =====================================
+    elif viz_type == "AI Tools Used for Academic Purposes":
 
-            sizes = [99, 29, 60, 33]
-            labels = ["Female – Yes", "Female – No", "Male – Yes", "Male – No"]
+        st.subheader("Distribution of AI Tools Used for Academic Purposes")
 
-            fig, ax = pie_figure()
-            ax.pie(
-                sizes,
-                labels=labels,
-                autopct="%1.1f%%",
-                startangle=90,
-                radius=0.68,
-                colors=["#4C72B0", "#DD8452", "#55A868", "#C44E52"],
-                wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-                textprops={"color": "white", "fontsize": 7},
-                labeldistance=1.05,
-                pctdistance=0.6
-            )
+        df2 = pd.read_excel(
+            "FINAL DATA OF PROJECT (1).xlsx",
+            sheet_name="SheetX"   # ← replace
+        )
 
-            ax.set_title("Gender-wise AI Usage Distribution", color="white", fontsize=9)
-            ax.axis("equal")
-            plt.tight_layout()
+        col = df2.columns[0]
+        df2[col] = df2[col].replace({
+            "Perplexity": "Perplexity / Copilot",
+            "Copilot": "Perplexity / Copilot"
+        })
 
-            st.pyplot(fig, use_container_width=False)
+        counts = df2[col].value_counts()
 
-elif viz_type == "AI Tools Used for Academic Purposes":
+        fig, ax = plt.subplots(figsize=(4, 4))
+        ax.pie(
+            counts.values,
+            labels=counts.index,
+            autopct="%1.1f%%",
+            startangle=140
+        )
 
-    st.subheader("Distribution of AI Tools Used for Academic Purposes")
+        ax.set_title("AI Tools Used for Academic Purposes")
+        ax.axis("equal")
 
-    # Load data properly
-    df2 = pd.read_excel(
-        "FINAL DATA OF PROJECT (1).xlsx",
-        sheet_name="SheetX"  # <-- put correct sheet name
-    )
+        st.pyplot(fig, use_container_width=True)
 
-    col = df2.columns[0]
-    df2[col] = df2[col].replace({
-        "Perplexity": "Perplexity / Copilot",
-        "Copilot": "Perplexity / Copilot"
-    })
-
-    counts = df2[col].value_counts()
-
-    fig, ax = plt.subplots(figsize=(4, 4), facecolor="#0E1117")
-    ax.set_facecolor("#0E1117")
-
-    ax.pie(
-        counts.values,
-        labels=counts.index,
-        autopct="%1.1f%%",
-        startangle=140,
-        pctdistance=0.75,
-        textprops={"fontsize": 8, "color": "white"},
-        wedgeprops={"edgecolor": "#1f2937"}
-    )
-
-    ax.set_title(
-        "Distribution of AI Tools Used for Academic Purposes",
-        fontsize=10,
-        color="white",
-        pad=10
-    )
-
-    ax.axis("equal")
-    plt.tight_layout()
-
-    st.pyplot(fig, use_container_width=True)
-
-            
 # =========================================================
 # RELIABILITY
 # =========================================================
