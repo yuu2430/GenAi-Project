@@ -563,14 +563,11 @@ elif active_tab == "📊 Data Visualization":
             legend = ax.legend(title="Usage Frequency")
             legend.get_frame().set_facecolor("none")
             legend.get_frame().set_edgecolor("none")
-            ax.title.set_color("auto")
-            ax.xaxis.label.set_color("auto")
-            ax.yaxis.label.set_color("auto")
-            
+            ax.title.set_color("white")
+            ax.xaxis.label.set_color("white")
+            ax.yaxis.label.set_color("white")
+            ax.tick_params(colors="auto")
             ax.grid(alpha=0.25)
-
-
-
             st.pyplot(fig)
 
 # =========================================================
