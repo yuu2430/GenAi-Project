@@ -413,53 +413,43 @@ elif active_tab == "📊 Data Visualization":
             ax.set_title("Gender-wise AI Usage Distribution", color="white", fontsize=9)
             ax.axis("equal")
             st.pyplot(fig)
+        # ================================
+        # ACADEMIC PURPOSE – AI TOOLS PIE
+        # ================================    
+        elif viz_type == "AI Tools Used for Academic Purposes":
+            st.subheader("AI Tools Used for Academic Purposes")
+            df2 = pd.read_excel("C:\Users\AJAY KUMAR SHARMA\Downloads\Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
+                                sheet_name="Sheet2")
+            df2.columns = df2.columns.astype(str).str.strip()
+            col = df2.columns[0]
+            df2[col] = df2[col].replace({"Perplexity": "Perplexity / Copilot","Copilot": "Perplexity / Copilot"})
+            counts = df2[col].value_counts()
+            labels = counts.index
+            sizes = counts.values
+            fig, ax = pie_figure()
+            ax.pie(sizes,labels=labels,autopct="%1.1f%%",startangle=140,radius=0.68,
+                   colors=sns.color_palette("Spectral", len(labels)),wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
+                   textprops={"color": "white", "fontsize": 7},
+                   labeldistance=1.05,pctdistance=0.6)
+            ax.set_title("Distribution of AI Tools Used for Academic Purposes",color="white",fontsize=9)
+            ax.axis("equal")
+            plt.tight_layout()
+            st.pyplot(fig, use_container_width=False)
 
-    # =====================================
-    # ACADEMIC PURPOSE PIE (NEW & FIXED)
-    # =====================================
-    else:
 
-        st.subheader("AI Tools Used for Academic Purposes")
 
-        df2 = pd.read_excel(
-            "FINAL DATA OF PROJECT (1).xlsx",
-            sheet_name="Sheet3"
-        )
 
-        df2.columns = df2.columns.astype(str).str.strip()
-        col = df2.columns[0]
 
-        df2[col] = df2[col].replace({
-            "Perplexity": "Perplexity / Copilot",
-            "Copilot": "Perplexity / Copilot"
-        })
 
-        counts = df2[col].value_counts()
-        labels = counts.index
-        sizes = counts.values
 
-        fig, ax = plt.subplots(figsize=(4, 4), facecolor="#0E1117")
-        ax.set_facecolor("#0E1117")
+   
+    
+    
+    
+    
 
-        colors = sns.color_palette("Spectral", len(labels))
-
-        ax.pie(
-            sizes, labels=labels, autopct="%1.1f%%",
-            startangle=140, radius=0.75,
-            colors=colors, pctdistance=0.65,
-            wedgeprops={"edgecolor": "#1f2937"},
-            textprops={"color": "white", "fontsize": 9}
-        )
-
-        ax.set_title(
-            "Distribution of AI Tools Used for Academic Purposes",
-            fontsize=10, color="white"
-        )
-
-        ax.axis("equal")
-        st.pyplot(fig)
-
-            
+    
+           
 # =========================================================
 # RELIABILITY
 # =========================================================
