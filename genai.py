@@ -437,7 +437,7 @@ elif active_tab == "📊 Data Visualization":
         # ================================
         # GENDER-WISE AI USAGE
         # ================================
-        else:
+        elif:
 
             sizes = [99, 29, 60, 33]
             labels = ["Female – Yes", "Female – No", "Male – Yes", "Male – No"]
@@ -461,6 +461,46 @@ elif active_tab == "📊 Data Visualization":
             plt.tight_layout()
 
             st.pyplot(fig, use_container_width=False)
+            
+
+            # ================================
+            # AI USAGE For Academic Purpose
+            # ================================
+            else:
+                col = df2.columns[0]
+                df2[col] = df2[col].replace({
+                    "Perplexity": "Perplexity / Copilot",
+                    "Copilot": "Perplexity / Copilot"
+                })
+                counts = df2[col].value_counts()
+                labels = counts.index
+                sizes = counts.values
+                sns.set_theme(style="white")
+                colors = sns.color_palette("Spectral", len(labels))
+                plt.figure(figsize=(8, 8))
+                wedges, texts, autotexts = plt.pie(sizes,
+                                                   labels=labels,
+                                                   autopct='%1.1f%%',
+                                                   startangle=140,
+                                                   colors=colors,
+                                                   pctdistance=0.75,
+                                                   wedgeprops={'edgecolor': 'white'})
+                for text in texts:
+                    text.set_fontsize(11)
+                for autotext in autotexts:
+                    autotext.set_fontsize(11)
+                    autotext.set_color("black")
+                plt.title("Distribution of AI Tools Used for Academic Purposes",fontsize=14, weight="bold")
+                plt.axis('equal')  # Perfect circle
+                plt.tight_layout()
+                st.pyplot(fig, use_container_width=False)
+
+
+
+
+
+
+
 
 # =========================================================
 # RELIABILITY
