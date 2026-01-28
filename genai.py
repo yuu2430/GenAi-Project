@@ -455,6 +455,60 @@ elif active_tab == "📊 Data Visualization":
 
             st.pyplot(fig, use_container_width=False)
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+st.subheader("AI Tools Used for Academic Purposes")
+
+# Select the column
+col = df2.columns[0]
+
+# Combine Perplexity and Copilot
+df2[col] = df2[col].replace({
+    "Perplexity": "Perplexity / Copilot",
+    "Copilot": "Perplexity / Copilot"
+})
+
+# Calculate counts
+counts = df2[col].value_counts()
+labels = counts.index
+sizes = counts.values
+
+# ---------- Pie Figure ----------
+fig, ax = plt.subplots(
+    figsize=(4, 4),
+    facecolor="#0E1117"
+)
+ax.set_facecolor("#0E1117")
+
+# Color palette
+colors = sns.color_palette("Spectral", len(labels))
+
+# Pie chart
+ax.pie(
+    sizes,
+    labels=labels,
+    autopct="%1.1f%%",
+    startangle=140,
+    colors=colors,
+    radius=0.75,
+    pctdistance=0.65,
+    wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
+    textprops={"color": "white", "fontsize": 9}
+)
+
+# Title
+ax.set_title(
+    "Distribution of AI Tools Used for Academic Purposes",
+    fontsize=10,
+    color="white",
+    pad=12
+)
+
+ax.axis("equal")
+plt.tight_layout()
+
+st.pyplot(fig, use_container_width=False)
 
 
             
