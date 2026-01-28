@@ -461,6 +461,50 @@ elif active_tab == "📊 Data Visualization":
             plt.tight_layout()
 
             st.pyplot(fig, use_container_width=False)
+
+elif viz_type == "AI Tools Used for Academic Purposes":
+
+    st.subheader("Distribution of AI Tools Used for Academic Purposes")
+
+    # Load data properly
+    df2 = pd.read_excel(
+        "FINAL DATA OF PROJECT (1).xlsx",
+        sheet_name="SheetX"  # <-- put correct sheet name
+    )
+
+    col = df2.columns[0]
+    df2[col] = df2[col].replace({
+        "Perplexity": "Perplexity / Copilot",
+        "Copilot": "Perplexity / Copilot"
+    })
+
+    counts = df2[col].value_counts()
+
+    fig, ax = plt.subplots(figsize=(4, 4), facecolor="#0E1117")
+    ax.set_facecolor("#0E1117")
+
+    ax.pie(
+        counts.values,
+        labels=counts.index,
+        autopct="%1.1f%%",
+        startangle=140,
+        pctdistance=0.75,
+        textprops={"fontsize": 8, "color": "white"},
+        wedgeprops={"edgecolor": "#1f2937"}
+    )
+
+    ax.set_title(
+        "Distribution of AI Tools Used for Academic Purposes",
+        fontsize=10,
+        color="white",
+        pad=10
+    )
+
+    ax.axis("equal")
+    plt.tight_layout()
+
+    st.pyplot(fig, use_container_width=True)
+
             
 # =========================================================
 # RELIABILITY
