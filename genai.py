@@ -270,6 +270,9 @@ elif active_tab == "🧪 Pilot Survey":
 # =========================================================
 # DATA VISUALIZATION
 # =========================================================
+# =========================================================
+# DATA VISUALIZATION
+# =========================================================
 elif active_tab == "📊 Data Visualization":
 
     st.header("Data Visualization")
@@ -349,7 +352,7 @@ elif active_tab == "📊 Data Visualization":
         st.plotly_chart(fig, use_container_width=True)
 
     # =====================================
-    # GENERAL PIE CHARTS
+    # PIE CHARTS (GENERAL USAGE)
     # =====================================
     elif viz_type == "Pie Charts (AI Usage Distribution)":
 
@@ -372,81 +375,108 @@ elif active_tab == "📊 Data Visualization":
         if pie_type == "Overall AI Usage":
             sizes = [159, 62]
             labels = ["Yes", "No"]
+
             fig, ax = pie_figure()
             ax.pie(
-                sizes, labels=labels, autopct="%1.1f%%",
-                startangle=90, radius=0.68,
+                sizes,
+                labels=labels,
+                autopct="%1.1f%%",
+                startangle=90,
+                radius=0.68,
                 colors=["#4C72B0", "#DD8452"],
                 wedgeprops={"edgecolor": "#1f2937"},
                 textprops={"color": "white", "fontsize": 7}
             )
             ax.set_title("Overall AI Usage Among Students", color="white", fontsize=9)
             ax.axis("equal")
-            st.pyplot(fig)
+            st.pyplot(fig, use_container_width=False)
 
         elif pie_type == "Programme-wise AI Usage":
             sizes = [47, 112, 3, 59]
             labels = ["PG – Yes", "UG – Yes", "PG – No", "UG – No"]
+
             fig, ax = pie_figure()
             ax.pie(
-                sizes, labels=labels, autopct="%1.1f%%",
-                startangle=90, radius=0.68,
+                sizes,
+                labels=labels,
+                autopct="%1.1f%%",
+                startangle=90,
+                radius=0.68,
                 colors=["#4C72B0", "#55A868", "#C44E52", "#8172B3"],
                 wedgeprops={"edgecolor": "#1f2937"},
                 textprops={"color": "white", "fontsize": 7}
             )
             ax.set_title("Programme-wise AI Usage Distribution", color="white", fontsize=9)
             ax.axis("equal")
-            st.pyplot(fig)
+            st.pyplot(fig, use_container_width=False)
 
         else:
             sizes = [99, 29, 60, 33]
             labels = ["Female – Yes", "Female – No", "Male – Yes", "Male – No"]
+
             fig, ax = pie_figure()
             ax.pie(
-                sizes, labels=labels, autopct="%1.1f%%",
-                startangle=90, radius=0.68,
+                sizes,
+                labels=labels,
+                autopct="%1.1f%%",
+                startangle=90,
+                radius=0.68,
                 colors=["#4C72B0", "#DD8452", "#55A868", "#C44E52"],
                 wedgeprops={"edgecolor": "#1f2937"},
                 textprops={"color": "white", "fontsize": 7}
             )
             ax.set_title("Gender-wise AI Usage Distribution", color="white", fontsize=9)
             ax.axis("equal")
-            st.pyplot(fig)
-        # ================================
-        # ACADEMIC PURPOSE – AI TOOLS PIE
-        # ================================    
-        elif viz_type == "AI Tools Used for Academic Purposes":
-            st.subheader("AI Tools Used for Academic Purposes")
-            df2 = pd.read_excel("C:\Users\AJAY KUMAR SHARMA\Downloads\Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
-                                sheet_name="Sheet2")
-            df2.columns = df2.columns.astype(str).str.strip()
-            col = df2.columns[0]
-            df2[col] = df2[col].replace({"Perplexity": "Perplexity / Copilot","Copilot": "Perplexity / Copilot"})
-            counts = df2[col].value_counts()
-            labels = counts.index
-            sizes = counts.values
-            fig, ax = pie_figure()
-            ax.pie(sizes,labels=labels,autopct="%1.1f%%",startangle=140,radius=0.68,
-                   colors=sns.color_palette("Spectral", len(labels)),wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-                   textprops={"color": "white", "fontsize": 7},
-                   labeldistance=1.05,pctdistance=0.6)
-            ax.set_title("Distribution of AI Tools Used for Academic Purposes",color="white",fontsize=9)
-            ax.axis("equal")
-            plt.tight_layout()
             st.pyplot(fig, use_container_width=False)
 
+    # =====================================
+    # ACADEMIC PURPOSE – AI TOOLS PIE
+    # =====================================
+    elif viz_type == "AI Tools Used for Academic Purposes":
 
+        st.subheader("AI Tools Used for Academic Purposes")
 
+        df2 = pd.read_excel(
+            r"C:\Users\AJAY KUMAR SHARMA\Downloads\Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
+            sheet_name="Sheet2"
+        )
 
+        df2.columns = df2.columns.astype(str).str.strip()
+        col = df2.columns[0]
 
+        df2[col] = df2[col].replace({
+            "Perplexity": "Perplexity / Copilot",
+            "Copilot": "Perplexity / Copilot"
+        })
 
+        counts = df2[col].value_counts()
+        labels = counts.index
+        sizes = counts.values
 
-   
-    
-    
-    
-    
+        fig, ax = pie_figure()   # SAME SIZE AS OTHER PIE CHARTS
+
+        ax.pie(
+            sizes,
+            labels=labels,
+            autopct="%1.1f%%",
+            startangle=140,
+            radius=0.68,
+            colors=sns.color_palette("Spectral", len(labels)),
+            wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
+            textprops={"color": "white", "fontsize": 7},
+            labeldistance=1.05,
+            pctdistance=0.6
+        )
+
+        ax.set_title(
+            "Distribution of AI Tools Used for Academic Purposes",
+            color="white",
+            fontsize=9
+        )
+
+        ax.axis("equal")
+        plt.tight_layout()
+        st.pyplot(fig, use_container_width=False)
 
     
            
