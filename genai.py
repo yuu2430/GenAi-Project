@@ -271,9 +271,6 @@ elif active_tab == "🧪 Pilot Survey":
 # =========================================================
 # DATA VISUALIZATION
 # =========================================================
-# =========================================================
-# DATA VISUALIZATION
-# =========================================================
 elif active_tab == "📊 Data Visualization":
 
     st.header("Data Visualization")
@@ -501,10 +498,9 @@ elif active_tab == "📊 Data Visualization":
             counts = df2[col].value_counts().reset_index()
             counts.columns = ["AI Tool", "Number of Students"]
 
-            sns.set_theme(style="ticks", font_scale=1.1)
+            sns.set_theme(style="whitegrid", font_scale=1.1)
 
-            fig, ax = plt.subplots(figsize=(10, 6),facecolor="none")
-            ax.set_facecolor("none")
+            fig, ax = plt.subplots(figsize=(10, 6))
             sns.barplot(
                 data=counts,
                 x="AI Tool",
@@ -538,10 +534,9 @@ elif active_tab == "📊 Data Visualization":
                 value_name="Number of Students"
             )
 
-            sns.set_theme(style="ticks", font_scale=1.1)
+            sns.set_theme(style="whitegrid", font_scale=1.1)
 
-            fig, ax = plt.subplots(figsize=(12, 7),facecolor="none")
-            ax.set_facecolor("none")
+            fig, ax = plt.subplots(figsize=(12, 7))
             sns.barplot(
                 data=df3_long,
                 x="Usage Purpose",
@@ -560,14 +555,7 @@ elif active_tab == "📊 Data Visualization":
             ax.set_ylabel("Number of Students")
             ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha="right")
             ax.legend(title="Usage Frequency")
-            legend = ax.legend(title="Usage Frequency")
-            legend.get_frame().set_facecolor("none")
-            legend.get_frame().set_edgecolor("none")
-            ax.title.set_color("white")
-            ax.xaxis.label.set_color("white")
-            ax.yaxis.label.set_color("white")
-            ax.tick_params(colors="auto")
-            ax.grid(alpha=0.25)
+
             st.pyplot(fig)
 
 # =========================================================
