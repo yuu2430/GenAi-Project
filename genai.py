@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import shapiro
 import plotly.express as px
+import seaborn as sns
 
 # =========================================================
 # PAGE CONFIG
