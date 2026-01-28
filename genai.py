@@ -286,8 +286,66 @@ elif active_tab == "📊 Data Visualization":
     # BAR CHART
     # =====================================
     if viz_type == "Multiple Bar Chart (AI Tools vs Purpose)":
+
         st.subheader("Usage of AI Tools Across Academic Purposes")
-        st.info("Bar chart code goes here")
+
+        df = pd.read_excel(
+            "FINAL DATA OF PROJECT (1).xlsx",
+            sheet_name="Sheet3"
+        )
+
+        df.columns = df.columns.astype(str).str.strip()
+        df = df.rename(columns={df.columns[0]: "Label"})
+
+        purposes = [
+            "Project / Assignment",
+            "Concept Learning",
+            "Writing / Summarizing",
+            "Exam Preparation",
+            "Research / Idea Generation",
+            "Programming / Coding"
+        ]
+
+        ai_tools = ["ChatGPT", "Gemini", "Copilot", "Perplexity"]
+
+        df["Purpose"] = df["Label"].where(df["Label"].isin(purposes)).ffill()
+
+        df = df[
+            (~df["Label"].isin(purposes)) &
+            (~df["Label"].str.contains("Grand Total", na=False))
+        ]
+
+        records = []
+        for purpose in purposes:
+            subset = df[df["Purpose"] == purpose]
+            for tool in ai_tools:
+                if tool in subset.columns:
+                    records.append({
+                        "Purpose": purpose,
+                        "AI Tool": tool,
+                        "Count": int(subset[tool].sum())
+                    })
+
+        final_df = pd.DataFrame(records)
+
+        fig = px.bar(
+            final_df,
+            x="Purpose",
+            y="Count",
+            color="AI Tool",
+            barmode="group",
+            text_auto=True,
+            title="Usage of AI Tools Across Academic Purposes"
+        )
+
+        fig.update_layout(
+            xaxis_title="Academic Purpose",
+            yaxis_title="Number of Students",
+            legend_title="AI Tool",
+            height=550
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
 
     # =====================================
     # PIE CHARTS
