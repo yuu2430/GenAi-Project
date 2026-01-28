@@ -584,58 +584,189 @@ elif active_tab == "🧠 Reliability":
         """)
 
 # =========================================================
-# HYPOTHESES
+# HYPOTHESES / TESTS TAB
 # =========================================================
 elif active_tab == "📑 Tests":
 
-    st.header("Tests")
+    st.header("Statistical Hypothesis Testing")
 
-    st.markdown("""
-    **H₀:** AI Dependency Score is not Normal.  
+    # =====================================================
+    # HYPOTHESIS DROPDOWN
+    # =====================================================
+    hypothesis_list = [
+        "Normality of AI Dependency Score",
+        "CGPA vs AI Dependency",
+        "Faculty vs AI Dependency (One-Way ANOVA)"
+    ]
 
-    **H₁:** AI Dependency Score is Normal.
-    """)
-# ---------- NORMALITY TEST ----------
-    st.markdown("---")
-    st.subheader("Normality Assessment of AI Dependency Score")
-
-    dep_df = pd.read_excel(
-        "FINAL DATA OF PROJECT (1).xlsx",
-        sheet_name="Sheet5"
+    selected_hypothesis = st.selectbox(
+        "Select Hypothesis",
+        hypothesis_list
     )
 
-    dep_df.columns = dep_df.columns.astype(str).str.strip()
+    st.markdown("---")
 
-    dep_col = next((c for c in dep_df.columns if "dep" in c.lower()), None)
-    dep_score = dep_df[dep_col].dropna()
+    # =====================================================
+    # HYPOTHESIS 1: NORMALITY TEST
+    # =====================================================
+    if selected_hypothesis == "Normality of AI Dependency Score":
 
-    fig, ax = plt.subplots(figsize=(7, 4))
-    ax.hist(dep_score, bins=8, edgecolor="black")
-    ax.set_title("Histogram of AI Dependency Score")
-    st.pyplot(fig)
+        st.subheader("Hypothesis 1: Normality of AI Dependency Score")
 
-    stat, p_value = shapiro(dep_score)
-    st.write(f"Shapiro–Wilk p-value: {p_value:.4f}")
-    st.markdown("""
-    **Interpretation:** Since the p-value is greater than the significance level α = 0.05, we fail to reject the null hypothesis.
-                There is no statistically significant evidence to suggest that the AI Dependency Score deviates from normality.
-                 Hence, the AI Dependency Score can be considered approximately normally distributed. 
-    """)
+        st.markdown("""
+        **H₀:** AI Dependency Score follows a normal distribution  
+        **H₁:** AI Dependency Score does not follow a normal distribution  
 
-# =========================================================
-# WHAT NEXT
-# =========================================================
-elif active_tab == "🚀 What Next?":
+        **Statistical Test Used:** Shapiro–Wilk Test  
+        **Data Source:** Sheet – `Sheet5`
+        """)
 
-    st.header("Future Scope and Deliverables")
+        df = pd.read_excel(
+            "FINAL DATA OF PROJECT (1).xlsx",
+            sheet_name="Sheet5"
+        )
+        df.columns = df.columns.astype(str).str.strip()
+        dep_col = next(c for c in df.columns if "dep" in c.lower())
+        ai_dep = df[dep_col].dropna()
 
-    st.markdown("""
-    - Inferential statistical testing  
-    - Correlation and regression analysis  
-    - Group-wise comparisons (UG vs PG, faculty-wise)  
-    - Final dashboard, statistical report, and presentation  
-    """)
+        col1, col2 = st.columns([1.1, 1])
 
+        with col1:
+            fig, ax = plt.subplots(figsize=(4.5, 3))
+            ax.hist(ai_dep, bins=8, edgecolor="black", alpha=0.75)
+            ax.set_title("AI Dependency Score Distribution", fontsize=10)
+            ax.set_xlabel("Score")
+            ax.set_ylabel("Frequency")
+            st.pyplot(fig)
+
+        stat, p_value = shapiro(ai_dep)
+
+        with col2:
+            st.metric("Shapiro–Wilk p-value", f"{p_value:.4f}")
+            if p_value > 0.05:
+                st.success("Fail to reject H₀ → Normality assumption satisfied.")
+            else:
+                st.warning("Reject H₀ → Data deviates from normality.")
+
+        st.markdown("### Test Formula")
+        st.latex(r"""
+        W = \frac{(\sum a_i x_{(i)})^2}{\sum (x_i - \bar{x})^2}
+        """)
+
+    # =====================================================
+    # HYPOTHESIS 2: CGPA vs AI DEPENDENCY
+    # =====================================================
+    elif selected_hypothesis == "CGPA vs AI Dependency":
+
+        st.subheader("Hypothesis 2: CGPA vs AI Dependency")
+
+        st.markdown("""
+        **H₀:** No significant relationship exists between CGPA and AI Dependency Score  
+        **H₁:** A significant relationship exists between CGPA and AI Dependency Score  
+
+        **Statistical Test Used:** Spearman Rank Correlation  
+        **Data Source:** Sheet – `AI_dep vs CGPA`
+        """)
+
+        df = pd.read_excel(
+            "FINAL DATA OF PROJECT (1).xlsx",
+            sheet_name="AI_dep vs CGPA"
+        )
+        df.columns = df.columns.astype(str).str.strip()
+
+        cgpa = df["CGPA of Previous Semester"]
+        ai_dep = df["AI_DEP_SCORE"]
+
+        from scipy.stats import spearmanr
+        rho, p_value = spearmanr(cgpa, ai_dep, nan_policy="omit")
+
+        col1, col2 = st.columns(2)
+        col1.metric("Spearman Correlation (ρ)", f"{rho:.3f}")
+        col2.metric("p-value", f"{p_value:.4f}")
+
+        strength = (
+            "Negligible" if abs(rho) < 0.1 else
+            "Weak" if abs(rho) < 0.3 else
+            "Moderate" if abs(rho) < 0.5 else
+            "Strong"
+        )
+
+        st.info(f"Observed relationship strength: **{strength} correlation**")
+
+        st.markdown("### Test Formula")
+        st.latex(r"""
+        \rho = 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)}
+        """)
+
+        if p_value < 0.05:
+            st.success("Reject H₀ → Significant relationship detected.")
+        else:
+            st.info("Fail to reject H₀ → No significant relationship detected.")
+
+    # =====================================================
+    # HYPOTHESIS 3: FACULTY vs AI DEPENDENCY (ANOVA)
+    # =====================================================
+    elif selected_hypothesis == "Faculty vs AI Dependency (One-Way ANOVA)":
+
+        st.subheader("Hypothesis 3: Faculty-wise Differences in AI Dependency")
+
+        st.markdown("""
+        **H₀:** Mean AI Dependency Score is the same across all faculties  
+        **H₁:** At least one faculty differs in mean AI Dependency Score  
+
+        **Statistical Test Used:** One-Way ANOVA  
+        **Data Source:** Sheet – `Form responses 1`
+        """)
+
+        df = pd.read_excel(
+            "FINAL DATA OF PROJECT (1).xlsx",
+            sheet_name="ANOVA"
+        )
+        df.columns = df.columns.astype(str).str.strip()
+
+        if not {"Faculty", "AI_DEP_SCORE"}.issubset(df.columns):
+            st.error("Required columns (Faculty, AI_DEP_SCORE) not found.")
+            st.stop()
+
+        # Group data correctly
+        groups = [
+            g["AI_DEP_SCORE"].dropna()
+            for _, g in df.groupby("Faculty")
+            if g["AI_DEP_SCORE"].dropna().shape[0] >= 2
+        ]
+
+        if len(groups) < 2:
+            st.error("Not enough faculties with sufficient observations for ANOVA.")
+            st.stop()
+
+        from scipy.stats import f_oneway
+        f_stat, p_value = f_oneway(*groups)
+
+        col1, col2 = st.columns(2)
+        col1.metric("F-statistic", f"{f_stat:.3f}")
+        col2.metric("p-value", f"{p_value:.4f}")
+
+        st.markdown("### Test Formula")
+        st.latex(r"""
+        F = \frac{\text{Between-group Mean Square}}{\text{Within-group Mean Square}}
+        """)
+
+        st.markdown("### Interpretation")
+
+        if p_value < 0.05:
+            st.success(
+                "Since p-value < 0.05, we reject the null hypothesis. "
+                "Mean AI Dependency Scores differ significantly across faculties."
+            )
+        else:
+            st.info(
+                "Since p-value > 0.05, we fail to reject the null hypothesis. "
+                "No statistically significant difference in mean AI Dependency Scores "
+                "is observed across faculties."
+            )
+
+
+   
 # =========================================================
 # FOOTER
 # =========================================================
