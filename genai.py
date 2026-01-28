@@ -207,12 +207,13 @@ elif active_tab == "📐 Sampling & Sample Size":
 
     st.latex(r"n_i = \frac{N_i}{N} \times n")
 
-    st.markdown("""
-                **Where:**
-    - \( n_{group} \) → Sample size for a faculty  
-    - \( N_{group} \) → Population size of that faculty  
-    - \( N \) → Total population (37,095)  
-    - \( n \) → Total sample size (221)  
+    st.latex.markdown("""
+    **Where:**  
+    - \( n_i \): Sample size for the *i-th* stratum  
+    - \( N_i \): Population size of the *i-th* stratum  
+    - \( N \): Total population (37,095)  
+    - \( n \): Total sample size (221)  
+
     Proportional allocation was used as a **guiding framework** to ensure
     fair representation across faculties. The table above shows the
     **actual achieved sample**, classified by faculty, gender, and level of study (UG/PG).
