@@ -551,14 +551,14 @@ elif active_tab == "📊 Data Visualization":
             st.plotly_chart(fig, use_container_width=True)
 
 # =========================================================
-# HYPOTHESES / TESTS TAB
+# HYPOTHESES / TESTS TAB (FINAL VERSION)
 # =========================================================
 elif active_tab == "📑 Tests":
 
     st.header("Statistical Hypothesis Testing")
 
     # =====================================================
-    # HYPOTHESIS DROPDOWN
+    # HYPOTHESIS SELECTION
     # =====================================================
     hypothesis_list = [
         "Normality of AI Dependency Score",
@@ -585,6 +585,7 @@ elif active_tab == "📑 Tests":
         **H₁:** AI Dependency Score does not follow a normal distribution  
 
         **Statistical Test Used:** Shapiro–Wilk Test  
+        **Significance Level:** α = 0.05  
         **Data Source:** Sheet – `Sheet5`
         """)
 
@@ -592,30 +593,49 @@ elif active_tab == "📑 Tests":
             "FINAL DATA OF PROJECT (1).xlsx",
             sheet_name="Sheet5"
         )
+
         df.columns = df.columns.astype(str).str.strip()
         dep_col = next(c for c in df.columns if "dep" in c.lower())
         ai_dep = df[dep_col].dropna()
 
-        col1, col2 = st.columns([1.1, 1])
+        col1, col2 = st.columns([1.2, 1])
 
+        # -------- PLOT (PLOTLY – DARK THEME)
         with col1:
-            fig, ax = plt.subplots(figsize=(4.5, 3))
-            ax.hist(ai_dep, bins=8, edgecolor="black", alpha=0.75)
-            ax.set_title("AI Dependency Score Distribution", fontsize=10)
-            ax.set_xlabel("Score")
-            ax.set_ylabel("Frequency")
-            st.pyplot(fig)
+            fig = px.histogram(
+                ai_dep,
+                nbins=8,
+                title="Distribution of AI Dependency Score",
+                template="plotly_dark",
+                color_discrete_sequence=["#636EFA"]
+            )
 
+            fig.update_layout(
+                xaxis_title="AI Dependency Score",
+                yaxis_title="Frequency",
+                bargap=0.08,
+                height=320
+            )
+
+            st.plotly_chart(fig, use_container_width=True)
+
+        # -------- SHAPIRO TEST
+        from scipy.stats import shapiro
         stat, p_value = shapiro(ai_dep)
 
         with col2:
             st.metric("Shapiro–Wilk p-value", f"{p_value:.4f}")
-            if p_value > 0.05:
-                st.success("Fail to reject H₀ → Normality assumption satisfied.")
-            else:
-                st.warning("Reject H₀ → Data deviates from normality.")
 
-        st.markdown("### Test Formula")
+            if p_value > 0.05:
+                st.success(
+                    "Fail to reject H₀ → AI Dependency Score can be considered approximately normally distributed."
+                )
+            else:
+                st.warning(
+                    "Reject H₀ → AI Dependency Score significantly deviates from normality."
+                )
+
+        st.markdown("### Test Statistic Formula")
         st.latex(r"""
         W = \frac{(\sum a_i x_{(i)})^2}{\sum (x_i - \bar{x})^2}
         """)
@@ -625,13 +645,14 @@ elif active_tab == "📑 Tests":
     # =====================================================
     elif selected_hypothesis == "CGPA vs AI Dependency":
 
-        st.subheader("Hypothesis 2: CGPA vs AI Dependency")
+        st.subheader("Hypothesis 2: CGPA vs AI Dependency Score")
 
         st.markdown("""
         **H₀:** No significant relationship exists between CGPA and AI Dependency Score  
         **H₁:** A significant relationship exists between CGPA and AI Dependency Score  
 
         **Statistical Test Used:** Spearman Rank Correlation  
+        **Significance Level:** α = 0.05  
         **Data Source:** Sheet – `AI_dep vs CGPA`
         """)
 
@@ -639,8 +660,8 @@ elif active_tab == "📑 Tests":
             "FINAL DATA OF PROJECT (1).xlsx",
             sheet_name="AI_dep vs CGPA"
         )
-        df.columns = df.columns.astype(str).str.strip()
 
+        df.columns = df.columns.astype(str).str.strip()
         cgpa = df["CGPA of Previous Semester"]
         ai_dep = df["AI_DEP_SCORE"]
 
@@ -652,50 +673,55 @@ elif active_tab == "📑 Tests":
         col2.metric("p-value", f"{p_value:.4f}")
 
         strength = (
-            "Negligible" if abs(rho) < 0.1 else
-            "Weak" if abs(rho) < 0.3 else
-            "Moderate" if abs(rho) < 0.5 else
+            "Negligible" if abs(rho) < 0.10 else
+            "Weak" if abs(rho) < 0.30 else
+            "Moderate" if abs(rho) < 0.50 else
             "Strong"
         )
 
         st.info(f"Observed relationship strength: **{strength} correlation**")
 
-        st.markdown("### Test Formula")
+        st.markdown("### Test Statistic Formula")
         st.latex(r"""
         \rho = 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)}
         """)
 
         if p_value < 0.05:
-            st.success("Reject H₀ → Significant relationship detected.")
+            st.success(
+                "Reject H₀ → A statistically significant relationship exists between CGPA and AI Dependency Score."
+            )
         else:
-            st.info("Fail to reject H₀ → No significant relationship detected.")
+            st.info(
+                "Fail to reject H₀ → No statistically significant relationship detected between CGPA and AI Dependency Score."
+            )
 
     # =====================================================
     # HYPOTHESIS 3: FACULTY vs AI DEPENDENCY (ANOVA)
     # =====================================================
     elif selected_hypothesis == "Faculty vs AI Dependency (One-Way ANOVA)":
 
-        st.subheader("Hypothesis 3: Faculty-wise Differences in AI Dependency")
+        st.subheader("Hypothesis 3: Faculty-wise Differences in AI Dependency Score")
 
         st.markdown("""
         **H₀:** Mean AI Dependency Score is the same across all faculties  
         **H₁:** At least one faculty differs in mean AI Dependency Score  
 
         **Statistical Test Used:** One-Way ANOVA  
-        **Data Source:** Sheet – `Form responses 1`
+        **Significance Level:** α = 0.05  
+        **Data Source:** Sheet – `ANOVA`
         """)
 
         df = pd.read_excel(
             "FINAL DATA OF PROJECT (1).xlsx",
             sheet_name="ANOVA"
         )
+
         df.columns = df.columns.astype(str).str.strip()
 
         if not {"Faculty", "AI_DEP_SCORE"}.issubset(df.columns):
             st.error("Required columns (Faculty, AI_DEP_SCORE) not found.")
             st.stop()
 
-        # Group data correctly
         groups = [
             g["AI_DEP_SCORE"].dropna()
             for _, g in df.groupby("Faculty")
@@ -703,7 +729,7 @@ elif active_tab == "📑 Tests":
         ]
 
         if len(groups) < 2:
-            st.error("Not enough faculties with sufficient observations for ANOVA.")
+            st.error("Insufficient data across faculties to perform ANOVA.")
             st.stop()
 
         from scipy.stats import f_oneway
@@ -713,7 +739,7 @@ elif active_tab == "📑 Tests":
         col1.metric("F-statistic", f"{f_stat:.3f}")
         col2.metric("p-value", f"{p_value:.4f}")
 
-        st.markdown("### Test Formula")
+        st.markdown("### Test Statistic Formula")
         st.latex(r"""
         F = \frac{\text{Between-group Mean Square}}{\text{Within-group Mean Square}}
         """)
@@ -731,7 +757,6 @@ elif active_tab == "📑 Tests":
                 "No statistically significant difference in mean AI Dependency Scores "
                 "is observed across faculties."
             )
-
 
    
 # =========================================================
