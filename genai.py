@@ -540,7 +540,7 @@ elif active_tab == "📊 Data Visualization":
 
             sns.set_theme(style="ticks", font_scale=1.1)
 
-            fig, ax = plt.subplots(figsize=(12, 7),"none")
+            fig, ax = plt.subplots(figsize=(12, 7),facecolor="none")
             ax.set_facecolor("none")
             sns.barplot(
                 data=df3_long,
