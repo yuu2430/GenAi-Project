@@ -437,7 +437,7 @@ elif active_tab == "📊 Data Visualization":
         st.subheader("AI Tools Used for Academic Purposes")
 
         df2 = pd.read_excel(
-            r"C:\Users\AJAY KUMAR SHARMA\Downloads\Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
+            r"Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
             sheet_name="Sheet2"
         )
 
