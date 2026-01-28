@@ -207,7 +207,7 @@ elif active_tab == "📐 Sampling & Sample Size":
 
     st.latex(r"n_i = \frac{N_i}{N} \times n")
 
-    st.latex("""
+    st.markdown("""
     **Where:**  
     - \( n_i \): Sample size for the *i-th* stratum  
     - \( N_i \): Population size of the *i-th* stratum  
