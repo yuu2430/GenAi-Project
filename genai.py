@@ -284,7 +284,7 @@ elif active_tab == "📊 Data Visualization":
     )
 
     # =====================================
-    # BAR CHART
+    # MULTIPLE BAR CHART
     # =====================================
     if viz_type == "Multiple Bar Chart (AI Tools vs Purpose)":
 
@@ -349,9 +349,9 @@ elif active_tab == "📊 Data Visualization":
         st.plotly_chart(fig, use_container_width=True)
 
     # =====================================
-    # PIE CHARTS
+    # GENERAL PIE CHARTS
     # =====================================
-    else:
+    elif viz_type == "Pie Charts (AI Usage Distribution)":
 
         st.subheader("AI Usage Distribution (Pie Charts)")
 
@@ -364,152 +364,100 @@ elif active_tab == "📊 Data Visualization":
             ]
         )
 
-        # ---------- FIXED PIE FIG ----------
         def pie_figure():
-            fig, ax = plt.subplots(
-                figsize=(3.2, 3),   # ✅ laptop friendly
-                facecolor="#0E1117"
-            )
+            fig, ax = plt.subplots(figsize=(3.2, 3), facecolor="#0E1117")
             ax.set_facecolor("#0E1117")
             return fig, ax
 
-        # ================================
-        # OVERALL AI USAGE
-        # ================================
         if pie_type == "Overall AI Usage":
-
             sizes = [159, 62]
             labels = ["Yes", "No"]
-
             fig, ax = pie_figure()
             ax.pie(
-                sizes,
-                labels=labels,
-                autopct="%1.1f%%",
-                startangle=90,
-                radius=0.68,
+                sizes, labels=labels, autopct="%1.1f%%",
+                startangle=90, radius=0.68,
                 colors=["#4C72B0", "#DD8452"],
-                wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-                textprops={"color": "white", "fontsize": 7},
-                labeldistance=1.05,
-                pctdistance=0.6
+                wedgeprops={"edgecolor": "#1f2937"},
+                textprops={"color": "white", "fontsize": 7}
             )
-
             ax.set_title("Overall AI Usage Among Students", color="white", fontsize=9)
             ax.axis("equal")
-            plt.tight_layout()
-            plt.tight_layout()
+            st.pyplot(fig)
 
-            st.pyplot(fig, use_container_width=False)
-
-        # ================================
-        # PROGRAMME-WISE AI USAGE
-        # ================================
         elif pie_type == "Programme-wise AI Usage":
             sizes = [47, 112, 3, 59]
             labels = ["PG – Yes", "UG – Yes", "PG – No", "UG – No"]
             fig, ax = pie_figure()
-            ax.pie(sizes,labels=labels,
-                   autopct="%1.1f%%",
-                   startangle=90,
-                   radius=0.68,
-                   colors=["#4C72B0", "#55A868", "#C44E52", "#8172B3"],
-                   wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-                   textprops={"color": "white", "fontsize": 7},
-                  labeldistance=1.05,
-                   pctdistance=0.6)
-            ax.set_title("Programme-wise AI Usage Distribution",
-                         color="white",
-                         fontsize=9,
-                         pad=12)
+            ax.pie(
+                sizes, labels=labels, autopct="%1.1f%%",
+                startangle=90, radius=0.68,
+                colors=["#4C72B0", "#55A868", "#C44E52", "#8172B3"],
+                wedgeprops={"edgecolor": "#1f2937"},
+                textprops={"color": "white", "fontsize": 7}
+            )
+            ax.set_title("Programme-wise AI Usage Distribution", color="white", fontsize=9)
             ax.axis("equal")
-            plt.tight_layout()
-            st.pyplot(fig, use_container_width=False)
+            st.pyplot(fig)
 
-
-        # ================================
-        # GENDER-WISE AI USAGE
-        # ================================
         else:
-
             sizes = [99, 29, 60, 33]
             labels = ["Female – Yes", "Female – No", "Male – Yes", "Male – No"]
-
             fig, ax = pie_figure()
             ax.pie(
-                sizes,
-                labels=labels,
-                autopct="%1.1f%%",
-                startangle=90,
-                radius=0.68,
+                sizes, labels=labels, autopct="%1.1f%%",
+                startangle=90, radius=0.68,
                 colors=["#4C72B0", "#DD8452", "#55A868", "#C44E52"],
-                wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-                textprops={"color": "white", "fontsize": 7},
-                labeldistance=1.05,
-                pctdistance=0.6
+                wedgeprops={"edgecolor": "#1f2937"},
+                textprops={"color": "white", "fontsize": 7}
             )
-
             ax.set_title("Gender-wise AI Usage Distribution", color="white", fontsize=9)
             ax.axis("equal")
-            plt.tight_layout()
+            st.pyplot(fig)
 
-            st.pyplot(fig, use_container_width=False)
+    # =====================================
+    # ACADEMIC PURPOSE PIE (NEW & FIXED)
+    # =====================================
+    else:
 
-import matplotlib.pyplot as plt
-import seaborn as sns
+        st.subheader("AI Tools Used for Academic Purposes")
 
-st.subheader("AI Tools Used for Academic Purposes")
+        df2 = pd.read_excel(
+            "FINAL DATA OF PROJECT (1).xlsx",
+            sheet_name="Sheet3"
+        )
 
-# Select the column
-col = df2.columns[0]
+        df2.columns = df2.columns.astype(str).str.strip()
+        col = df2.columns[0]
 
-# Combine Perplexity and Copilot
-df2[col] = df2[col].replace({
-    "Perplexity": "Perplexity / Copilot",
-    "Copilot": "Perplexity / Copilot"
-})
+        df2[col] = df2[col].replace({
+            "Perplexity": "Perplexity / Copilot",
+            "Copilot": "Perplexity / Copilot"
+        })
 
-# Calculate counts
-counts = df2[col].value_counts()
-labels = counts.index
-sizes = counts.values
+        counts = df2[col].value_counts()
+        labels = counts.index
+        sizes = counts.values
 
-# ---------- Pie Figure ----------
-fig, ax = plt.subplots(
-    figsize=(4, 4),
-    facecolor="#0E1117"
-)
-ax.set_facecolor("#0E1117")
+        fig, ax = plt.subplots(figsize=(4, 4), facecolor="#0E1117")
+        ax.set_facecolor("#0E1117")
 
-# Color palette
-colors = sns.color_palette("Spectral", len(labels))
+        colors = sns.color_palette("Spectral", len(labels))
 
-# Pie chart
-ax.pie(
-    sizes,
-    labels=labels,
-    autopct="%1.1f%%",
-    startangle=140,
-    colors=colors,
-    radius=0.75,
-    pctdistance=0.65,
-    wedgeprops={"edgecolor": "#1f2937", "linewidth": 1},
-    textprops={"color": "white", "fontsize": 9}
-)
+        ax.pie(
+            sizes, labels=labels, autopct="%1.1f%%",
+            startangle=140, radius=0.75,
+            colors=colors, pctdistance=0.65,
+            wedgeprops={"edgecolor": "#1f2937"},
+            textprops={"color": "white", "fontsize": 9}
+        )
 
-# Title
-ax.set_title(
-    "Distribution of AI Tools Used for Academic Purposes",
-    fontsize=10,
-    color="white",
-    pad=12
-)
+        ax.set_title(
+            "Distribution of AI Tools Used for Academic Purposes",
+            fontsize=10, color="white"
+        )
 
-ax.axis("equal")
-plt.tight_layout()
-
-st.pyplot(fig, use_container_width=False)
-
+        ax.axis("equal")
+        st.pyplot(fig)
 
             
 # =========================================================
