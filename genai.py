@@ -405,7 +405,7 @@ elif active_tab == "📊 Data Visualization":
             plt.tight_layout()
             plt.tight_layout()
 
-            st.pyplot(fig, use_container_width=False)
+            st.pyplot(fig, use_container_width=True)
 
         # ================================
         # PROGRAMME-WISE AI USAGE
@@ -454,7 +454,7 @@ elif active_tab == "📊 Data Visualization":
             ax.axis("equal")
             plt.tight_layout()
 
-            st.pyplot(fig, use_container_width=False)
+            st.pyplot(fig, use_container_width=True)
 
 # =========================================================
 # RELIABILITY
