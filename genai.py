@@ -125,7 +125,9 @@ if active_tab == "📘 Overview":
     **Institution:** The Maharaja Sayajirao University of Baroda  
     **Students:**  Rohan Shukla • Vaishali Sharma • Raiwant Kumar • Ashish Vaghela  
     **Mentor:** Prof. Murlidharan Kunnumal
-    **Team 4**""")
+    
+    **Team 4**
+    """)
     st.caption("Project Dashboard")
     st.markdown("---")
 
