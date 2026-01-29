@@ -136,22 +136,22 @@ elif active_tab == "🎯 Objectives":
     st.markdown("""
     <div style="font-size:18px; line-height:1.8;">
 
-    1. Quantify the frequency and purpose of Generative AI (GenAI) usage among university students.  
+    1. To find out how often students use AI tools and for what purpose, and see how this differs by their education level, subject area, or gender.  
     <br>
 
-    2. Examine the relationship between GenAI usage and cognitive engagement in academic learning.  
+    2. To understand how students’ views on AI dependence differ across different age groups, genders, and study programs.  
     <br>
 
-    3. Study the mediating role of cognitive offloading in shaping learning outcomes.  
+    3. To check if depending on AI for thinking (cognitive offloading) affects the link between AI usage and students’ learning performance or depth of understanding.  
     <br>
 
-    4. Identify differences in AI dependency across demographic categories such as gender, programme, and faculty.  
+    4. To study how AI tool usage is related to students’ critical thinking and engagement in learning, using self-reported ratings.  
     <br>
 
-    5. Assess the impact of GenAI tools on creativity, problem-solving ability, and independent learning behaviour.  
+    5. To explore how using AI tools influences students’ academic skills, like creativity, and independent learning.  
     <br>
 
-    6. Develop a predictive statistical framework to distinguish between positive and negative academic effects of GenAI usage.  
+    6. To create a model that predicts what factors lead to positive or negative effects of AI tool usage on students’ academic outcomes.  
 
     </div>
     """, unsafe_allow_html=True)
