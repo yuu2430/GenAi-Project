@@ -137,7 +137,7 @@ if active_tab == "📘 Overview":
             Among University Students
             </h2>
             <p style="font-size:16px; opacity:0.95;">
-            MSc Statistics · Research Dashboard
+            MSc Statistics · Mid-Sem Project Presentation
             </p>
         </div>
         """,
