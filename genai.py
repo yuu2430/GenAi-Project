@@ -306,34 +306,7 @@ elif active_tab == "🧪 Pilot Survey":
 # QUESTIONNAIRE
 # =========================================================
 
-elif active_tab == "📝 Questionnaire":
 
-    st.header("Research Questionnaire")
-    st.caption("Survey Instrument Used for Data Collection")
-    st.markdown("---")
-
-    from docx import Document
-
-    @st.cache_data
-    def load_questionnaire():
-        doc = Document("Questionnaire.docx")
-        content = []
-        for para in doc.paragraphs:
-            if para.text.strip():
-                content.append(para.text)
-        return content
-
-    questionnaire_text = load_questionnaire()
-
-    for line in questionnaire_text:
-        if line.lower().startswith("section"):
-            st.subheader(line)
-        elif line.lower().startswith("reference"):
-            st.markdown(f"📌 **{line}**")
-        elif line.lower().startswith("description"):
-            st.markdown(f"**{line}**")
-        else:
-            st.write(line)
 
     st.markdown("---")
     st.markdown("📄 **Full Questionnaire (Google Form PDF):**  "
