@@ -1095,7 +1095,7 @@ f"""
 <li>
 Gerlich, M. (2025). <i>AI tools in society: Impacts on cognitive offloading and the future of critical thinking</i>.
 <b>Societies, 15</b>(1), 6.
-<a href="https://doi.org/10.3390/soc15010006" target="_blank">
+<a href="" target="_blank">
 https://doi.org/10.3390/soc15010006
 </a>
 </li><br>
@@ -1135,9 +1135,7 @@ Karwowski, M., Lebuda, I., &amp; Wiśniewska, E. (2018).
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    st.info(
-        "📌 References are formatted in APA style and aligned with the theoretical framework of this study."
-    )
+    
 
 
 # =========================================================
