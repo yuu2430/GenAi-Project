@@ -334,13 +334,12 @@ elif active_tab == "📝 Questionnaire":
         else:
             st.write(line)
 
-    # Optional download button
-    with open("Questionnaire.docx", "rb") as f:
-        st.download_button(
-            "📥 Download Questionnaire (DOCX)",
-            f,
-            file_name="Research_Questionnaire.docx"
-        )
+    st.markdown("---")
+    st.markdown("📄 **Full Questionnaire (Google Form PDF):**  "
+                "[Click here to view on GitHub]"
+                "(https://github.com/yuu2430/GenAi-Project/blob/main/"
+                "Cognitive%20and%20Educational%20impacts%20of%20GenAi%20usage%20among%20university%20students%20-%20Google%20Forms.pdf)")
+
 
 
 
