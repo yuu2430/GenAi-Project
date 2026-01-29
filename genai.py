@@ -242,7 +242,7 @@ elif active_tab == "📐 Sampling & Sample Size":
         st.latex(r"E = 0.05")
         
         
-    st.subheader("Proportional Allocation Principle (Theoretical Basis)")
+    st.subheader("Proportional Allocation Principle")
 
     st.latex(r"n_i = \frac{N_i}{N} \times n")
 
