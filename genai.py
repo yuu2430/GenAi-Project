@@ -99,8 +99,8 @@ st.sidebar.caption("MSc Statistics – Research Dashboard")
 tabs = [
     "📘 Overview",
     "🎯 Objectives",
-    "📐 Sampling & Sample Size",
     "🧪 Pilot Survey",
+    "📐 Sampling & Sample Size",
     "📝 Questionnaire",
     "📋 Dataset Overview",
     "📊 Data Visualization",
