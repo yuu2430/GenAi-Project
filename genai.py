@@ -131,23 +131,30 @@ if active_tab == "📘 Overview":
 # =========================================================
 elif active_tab == "🎯 Objectives":
 
-    st.header("Objective")
+    st.header("Objectives of the Study")
 
-    obj_tabs = st.tabs(["Primary Objectives", "Analytical & Applied Objectives"])
+    st.markdown("""
+    <div style="font-size:18px; line-height:1.8;">
 
-    with obj_tabs[0]:
-        st.markdown("""
-        1. To find out how often students use AI tools and for what purpose, and see how this differs by their education level, subject area, or gender.  
-        2. To understand how students’ views on AI dependence differ across different age groups, genders, and study programs.  
-        3. Study the mediating role of cognitive offloading in learning outcomes  
-        """)
+    1. Quantify the frequency and purpose of Generative AI (GenAI) usage among university students.  
+    <br>
 
-    with obj_tabs[1]:
-        st.markdown("""
-        4. Identify differences in AI dependence across demographic categories  
-        5. Assess the impact of AI on creativity, problem-solving, and independent learning  
-        6. Develop a predictive statistical model for positive vs negative academic effects  
-        """)
+    2. Examine the relationship between GenAI usage and cognitive engagement in academic learning.  
+    <br>
+
+    3. Study the mediating role of cognitive offloading in shaping learning outcomes.  
+    <br>
+
+    4. Identify differences in AI dependency across demographic categories such as gender, programme, and faculty.  
+    <br>
+
+    5. Assess the impact of GenAI tools on creativity, problem-solving ability, and independent learning behaviour.  
+    <br>
+
+    6. Develop a predictive statistical framework to distinguish between positive and negative academic effects of GenAI usage.  
+
+    </div>
+    """, unsafe_allow_html=True)
 
 # =========================================================
 # SAMPLING & SAMPLE SIZE
