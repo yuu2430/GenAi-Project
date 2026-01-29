@@ -372,35 +372,27 @@ elif active_tab == "📝 Questionnaire":
         "Cognitive%20and%20Educational%20impacts%20of%20GenAi%20usage%20among%20university%20students%20-%20Google%20Forms.pdf)"
     )
 # =========================================================
-# DATASET OVERVIEW
+# FORM RESPONSES (RAW DATA)
 # =========================================================
 elif active_tab == "📋 Dataset Overview":
 
-    st.header("Dataset Overview")
-    st.caption("Primary Data Used for Statistical Analysis")
+    st.header("DATASET")
+    st.caption("Raw responses collected through Google Form")
     st.markdown("---")
 
     FILE_NAME = "FINAL DATA OF PROJECT (1).xlsx"
+    SHEET_NAME = "Form Responses 1"
 
     try:
-        # Load Excel file
-        excel_file = pd.ExcelFile(FILE_NAME)
-        sheet_names = excel_file.sheet_names
-
-        # Sheet selector
-        selected_sheet = st.selectbox(
-            "Select Dataset Sheet",
-            sheet_names
-        )
-
-        df = pd.read_excel(FILE_NAME, sheet_name=selected_sheet)
+        # Load only the required sheet
+        df = pd.read_excel(FILE_NAME, sheet_name=SHEET_NAME)
 
         # ===============================
-        # BASIC DATASET INFO
+        # BASIC DATASET METRICS
         # ===============================
         col1, col2, col3 = st.columns(3)
-        col1.metric("Number of Rows", df.shape[0])
-        col2.metric("Number of Columns", df.shape[1])
+        col1.metric("Total Responses", df.shape[0])
+        col2.metric("Total Variables", df.shape[1])
         col3.metric("Missing Values", int(df.isnull().sum().sum()))
 
         st.markdown("---")
@@ -408,35 +400,24 @@ elif active_tab == "📋 Dataset Overview":
         # ===============================
         # DATA PREVIEW
         # ===============================
-        st.subheader("Data Preview")
+        st.subheader("Response Data Preview")
         st.dataframe(df, use_container_width=True)
 
         # ===============================
-        # COLUMN INFORMATION
+        # OPTIONAL: COLUMN INFO
         # ===============================
-        with st.expander("Column Information"):
+        with st.expander("Variable Information"):
             col_info = pd.DataFrame({
-                "Column Name": df.columns,
+                "Variable Name": df.columns,
                 "Data Type": df.dtypes.astype(str),
                 "Missing Values": df.isnull().sum().values
             })
             st.dataframe(col_info, use_container_width=True)
 
-        # ===============================
-        # NUMERICAL SUMMARY
-        # ===============================
-        with st.expander("Descriptive Statistics (Numerical Variables)"):
-            numeric_df = df.select_dtypes(include=np.number)
-            if numeric_df.empty:
-                st.info("No numerical variables found in this sheet.")
-            else:
-                st.dataframe(
-                    numeric_df.describe().T,
-                    use_container_width=True
-                )
-
     except FileNotFoundError:
-        st.error("Excel file not found in GitHub repository.")
+        st.error("Excel file not found in the GitHub repository.")
+    except ValueError:
+        st.error("Sheet name 'Form Responses 1' not found in the Excel file.")
 
 
 # =========================================================
