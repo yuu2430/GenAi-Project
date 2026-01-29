@@ -368,16 +368,17 @@ elif active_tab == "🧪 Pilot Survey":
     st.info("“**Has Generative AI impacted your education?**”")
 
     st.subheader("Pilot Results Summary")
+    
+    st.markdown("""
+    - **Yes:** 48 students  
+    - **No:** 10 students  
+    """)
     col3, col4 = st.columns(2)
     with col1:
         st.metric("**Yes**", "48")
 
     with col2:
         st.metric("**No**", "10")
-    st.markdown("""
-    - **Yes:** 48 students  
-    - **No:** 10 students  
-    """)
 
     st.subheader("Estimated Proportion from Pilot Study")
     st.latex(r"p = \frac{48}{58} = 0.827")
