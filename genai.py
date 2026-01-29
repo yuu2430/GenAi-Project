@@ -250,7 +250,7 @@ elif active_tab == "🎯 Objectives":
 
     objectives = [
         "To find out how often students use AI tools and for what purpose, and see how this differs by their education level or gender.",
-        "To understand how students’ views on AI dependence differ across different age groups, genders, and study programs.",
+        "To identify the level of dependence on GenAI among MSU students.",
         "To check if depending on AI for thinking (cognitive offloading) affects the link between AI usage and students’ learning performance (CGPA).",
         "To study how AI tool usage is related to students’ critical thinking and engagement in learning, using self-reported ratings.",
         "To explore how using AI tools influences students’ academic skills, such as creativity and independent learning.",
