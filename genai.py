@@ -367,7 +367,7 @@ elif active_tab == "📝 Questionnaire":
     # 🔗 GitHub hyperlink to full questionnaire PDF
     st.markdown(
         "📄 **Full Questionnaire (Google Form PDF):** "
-        "[Click here to view on GitHub]"
+        "[Click here]"
         "(https://github.com/yuu2430/GenAi-Project/blob/main/"
         "Cognitive%20and%20Educational%20impacts%20of%20GenAi%20usage%20among%20university%20students%20-%20Google%20Forms.pdf)"
     )
