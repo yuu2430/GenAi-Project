@@ -369,10 +369,7 @@ elif active_tab == "🧪 Pilot Survey":
 
     st.subheader("Pilot Results Summary")
     
-    st.markdown("""
-    - **Yes:** 48 students  
-    - **No:** 10 students  
-    """)
+    
     col3, col4 = st.columns(2)
     with col3:
         st.metric("**Yes**", "48")
