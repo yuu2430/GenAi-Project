@@ -421,17 +421,7 @@ elif active_tab == "📋 Dataset Overview":
         st.subheader("Form Responses Preview")
         st.dataframe(df, use_container_width=True)
 
-        # ===============================
-        # COLUMN INFORMATION
-        # ===============================
-        with st.expander("Variable Information"):
-            col_info = pd.DataFrame({
-                "Variable Name": df.columns,
-                "Data Type": df.dtypes.astype(str),
-                "Missing Values": df.isnull().sum().values
-            })
-            st.dataframe(col_info, use_container_width=True)
-
+        
     except Exception as e:
         st.error("Unable to load Excel file.")
         st.code(str(e))
