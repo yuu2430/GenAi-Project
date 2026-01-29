@@ -171,29 +171,35 @@ if active_tab == "📘 Overview":
 elif active_tab == "🎯 Objectives":
 
     st.header("Objectives of the Study")
+    st.caption("Research goals guiding the analysis")
+    st.markdown("---")
 
-    st.markdown("""
-    <div style="font-size:18px; line-height:1.8;">
+    objectives = [
+        "To find out how often students use AI tools and for what purpose, and see how this differs by their education level or gender.",
+        "To understand how students’ views on AI dependence differ across different age groups, genders, and study programs.",
+        "To check if depending on AI for thinking (cognitive offloading) affects the link between AI usage and students’ learning performance (CGPA).",
+        "To study how AI tool usage is related to students’ critical thinking and engagement in learning, using self-reported ratings.",
+        "To explore how using AI tools influences students’ academic skills, such as creativity and independent learning.",
+        "To create a model that predicts factors leading to positive or negative effects of AI tool usage on students’ academic outcomes."
+    ]
 
-    1. To find out how often students use AI tools and for what purpose, and see how this differs by their education level, or gender.  
-    <br>
-
-    2. To understand how students’ views on AI dependence differ across different age groups, genders, and study programs.  
-    <br>
-
-    3. To check if depending on AI for thinking (cognitive offloading) affects the link between AI usage and students’ learning performance (CGPA).  
-    <br>
-
-    4. To study how AI tool usage is related to students’ critical thinking and engagement in learning, using self-reported ratings.  
-    <br>
-
-    5. To explore how using AI tools influences students’ academic skills, like creativity, and independent learning.  
-    <br>
-
-    6. To create a model that predicts what factors lead to positive or negative effects of AI tool usage on students’ academic outcomes.  
-
-    </div>
-    """, unsafe_allow_html=True)
+    for i, obj in enumerate(objectives, start=1):
+        st.markdown(
+            f"""
+            <div style="
+                background-color: {THEME_COLORS['accent2']};
+                padding: 14px 18px;
+                border-radius: 10px;
+                margin-bottom: 12px;
+                font-size: 17px;
+                line-height: 1.7;
+                border-left: 5px solid {THEME_COLORS['primary']};
+            ">
+            <b>Objective {i}.</b> {obj}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 # =========================================================
 # SAMPLING & SAMPLE SIZE
