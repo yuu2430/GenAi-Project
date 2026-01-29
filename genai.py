@@ -347,45 +347,142 @@ elif active_tab == "📐 Sampling & Sample Size":
 # =========================================================
 elif active_tab == "🧪 Pilot Survey":
 
+    # =====================================================
+    # SECTION HEADER
+    # =====================================================
     st.header("Pilot Survey Analysis")
+    st.caption("Preliminary assessment before full-scale data collection")
 
-    st.success("Pilot survey conducted prior to full-scale data collection.")
+    st.markdown(
+        """
+        <div style="
+            background-color:#e8f3ff;
+            padding:12px 18px;
+            border-radius:10px;
+            font-size:16px;
+        ">
+        ✅ Pilot survey conducted prior to full-scale data collection.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown("---")
+
+    # =====================================================
+    # PILOT DESIGN SUMMARY (METRICS IN CARDS)
+    # =====================================================
+    st.subheader("Pilot Study Design")
 
     col1, col2 = st.columns(2)
 
     with col1:
-        st.metric("Total Population (N)", "37,095")
-        st.metric("Pilot Sample Size (n)", "58")
-        st.metric("Sampling Method", "Simple Random Sampling")
+        st.markdown(
+            """
+            <div style="
+                background-color:#f7fbff;
+                padding:16px;
+                border-radius:12px;
+                border-left:5px solid #5b9bd5;
+            ">
+            <b>Total Population (N):</b> 37,095<br>
+            <b>Pilot Sample Size (n):</b> 58<br>
+            <b>Sampling Method:</b> Simple Random Sampling
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
     with col2:
-        st.metric("Yes", "48")
-        st.metric("No", "10")
-        st.metric("Pilot Question", "Single Perception Item")
+        st.markdown(
+            """
+            <div style="
+                background-color:#f7fbff;
+                padding:16px;
+                border-radius:12px;
+                border-left:5px solid #2f75b5;
+            ">
+            <b>Responses – Yes:</b> 48<br>
+            <b>Responses – No:</b> 10<br>
+            <b>Pilot Question Type:</b> Single Perception Item
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
     st.markdown("---")
 
+    # =====================================================
+    # PILOT QUESTION
+    # =====================================================
     st.subheader("Pilot Survey Question")
-    st.info("“Has Generative AI impacted your education?”")
 
+    st.markdown(
+        """
+        <div style="
+            background-color:#f0f6ff;
+            padding:14px 18px;
+            border-radius:10px;
+            font-size:17px;
+            font-style:italic;
+        ">
+        “Has Generative AI impacted your education?”
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown("---")
+
+    # =====================================================
+    # RESULTS SUMMARY
+    # =====================================================
     st.subheader("Pilot Results Summary")
-    st.markdown("""
-    - **Yes:** 48 students  
-    - **No:** 10 students  
-    """)
 
+    st.markdown(
+        """
+        <div style="
+            background-color:#f7fbff;
+            padding:14px 18px;
+            border-radius:10px;
+            font-size:16px;
+            line-height:1.6;
+        ">
+        • <b>Yes:</b> 48 students<br>
+        • <b>No:</b> 10 students
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown("---")
+
+    # =====================================================
+    # ESTIMATED PROPORTION
+    # =====================================================
     st.subheader("Estimated Proportion from Pilot Study")
-    st.latex(r"p = \frac{48}{58} = 0.827")
-    st.latex(r"q = 1 - p = 0.173")
 
+    col3, col4 = st.columns(2)
+
+    with col3:
+        st.latex(r"p = \frac{48}{58} = 0.827")
+
+    with col4:
+        st.latex(r"q = 1 - p = 0.173")
+
+    # =====================================================
+    # IMPORTANCE OF PILOT STUDY
+    # =====================================================
     with st.expander("Importance of Pilot Study"):
-        st.markdown("""
-        - Tested clarity and relevance of questionnaire  
-        - Improved construct grouping  
-        - Validated Likert-scale consistency  
-        - Provided empirical estimate of population proportion  
-        - Reduced measurement and response bias  
-        """)
+        st.markdown(
+            """
+            - Tested clarity and relevance of the questionnaire  
+            - Improved construct grouping and item alignment  
+            - Validated Likert-scale consistency  
+            - Provided empirical estimate of population proportion  
+            - Reduced potential measurement and response bias  
+            """
+        )
 
 
 # =========================================================
