@@ -967,9 +967,12 @@ elif active_tab == "📌 Conclusion":
         "importance of individual effort, critical thinking, and independent learning in "
         "higher education."
     )
+
+
+    
     st.markdown("---")
     st.markdown(
-        "<div style='text-align:center; font-size:22px; color:gray; margin-top:10px;'>"
+        "<div style='text-align:center; font-size:42px; color:black; margin-top:10px;'>"
         "<b>Thank you</b>"
         "</div>",
         unsafe_allow_html=True
