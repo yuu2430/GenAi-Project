@@ -9,35 +9,27 @@ import seaborn as sns
 # =====================================================
 # GLOBAL COLOR THEME ( emphasize academic blue palette)
 # =====================================================
-# =====================================================
-# PROJECTOR-FRIENDLY LIGHT MULTI-HUE ACADEMIC THEME
-# =====================================================
 THEME_COLORS = {
-    "primary":   "#6fa8dc",   # soft sky blue
-    "secondary": "#93c47d",   # pastel green
-    "accent1":   "#f9cb9c",   # light peach
-    "accent2":   "#c9daf8",   # very light blue
-    "accent3":   "#b4a7d6",   # lavender
-    "accent4":   "#ffd966",   # soft yellow
-    "neutral":   "#f7f9fc"    # off-white
+    "primary": "#04408d",
+    "secondary": "#055cb8",
+    "accent1": "#5b97e1",
+    "accent2": "#a0bce4",
+    "accent3": "#267ed7",
+    "neutral": "#e6eef8"
 }
 
-# For grouped / multiple bar charts (high contrast but light)
 BAR_COLORS = [
-    "#6fa8dc",   # blue
-    "#93c47d",   # green
-    "#f9cb9c",   # peach
-    "#b4a7d6",   # lavender
-    "#ffd966"    # yellow
+    THEME_COLORS["primary"],
+    THEME_COLORS["secondary"],
+    THEME_COLORS["accent3"],
+    THEME_COLORS["accent1"]
 ]
 
-# For pie / donut charts (soft circular harmony)
 PIE_COLORS = [
-    "#6fa8dc",
-    "#93c47d",
-    "#f9cb9c",
-    "#b4a7d6",
-    "#ffd966"
+    THEME_COLORS["primary"],
+    THEME_COLORS["accent1"],
+    THEME_COLORS["accent2"],
+    THEME_COLORS["accent3"]
 ]
 
 
