@@ -776,7 +776,7 @@ elif active_tab == "📊 Data Visualization":
 elif active_tab == "📑 Inference":
 
     st.header("Objective 2: To identify the level of dependence on GenAI among MSU students.")
-    st.markdown("---")
+    
     # =====================================================
     # SESSION STATE FOR BUTTON SELECTION
     # =====================================================
