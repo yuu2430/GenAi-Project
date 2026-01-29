@@ -278,8 +278,8 @@ elif active_tab == "🧪 Pilot Survey":
         st.metric("Sampling Method", "Simple Random Sampling")
 
     with col2:
-        st.metric("Positive Impact", "48")
-        st.metric("Negative / No Impact", "10")
+        st.metric("Yes", "48")
+        st.metric("No", "10")
         st.metric("Pilot Question", "Single Perception Item")
 
     st.markdown("---")
