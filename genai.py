@@ -235,7 +235,7 @@ elif active_tab == "📐 Sampling & Sample Size":
         st.markdown("**Where:**")
         st.latex(r"z_{\alpha/2} = 1.96")
         st.markdown("Critical value for 95% confidence level")
-        st.latex(r"p = 0.5")
+        st.latex(r"p = 0.827")
         st.markdown("Assumed population proportion")
         st.latex(r"q = 1 - p")
         st.latex(r"E = 0.05")
