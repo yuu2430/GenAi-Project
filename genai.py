@@ -403,17 +403,17 @@ elif active_tab == "📋 Dataset Overview":
         st.subheader("Response Data Preview")
         st.dataframe(df, use_container_width=True)
 
-        # ===============================
-        # OPTIONAL: COLUMN INFO
-        # ===============================
-        with st.expander("Variable Information"):
-            col_info = pd.DataFrame({
-                "Variable Name": df.columns,
-                "Data Type": df.dtypes.astype(str),
-                "Missing Values": df.isnull().sum().values
-            })
-            st.dataframe(col_info, use_container_width=True)
+        with st.expander("Descriptive Statistics (Numerical Variables)"):
+            numeric_df = df.select_dtypes(include=np.number)
+            if numeric_df.empty:
+                st.info("No numerical variables found in this sheet.")
+            else:
+                st.dataframe(
+                    numeric_df.describe().T,
+                    use_container_width=True
+                )
 
+    
     except FileNotFoundError:
         st.error("Excel file not found in the GitHub repository.")
     except ValueError:
