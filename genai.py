@@ -1096,7 +1096,7 @@ f"""
 Gerlich, M. (2025). <i>AI tools in society: Impacts on cognitive offloading and the future of critical thinking</i>.
 <b>Societies, 15</b>(1), 6.
 <a href="" target="_blank">
-https://doi.org/10.3390/soc15010006
+
 </a>
 </li><br>
 
