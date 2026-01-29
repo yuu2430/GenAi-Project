@@ -126,49 +126,48 @@ if active_tab == "📘 Overview":
     st.markdown(
         f"""
         <div style="
-            background: linear-gradient(90deg,
-                {THEME_COLORS['primary']},
-                {THEME_COLORS['secondary']});
+            background: linear-gradient(90deg, {THEME_COLORS['primary']}, {THEME_COLORS['secondary']});
             padding: 26px 32px;
             border-radius: 14px;
         ">
             <h1 style="
                 color:white;
-                margin-bottom:4px;
-                line-height:1.25;
+                margin:0;
                 font-size:30px;
                 font-weight:600;
+                line-height:1.25;
             ">
-            Cognitive & Educational Impacts of Generative AI Usage
+                Cognitive & Educational Impacts of Generative AI Usage
             </h1>
 
             <h3 style="
                 color:white;
-                font-weight:400;
-                margin-top:0;
-                opacity:0.85;
+                margin-top:4px;
+                margin-bottom:10px;
                 font-size:20px;
+                font-weight:400;
+                opacity:0.85;
             ">
-            Among University Students
+                Among University Students
             </h3>
 
             <div style="
-                margin-top:14px;
-                height:3px;
                 width:72px;
+                height:3px;
                 background-color:white;
                 opacity:0.85;
                 border-radius:2px;
+                margin-bottom:12px;
             "></div>
 
             <p style="
-                margin-top:12px;
+                margin:0;
                 font-size:14px;
                 color:white;
                 opacity:0.8;
                 letter-spacing:0.3px;
             ">
-            MSc Statistics · Research Dashboard
+                MSc Statistics · Research Dashboard
             </p>
         </div>
         """,
