@@ -7,38 +7,30 @@ import plotly.express as px
 import seaborn as sns
 
 # =====================================================
-# PROJECTOR-OPTIMIZED PASTEL ACADEMIC THEME
-# (High visibility • Low eye strain • Multi-color safe)
+# GLOBAL COLOR THEME ( emphasize academic blue palette)
 # =====================================================
-
 THEME_COLORS = {
-    "blue": "#7db7e8",      # soft sky blue
-    "teal": "#8fd0c6",      # pastel teal
-    "green": "#b7d7b0",     # sage green
-    "lavender": "#c7c3e8",  # soft lavender
-    "peach": "#f2c6a0",     # muted peach
-    "grey": "#f3f4f6",      # neutral background
-    "text": "#2b2b2b"       # high contrast text
+    "primary": "#04408d",
+    "secondary": "#055cb8",
+    "accent1": "#5b97e1",
+    "accent2": "#a0bce4",
+    "accent3": "#267ed7",
+    "neutral": "#e6eef8"
 }
 
-# Bar charts (clear distinction on projector)
 BAR_COLORS = [
-    "#7db7e8",   # sky blue
-    "#8fd0c6",   # teal
-    "#b7d7b0",   # green
-    "#c7c3e8",   # lavender
-    "#f2c6a0"    # peach (extra category safe)
+    THEME_COLORS["primary"],
+    THEME_COLORS["secondary"],
+    THEME_COLORS["accent3"],
+    THEME_COLORS["accent1"]
 ]
 
-# Pie charts (softer, balanced)
 PIE_COLORS = [
-    "#7db7e8",
-    "#8fd0c6",
-    "#b7d7b0",
-    "#c7c3e8",
-    "#f2c6a0"
+    THEME_COLORS["primary"],
+    THEME_COLORS["accent1"],
+    THEME_COLORS["accent2"],
+    THEME_COLORS["accent3"]
 ]
-
 
 
 # =========================================================
