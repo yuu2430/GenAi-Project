@@ -120,56 +120,66 @@ active_tab = st.sidebar.radio(
 # =========================================================
 if active_tab == "📘 Overview":
 
-    # ---------- HERO TITLE ----------
+    # =====================================================
+    # HERO TITLE
+    # =====================================================
     st.markdown(
-    f"""
-    <div style="
-        background: linear-gradient(90deg,
-            {THEME_COLORS['primary']},
-            {THEME_COLORS['secondary']});
-        padding: 22px 28px;
-        border-radius: 14px;
-    ">
-        <h2 style="
-            color:white;
-            margin-bottom:6px;
-            line-height:1.3;
-        ">
-        Cognitive & Educational Impacts of Generative AI Usage
-        </h2>
-
-        <h4 style="
-            color:white;
-            font-weight:400;
-            margin-top:0;
-            opacity:0.9;
-        ">
-        Among University Students
-        </h4>
-
+        f"""
         <div style="
-            margin-top:12px;
-            height:2px;
-            width:60px;
-            background-color:white;
-            opacity:0.8;
-        "></div>
-
-        <p style="
-            margin-top:10px;
-            font-size:14px;
-            color:white;
-            opacity:0.85;
+            background: linear-gradient(90deg,
+                {THEME_COLORS['primary']},
+                {THEME_COLORS['secondary']});
+            padding: 26px 32px;
+            border-radius: 14px;
         ">
-        MSc Statistics · Research Dashboard
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+            <h1 style="
+                color:white;
+                margin-bottom:4px;
+                line-height:1.25;
+                font-size:30px;
+                font-weight:600;
+            ">
+            Cognitive & Educational Impacts of Generative AI Usage
+            </h1>
 
+            <h3 style="
+                color:white;
+                font-weight:400;
+                margin-top:0;
+                opacity:0.85;
+                font-size:20px;
+            ">
+            Among University Students
+            </h3>
 
-    # ---------- PROJECT INFO CARD ----------
+            <div style="
+                margin-top:14px;
+                height:3px;
+                width:72px;
+                background-color:white;
+                opacity:0.85;
+                border-radius:2px;
+            "></div>
+
+            <p style="
+                margin-top:12px;
+                font-size:14px;
+                color:white;
+                opacity:0.8;
+                letter-spacing:0.3px;
+            ">
+            MSc Statistics · Research Dashboard
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # =====================================================
+    # PROJECT INFO CARD
+    # =====================================================
     st.markdown(
         f"""
         <div style="
@@ -190,7 +200,9 @@ if active_tab == "📘 Overview":
 
     st.markdown("---")
 
-    # ---------- OVERVIEW CONTENT ----------
+    # =====================================================
+    # PROJECT OVERVIEW CONTENT
+    # =====================================================
     st.header("Project Overview")
 
     col1, col2 = st.columns(2)
@@ -242,7 +254,9 @@ if active_tab == "📘 Overview":
 
     st.markdown("---")
 
-    # ---------- AIM ----------
+    # =====================================================
+    # AIM OF THE STUDY
+    # =====================================================
     st.subheader("Aim of the Study")
     st.markdown(
         f"""
