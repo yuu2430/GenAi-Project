@@ -561,7 +561,7 @@ elif active_tab == "📊 Data Visualization":
 # =========================================================
 elif active_tab == "📑 Objective 1":
 
-    st.header("To understand how students’ views on AI dependence differ across different study programs.")
+    st.header("To understand how students’ views on AI dependence differ across MSU faculties and study programs.")
 
     # =====================================================
     # HYPOTHESIS DROPDOWN
