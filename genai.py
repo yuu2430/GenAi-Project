@@ -484,7 +484,7 @@ elif active_tab == "📋 Dataset Overview":
         # Auto-pick the first sheet (Google Forms responses)
         SHEET_NAME = sheet_names[0]
 
-        st.info(f"Using sheet: **{SHEET_NAME}**")
+        
 
         df = pd.read_excel(FILE_NAME, sheet_name=SHEET_NAME)
 
