@@ -269,8 +269,7 @@ elif active_tab == "🧪 Pilot Survey":
 
 
 # =========================================================
-# Data Visualization
-# =========================================================
+# DATA VISUALIZATION=========================================================
 elif active_tab == "📊 Data Visualization":
 
     st.header("Data Visualization")
@@ -308,7 +307,7 @@ elif active_tab == "📊 Data Visualization":
     st.markdown("---")
 
     # =====================================================
-    # 1. MULTIPLE BAR CHART
+    # 1. MULTIPLE BAR CHART (LIGHT)
     # =====================================================
     if viz_type == "Multiple Bar Chart – AI Tools vs Academic Purpose":
 
@@ -360,14 +359,21 @@ elif active_tab == "📊 Data Visualization":
             barmode="group",
             text_auto=True,
             title="Usage of AI Tools Across Academic Purposes",
-            template="plotly_dark"
+            template="plotly_white",
+            color_discrete_sequence=["#1f77b4", "#2ca02c", "#9467bd", "#ff7f0e"]
         )
 
-        fig.update_layout(height=550)
+        fig.update_layout(
+            height=550,
+            plot_bgcolor="white",
+            paper_bgcolor="white",
+            font=dict(color="black")
+        )
+
         st.plotly_chart(fig, use_container_width=True)
 
     # =====================================================
-    # 2. PROGRAMME & GENDER DISTRIBUTION
+    # 2. PROGRAMME & GENDER DISTRIBUTION (LIGHT)
     # =====================================================
     elif viz_type == "AI Usage Distribution (Programme & Gender)":
 
@@ -377,14 +383,28 @@ elif active_tab == "📊 Data Visualization":
 
         with col1:
             ug_df = pd.DataFrame({"Usage": ["Yes", "No"], "Count": [112, 59]})
-            fig_ug = px.pie(ug_df, names="Usage", values="Count",
-                            title="UG Students", hole=0.45, template="plotly_dark")
+            fig_ug = px.pie(
+                ug_df,
+                names="Usage",
+                values="Count",
+                title="UG Students",
+                hole=0.45,
+                template="plotly_white",
+                color_discrete_sequence=["#2ca02c", "#d62728"]
+            )
             st.plotly_chart(fig_ug, use_container_width=True)
 
         with col2:
             pg_df = pd.DataFrame({"Usage": ["Yes", "No"], "Count": [47, 3]})
-            fig_pg = px.pie(pg_df, names="Usage", values="Count",
-                            title="PG Students", hole=0.45, template="plotly_dark")
+            fig_pg = px.pie(
+                pg_df,
+                names="Usage",
+                values="Count",
+                title="PG Students",
+                hole=0.45,
+                template="plotly_white",
+                color_discrete_sequence=["#2ca02c", "#d62728"]
+            )
             st.plotly_chart(fig_pg, use_container_width=True)
 
         st.markdown("---")
@@ -394,18 +414,32 @@ elif active_tab == "📊 Data Visualization":
 
         with col3:
             female_df = pd.DataFrame({"Usage": ["Yes", "No"], "Count": [99, 29]})
-            fig_female = px.pie(female_df, names="Usage", values="Count",
-                                title="Female Students", hole=0.45, template="plotly_dark")
+            fig_female = px.pie(
+                female_df,
+                names="Usage",
+                values="Count",
+                title="Female Students",
+                hole=0.45,
+                template="plotly_white",
+                color_discrete_sequence=["#1f77b4", "#ff7f0e"]
+            )
             st.plotly_chart(fig_female, use_container_width=True)
 
         with col4:
             male_df = pd.DataFrame({"Usage": ["Yes", "No"], "Count": [60, 33]})
-            fig_male = px.pie(male_df, names="Usage", values="Count",
-                              title="Male Students", hole=0.45, template="plotly_dark")
+            fig_male = px.pie(
+                male_df,
+                names="Usage",
+                values="Count",
+                title="Male Students",
+                hole=0.45,
+                template="plotly_white",
+                color_discrete_sequence=["#1f77b4", "#ff7f0e"]
+            )
             st.plotly_chart(fig_male, use_container_width=True)
 
     # =====================================================
-    # 3. AI TOOLS USED FOR ACADEMIC PURPOSES
+    # 3. AI TOOLS USED FOR ACADEMIC PURPOSES (LIGHT)
     # =====================================================
     else:
 
@@ -428,7 +462,6 @@ elif active_tab == "📊 Data Visualization":
 
         academic_viz = st.session_state.academic_viz
 
-        # -------- PIE --------
         if academic_viz == "Pie Chart – AI Tools Used":
 
             df2 = pd.read_excel(
@@ -441,11 +474,15 @@ elif active_tab == "📊 Data Visualization":
             counts = df2[col].value_counts().reset_index()
             counts.columns = ["AI Tool", "Number of Students"]
 
-            fig = px.pie(counts, names="AI Tool", values="Number of Students",
-                         hole=0.45, template="plotly_dark")
+            fig = px.pie(
+                counts,
+                names="AI Tool",
+                values="Number of Students",
+                hole=0.45,
+                template="plotly_white"
+            )
             st.plotly_chart(fig, use_container_width=True)
 
-        # -------- BAR --------
         elif academic_viz == "Bar Chart – Most Frequently Used AI Tools":
 
             df2 = pd.read_excel(
@@ -458,11 +495,16 @@ elif active_tab == "📊 Data Visualization":
             counts = df2[col].value_counts().reset_index()
             counts.columns = ["AI Tool", "Number of Students"]
 
-            fig = px.bar(counts, x="AI Tool", y="Number of Students",
-                         text_auto=True, template="plotly_dark")
+            fig = px.bar(
+                counts,
+                x="AI Tool",
+                y="Number of Students",
+                text_auto=True,
+                template="plotly_white",
+                color_discrete_sequence=["#1f77b4"]
+            )
             st.plotly_chart(fig, use_container_width=True)
 
-        # -------- GROUPED BAR --------
         else:
 
             df3 = pd.read_excel(
@@ -485,11 +527,12 @@ elif active_tab == "📊 Data Visualization":
                 color="Frequency",
                 barmode="group",
                 text_auto=True,
-                template="plotly_dark"
+                template="plotly_white"
             )
 
             fig.update_layout(height=550)
             st.plotly_chart(fig, use_container_width=True)
+            
 # =========================================================
 # HYPOTHESES / TESTS TAB
 # =========================================================
