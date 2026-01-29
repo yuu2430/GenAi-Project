@@ -559,17 +559,17 @@ elif active_tab == "📊 Data Visualization":
 # =========================================================
 # HYPOTHESES / TESTS TAB
 # =========================================================
-elif active_tab == "📑 Objective 1":
+elif active_tab == "📑 Tests":
 
-    st.header("To understand how students’ views on AI dependence differ across MSU faculties and study programs.")
+    st.header("Statistical Hypothesis Testing")
 
     # =====================================================
     # HYPOTHESIS DROPDOWN
     # =====================================================
     hypothesis_list = [
         "Normality of AI Dependency Score",
-        "CGPA vs AI Dependency",
-        "Mean AI Dependency vs Neutral Value (One-Sample t-test)"
+        "Mean AI Dependency vs Neutral Value (One-Sample t-test)",
+        "CGPA vs AI Dependency (Pearson Correlation)"
     ]
 
     selected_hypothesis = st.selectbox(
@@ -600,19 +600,19 @@ elif active_tab == "📑 Objective 1":
         )
         df.columns = df.columns.astype(str).str.strip()
         dep_col = next(c for c in df.columns if "dep" in c.lower())
-        ai_dep = df[dep_col].dropna()
+        scores = df[dep_col].dropna()
 
         col1, col2 = st.columns([1.1, 1])
 
         with col1:
             fig, ax = plt.subplots(figsize=(4.5, 3))
-            ax.hist(ai_dep, bins=8, edgecolor="black", alpha=0.75)
+            ax.hist(scores, bins=8, edgecolor="black", alpha=0.75)
             ax.set_title("AI Dependency Score Distribution", fontsize=10)
             ax.set_xlabel("Score")
             ax.set_ylabel("Frequency")
             st.pyplot(fig)
 
-        stat, p_value = shapiro(ai_dep)
+        stat, p_value = shapiro(scores)
 
         with col2:
             st.metric("Shapiro–Wilk p-value", f"{p_value:.4f}")
@@ -627,64 +627,14 @@ elif active_tab == "📑 Objective 1":
         """)
 
     # =====================================================
-    # HYPOTHESIS 2: CGPA vs AI DEPENDENCY
-    # =====================================================
-    elif selected_hypothesis == "CGPA vs AI Dependency":
-
-        st.subheader("Hypothesis 2: CGPA vs AI Dependency")
-
-        st.markdown("""
-        *H₀:* No significant relationship exists between CGPA and AI Dependency Score  
-        *H₁:* A significant relationship exists between CGPA and AI Dependency Score  
-
-        *Statistical Test Used:* Spearman Rank Correlation  
-        *Data Source:* FINAL DATA OF PROJECT (1).xlsx → AI_dep vs CGPA
-        """)
-
-        df = pd.read_excel(
-            "FINAL DATA OF PROJECT (1).xlsx",
-            sheet_name="AI_dep vs CGPA"
-        )
-        df.columns = df.columns.astype(str).str.strip()
-
-        cgpa = df["CGPA of Previous Semester"]
-        ai_dep = df["AI_DEP_SCORE"]
-
-        from scipy.stats import spearmanr
-        rho, p_value = spearmanr(cgpa, ai_dep, nan_policy="omit")
-
-        col1, col2 = st.columns(2)
-        col1.metric("Spearman Correlation (ρ)", f"{rho:.3f}")
-        col2.metric("p-value", f"{p_value:.4f}")
-
-        strength = (
-            "Negligible" if abs(rho) < 0.1 else
-            "Weak" if abs(rho) < 0.3 else
-            "Moderate" if abs(rho) < 0.5 else
-            "Strong"
-        )
-
-        st.info(f"Observed relationship strength: *{strength} correlation*")
-
-        st.markdown("### Test Formula")
-        st.latex(r"""
-        \rho = 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)}
-        """)
-
-        if p_value < 0.05:
-            st.success("Reject H₀ → Significant relationship detected.")
-        else:
-            st.info("Fail to reject H₀ → No significant relationship detected.")
-
-    # =====================================================
-    # HYPOTHESIS 3: ONE-SAMPLE T-TEST
+    # HYPOTHESIS 2: ONE-SAMPLE T-TEST
     # =====================================================
     elif selected_hypothesis == "Mean AI Dependency vs Neutral Value (One-Sample t-test)":
 
-        st.subheader("Hypothesis 3: Mean AI Dependency vs Neutral Value")
+        st.subheader("Hypothesis 2: Mean AI Dependency vs Neutral Value")
 
         st.markdown("""
-        *H₀:* Population mean AI Dependency Score = 3   
+        *H₀:* Population mean AI Dependency Score = 3 (neutral value)  
         *H₁:* Population mean AI Dependency Score ≠ 3  
 
         *Statistical Test Used:* Two-sided One-Sample t-test  
@@ -708,7 +658,6 @@ elif active_tab == "📑 Objective 1":
         std = np.std(scores, ddof=1)
 
         from scipy.stats import ttest_1samp, t
-
         t_stat, p_value = ttest_1samp(scores, mu_0)
 
         col1, col2 = st.columns(2)
@@ -720,11 +669,9 @@ elif active_tab == "📑 Objective 1":
 
         with col2:
             st.metric("t-statistic", f"{t_stat:.3f}")
-            st.metric("p-value (two-tailed)", f"{p_value:.10f}")
+            st.metric("p-value (two-tailed)", f"{p_value:.6f}")
 
-        # -------------------------------
-        # CONFIDENCE INTERVAL
-        # -------------------------------
+        # Confidence Interval
         t_crit = t.ppf(1 - alpha / 2, df=n - 1)
         margin = t_crit * (std / np.sqrt(n))
         ci_lower = mean - margin
@@ -733,28 +680,74 @@ elif active_tab == "📑 Objective 1":
         st.markdown("### 95% Confidence Interval for Mean")
         st.info(f"({ci_lower:.3f}, {ci_upper:.3f})")
 
-        # -------------------------------
-        # INTERPRETATION
-        # -------------------------------
         st.markdown("### Interpretation")
 
         if p_value < alpha:
             direction = "greater than" if mean > mu_0 else "less than"
             st.success(
-                f"Since p-value < α = {alpha}, we reject the null hypothesis. "
-                f"The mean AI Dependency Score is statistically significantly "
+                f"Reject H₀ → Mean AI Dependency Score is significantly "
                 f"{direction} the neutral value (μ = {mu_0})."
                 f"This indicates that university students’ average level of dependence on GenAI for academic purposes lies between 40.05% and 45.14% of the total scale range."
             )
         else:
             st.info(
-                f"Since p-value > α = {alpha}, we fail to reject the null hypothesis. "
-                f"There is insufficient evidence to conclude that the mean "
-                f"AI Dependency Score differs significantly from μ = {mu_0}."
-                
-                
+                "Fail to reject H₀ → No significant difference from the neutral value."
             )
-   
+
+    # =====================================================
+    # HYPOTHESIS 3: PEARSON CORRELATION
+    # =====================================================
+    elif selected_hypothesis == "CGPA vs AI Dependency (Pearson Correlation)":
+
+        st.subheader("Hypothesis 3: CGPA vs AI Dependency")
+
+        st.markdown("""
+        *H₀:* No significant linear relationship exists between CGPA and AI Dependency Score  
+        *H₁:* A significant linear relationship exists between CGPA and AI Dependency Score  
+
+        *Statistical Test Used:* Pearson Product–Moment Correlation  
+        *Data Source:* FINAL DATA OF PROJECT (1).xlsx → AI_dep vs CGPA
+        """)
+
+        df = pd.read_excel(
+            "FINAL DATA OF PROJECT (1).xlsx",
+            sheet_name="AI_dep vs CGPA"
+        )
+        df.columns = df.columns.astype(str).str.strip()
+
+        cgpa = df["CGPA of Previous Semester"]
+        ai_dep = df["AI_DEP_SCORE"]
+
+        from scipy.stats import pearsonr
+        r, p_value = pearsonr(cgpa.dropna(), ai_dep.dropna())
+
+        col1, col2 = st.columns(2)
+        col1.metric("Pearson Correlation (r)", f"{r:.3f}")
+        col2.metric("p-value", f"{p_value:.4f}")
+
+        strength = (
+            "Negligible" if abs(r) < 0.1 else
+            "Weak" if abs(r) < 0.3 else
+            "Moderate" if abs(r) < 0.5 else
+            "Strong"
+        )
+
+        direction = "positive" if r > 0 else "negative"
+
+        st.info(
+            f"Observed relationship: *{strength} {direction} linear correlation*"
+        )
+
+        st.markdown("### Test Formula")
+        st.latex(r"""
+        r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}
+                 {\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}}
+        """)
+
+        if p_value < 0.05:
+            st.success("Reject H₀ → Significant linear relationship detected.")
+        else:
+            st.info("Fail to reject H₀ → No significant linear relationship detected.")
 # =========================================================
 # FOOTER
 # =========================================================
