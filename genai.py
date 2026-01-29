@@ -231,21 +231,16 @@ elif active_tab == "📐 Sampling & Sample Size":
     st.dataframe(sampling_data, use_container_width=True)
 
     with st.expander("Sample Size Formula (Single Proportion)"):
+        st.latex(r"""n = \frac{z_{\alpha/2}^2 \, p \, q}{E^2}""")
 
-    st.latex(r"""
-    n = \frac{z_{\alpha/2}^2 \, p \, q}{E^2}
-    """)
-
-    st.markdown("""
-    **Where:**  
+    st.markdown("""**Where:**  
     - \( z_{\alpha/2} = 1.96 \) (critical value for 95% confidence level)  
     - \( p = 0.5 \) (assumed population proportion)  
     - \( q = 1 - p \)  
     - \( E = 0.05 \) (margin of error)  
 
     Using \( p = 0.5 \) ensures **maximum variability** and provides a
-    **conservative estimate** of the required sample size.
-    """)
+    **conservative estimate** of the required sample size.""")
 
 
     st.subheader("Proportional Allocation Principle (Theoretical Basis)")
