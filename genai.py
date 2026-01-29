@@ -122,28 +122,52 @@ if active_tab == "📘 Overview":
 
     # ---------- HERO TITLE ----------
     st.markdown(
-        f"""
-        <div style="
-            background: linear-gradient(90deg,
-                {THEME_COLORS['primary']},
-                {THEME_COLORS['secondary']});
-            padding: 26px 30px;
-            border-radius: 14px;
-            color: white;
+    f"""
+    <div style="
+        background: linear-gradient(90deg,
+            {THEME_COLORS['primary']},
+            {THEME_COLORS['secondary']});
+        padding: 22px 28px;
+        border-radius: 14px;
+    ">
+        <h2 style="
+            color:white;
+            margin-bottom:6px;
+            line-height:1.3;
         ">
-            <h2 style="margin-bottom:8px;">
-            Cognitive & Educational Impacts of Generative AI Usage<br>
-            Among University Students
-            </h2>
-            <p style="font-size:16px; opacity:0.95;">
-            MSc Statistics · Research Dashboard
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+        Cognitive & Educational Impacts of Generative AI Usage
+        </h2>
 
-    st.markdown("<br>", unsafe_allow_html=True)
+        <h4 style="
+            color:white;
+            font-weight:400;
+            margin-top:0;
+            opacity:0.9;
+        ">
+        Among University Students
+        </h4>
+
+        <div style="
+            margin-top:12px;
+            height:2px;
+            width:60px;
+            background-color:white;
+            opacity:0.8;
+        "></div>
+
+        <p style="
+            margin-top:10px;
+            font-size:14px;
+            color:white;
+            opacity:0.85;
+        ">
+        MSc Statistics · Research Dashboard
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 
     # ---------- PROJECT INFO CARD ----------
     st.markdown(
