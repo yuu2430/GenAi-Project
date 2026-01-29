@@ -901,58 +901,60 @@ elif active_tab == "📑 Inference":
 elif active_tab == "📌 Conclusion":
 
     st.header("Conclusion")
-    st.caption("Summary of Findings from the Study")
+    st.caption("Integrated Summary of Findings")
     st.markdown("---")
 
-    conclusion_data = pd.DataFrame({
-        "Objective": [
-            "AI Usage Pattern",
-            "Level of AI Dependency",
-            "AI Dependency vs Academic Performance",
-            "AI Usage and Critical Thinking",
-            "AI Usage and Creativity"
+    conclusion_df = pd.DataFrame({
+        "Analysis Section": [
+            "Normality of AI Dependency Score",
+            "Mean AI Dependency vs Neutral Value",
+            "CGPA vs AI Dependency",
+            "AI Tools Across Academic Purposes",
+            "Programme-wise & Gender-wise Usage",
+            "Frequency of AI Usage",
+            "Pilot Survey Findings"
         ],
-        "Method / Analysis Used": [
-            "Descriptive statistics and visualizations",
-            "One-sample t-test, normality test",
-            "Pearson correlation analysis",
-            "Self-reported Likert scale analysis",
-            "Self-reported creativity scale analysis"
-        ],
-        "Key Finding": [
-            "Most students frequently use GenAI tools for assignments, concept learning, and exam preparation.",
-            "Students show a moderate level of dependence on GenAI tools for academic tasks.",
-            "No strong linear relationship was observed between CGPA and AI dependency.",
-            "Higher AI usage is associated with mixed levels of critical thinking engagement.",
-            "AI tools appear to support idea generation, but excessive reliance may reduce independent creativity."
+        "Key Result": [
+            "AI dependency scores follow a normal distribution.",
+            "Mean AI dependency score is significantly lower than the neutral value (3).",
+            "No significant linear relationship between AI dependency and CGPA.",
+            "ChatGPT is the most widely used AI tool across academic tasks.",
+            "PG students and female students report higher AI usage.",
+            "Most students use AI tools occasionally to frequently, not continuously.",
+            "Majority of students perceive AI as impactful on education."
         ],
         "Statistical Evidence": [
-            "High frequency counts across multiple academic purposes.",
-            "Mean AI dependency score significantly differs from neutral value.",
-            "Pearson’s r indicates weak correlation.",
-            "Descriptive trends from Likert-scale responses.",
-            "Descriptive analysis of creativity-related items."
+            "Shapiro–Wilk p-value > 0.05",
+            "One-sample t-test p-value < 0.05; CI excludes 3",
+            "Pearson r ≈ 0; p-value > 0.05",
+            "Descriptive frequency counts and bar charts",
+            "Programme-wise and gender-wise pie charts",
+            "Grouped bar charts on usage frequency",
+            "Pilot proportion p = 0.827"
         ],
         "Conclusion / Implication": [
-            "GenAI has become an integral academic support tool among university students.",
-            "While AI aids learning, controlled usage is necessary to avoid over-dependence.",
-            "Academic performance is influenced by multiple factors beyond AI usage alone.",
-            "Critical evaluation skills should be actively encouraged alongside AI use.",
-            "Balanced AI usage can enhance creativity without replacing independent thinking."
+            "Parametric tests are appropriate for further analysis.",
+            "Students are moderately dependent on AI, not overly reliant.",
+            "Academic performance depends on multiple factors beyond AI use.",
+            "GenAI functions mainly as an academic aid rather than a substitute.",
+            "Demographic and academic context influences AI adoption.",
+            "AI tools are used in a balanced, need-based manner.",
+            "The study topic is relevant and empirically justified."
         ]
     })
 
-    st.dataframe(conclusion_data, use_container_width=True)
+    st.dataframe(conclusion_df, use_container_width=True)
 
     st.markdown("---")
 
     st.subheader("Overall Conclusion")
     st.info(
-        "The study concludes that Generative AI tools play a significant role in modern "
-        "academic practices among university students. While these tools provide substantial "
-        "support in learning and productivity, excessive dependence may affect independent "
-        "thinking and creativity. Therefore, a balanced and guided use of GenAI tools is "
-        "essential to maximize educational benefits while minimizing cognitive over-reliance."
+        "The study concludes that Generative AI tools have become an integral part of "
+        "students’ academic workflows at MSU. While GenAI tools enhance learning efficiency "
+        "and accessibility, students demonstrate controlled usage rather than excessive dependence. "
+        "Importantly, AI dependency does not significantly influence academic performance, "
+        "highlighting the continued importance of individual effort, critical thinking, and "
+        "independent learning in higher education."
     )
 
 # =========================================================
