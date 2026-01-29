@@ -246,7 +246,6 @@ if active_tab == "📘 Overview":
 elif active_tab == "🎯 Objectives":
 
     st.header("Objectives of the Study")
-    st.caption("Research goals guiding the analysis")
     st.markdown("---")
 
     objectives = [
