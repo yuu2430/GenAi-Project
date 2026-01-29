@@ -172,7 +172,7 @@ elif active_tab == "🎯 Objectives":
     2. To understand how students’ views on AI dependence differ across different age groups, genders, and study programs.  
     <br>
 
-    3. To check if depending on AI for thinking (cognitive offloading) affects the link between AI usage and students’ learning performance or depth of understanding.  
+    3. To check if depending on AI for thinking (cognitive offloading) affects the link between AI usage and students’ learning performance (CGPA).  
     <br>
 
     4. To study how AI tool usage is related to students’ critical thinking and engagement in learning, using self-reported ratings.  
@@ -671,6 +671,20 @@ elif active_tab == "📑 Inference":
             st.metric("t-statistic", f"{t_stat:.3f}")
             st.metric("p-value (two-tailed)", f"{p_value:.10f}")
 
+        if p_value < alpha:
+            direction = "greater than" if mean > mu_0 else "less than"
+            st.success(
+                f"Since the p-value ({p_value:.10f}) is less than the significance level "
+                f"α = {alpha}, the null hypothesis is rejected. "
+                f"This indicates that the mean AI dependency score is "
+                f"statistically significantly {direction} the hypothesized value of {mu_0}. "
+                "Thus, there is strong evidence that the population mean differs from the neutral value.")
+        else:
+            st.info(
+                "Fail to reject H₀ → No significant difference from the neutral value."
+            )
+
+
         # Confidence Interval
         t_crit = t.ppf(1 - alpha / 2, df=n - 1)
         margin = t_crit * (std / np.sqrt(n))
@@ -682,18 +696,7 @@ elif active_tab == "📑 Inference":
 
         st.markdown("### Interpretation")
 
-        if p_value < alpha:
-            direction = "greater than" if mean > mu_0 else "less than"
-            st.success(
-                f"Reject H₀ → Mean AI Dependency Score is significantly "
-                f"{direction} the neutral value (μ = {mu_0})."
-                f"This indicates that university students’ average level of dependence on GenAI for academic purposes lies between 40.05% and 45.14% of the total scale range."
-            )
-        else:
-            st.info(
-                "Fail to reject H₀ → No significant difference from the neutral value."
-            )
-
+        
     # =====================================================
     # HYPOTHESIS 3: PEARSON CORRELATION
     # =====================================================
