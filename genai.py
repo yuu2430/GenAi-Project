@@ -789,15 +789,15 @@ elif active_tab == "📑 Inference":
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        if st.button("Normality of AI Dependency Score"):
+        if st.button("Normality of AI Dependency Score",use_container_width=True):
             st.session_state.selected_hypothesis = "Normality of AI Dependency Score"
 
     with col2:
-        if st.button("Mean AI Dependency vs Neutral Value (One-Sample t-test)"):
+        if st.button("Mean AI Dependency vs Neutral Value (One-Sample t-test)",use_container_width=True):
             st.session_state.selected_hypothesis = "Mean AI Dependency vs Neutral Value (One-Sample t-test)"
 
     with col3:
-        if st.button("CGPA vs AI Dependency (Pearson Correlation)"):
+        if st.button("CGPA vs AI Dependency (Pearson Correlation)",use_container_width=True):
             st.session_state.selected_hypothesis = "CGPA vs AI Dependency (Pearson Correlation)"
 
     selected_hypothesis = st.session_state.selected_hypothesis
