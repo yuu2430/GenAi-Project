@@ -312,44 +312,64 @@ elif active_tab == "📝 Questionnaire":
     st.markdown("---")
 
     from docx import Document
+    import os
 
-    @st.cache_data
-    def load_questionnaire():
-        doc = Document("Questionnaire.docx")
+    def load_questionnaire_fresh(file_path):
+        """
+        Loads questionnaire content fresh on every rerun.
+        No caching to avoid stale section issues.
+        """
+        doc = Document(file_path)
         content = []
         for para in doc.paragraphs:
-            if para.text.strip():
-                content.append(para.text)
+            text = para.text.strip()
+            if text:
+                content.append(text)
         return content
 
-    questionnaire_text = load_questionnaire()
+    # 🔹 File name must EXACTLY match GitHub
+    QUESTIONNAIRE_FILE = "Questionnaire.docx"
 
-    for line in questionnaire_text:
-        if line.lower().startswith("section"):
-            st.subheader(line)
-        elif line.lower().startswith("reference"):
-            st.markdown(f"📌 **{line}**")
-        elif line.lower().startswith("description"):
-            st.markdown(f"**{line}**")
-        else:
-            st.write(line)
+    if not os.path.exists(QUESTIONNAIRE_FILE):
+        st.error("Questionnaire file not found in GitHub repository.")
+    else:
+        questionnaire_text = load_questionnaire_fresh(QUESTIONNAIRE_FILE)
 
-    # Optional download button
-    with open("Questionnaire.docx", "rb") as f:
-        st.download_button(
-            "📥 Download Questionnaire (DOCX)",
-            f,
-            file_name="Research_Questionnaire.docx"
-        )
+        for line in questionnaire_text:
 
+            # SECTION HEADINGS
+            if line.lower().startswith("section"):
+                st.subheader(line)
+
+            # PART HEADINGS (Part A, Part B, etc.)
+            elif line.lower().startswith("part"):
+                st.markdown(f"### {line}")
+
+            # DESCRIPTION LABEL
+            elif line.lower().startswith("description"):
+                st.markdown(f"**{line}**")
+
+            # REFERENCE LABEL
+            elif line.lower().startswith("reference"):
+                st.markdown(f"📌 **{line}**")
+
+            # LINKS
+            elif line.startswith("http"):
+                st.markdown(f"[{line}]({line})")
+
+            # NORMAL TEXT
+            else:
+                st.write(line)
 
     st.markdown("---")
-    st.markdown("📄 **Full Questionnaire (Google Form PDF):**  "
-                "[Click here to view on GitHub]"
-                "(https://github.com/yuu2430/GenAi-Project/blob/main/"
-                "Cognitive%20and%20Educational%20impacts%20of%20GenAi%20usage%20among%20university%20students%20-%20Google%20Forms.pdf)")
 
-
+    # 🔗 GitHub hyperlink to full questionnaire PDF
+    st.markdown(
+        "📄 **Full Questionnaire (Google Form PDF):** "
+        "[Click here to view on GitHub]"
+        "(https://github.com/yuu2430/GenAi-Project/blob/main/"
+        "Cognitive%20and%20Educational%20impacts%20of%20GenAi%20usage%20among%20university%20students%20-%20Google%20Forms.pdf)"
+    )
 
 
 # =========================================================
