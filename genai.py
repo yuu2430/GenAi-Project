@@ -9,9 +9,6 @@ import seaborn as sns
 # =====================================================
 # GLOBAL COLOR THEME ( emphasize academic blue palette)
 # =====================================================
-# =====================================================
-# PROJECTOR-SAFE LIGHT ACADEMIC COLOR THEME
-# =====================================================
 THEME_COLORS = {
     "primary": "#5b9bd5",     # light academic blue
     "secondary": "#9dc3e6",   # softer blue
@@ -102,7 +99,7 @@ tabs = [
     "📐 Sampling & Sample Size",
     "🧪 Pilot Survey",
     "📊 Data Visualization",
-    "📑 Tests"
+    "📑 Objective 1"
 ]
 
 active_tab = st.sidebar.radio(
@@ -279,12 +276,12 @@ elif active_tab == "🧪 Pilot Survey":
     st.markdown("---")
 
     st.subheader("Pilot Survey Question")
-    st.info("“How has Generative AI impacted your education?”")
+    st.info("“Has Generative AI impacted your education?”")
 
     st.subheader("Pilot Results Summary")
     st.markdown("""
-    - **Positive impact:** 48 students  
-    - **Negative or no impact:** 10 students  
+    - **Yes:** 48 students  
+    - **No:** 10 students  
     """)
 
     st.subheader("Estimated Proportion from Pilot Study")
