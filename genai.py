@@ -105,7 +105,9 @@ tabs = [
     "📋 Dataset Overview",
     "📊 Data Visualization",
     "📑 Inference",
-    "📌 Conclusion"
+    "📌 Conclusion",
+    "📚 References"
+    
 ]
 
 active_tab = st.sidebar.radio(
@@ -1072,6 +1074,70 @@ elif active_tab == "📌 Conclusion":
         unsafe_allow_html=True
     )
 
+#references
+elif active_tab == "📚 References":
+
+    st.header("References")
+
+    st.markdown(
+f"""
+<div style="
+    background-color:{THEME_COLORS['neutral']};
+    padding:22px;
+    border-radius:14px;
+    font-size:16px;
+    line-height:1.8;
+    border-left:6px solid {THEME_COLORS['primary']};
+">
+
+<ol>
+
+<li>
+Gerlich, M. (2025). <i>AI tools in society: Impacts on cognitive offloading and the future of critical thinking</i>.
+<b>Societies, 15</b>(1), 6.
+<a href="https://doi.org/10.3390/soc15010006" target="_blank">
+https://doi.org/10.3390/soc15010006
+</a>
+</li><br>
+
+<li>
+Goh, A. Y. H., Hartanto, A., &amp; Majeed, N. M. (2023).
+<i>Generative artificial intelligence dependency: Scale development, validation, and its motivational, behavioral, and psychological correlates</i>.
+Singapore Management University; National University of Singapore.
+</li><br>
+
+<li>
+Kaufman, J. C. (2012).
+<i>Counting the muses: Development of the Kaufman Domains of Creativity Scale (K-DOCS)</i>.
+<b>Psychology of Aesthetics, Creativity, and the Arts, 6</b>(4), 298–308.
+</li><br>
+
+<li>
+Karwowski, M., Lebuda, I., &amp; Wiśniewska, E. (2018).
+<i>Measuring creative self-efficacy and creative personal identity</i>.
+<b>Psychology of Aesthetics, Creativity, and the Arts, 12</b>(2), 191–201.
+</li><br>
+
+<li>
+Črček, N., &amp; Patekar, J. (2023).
+<i>Writing with AI: University students’ use of ChatGPT</i>.
+</li><br>
+
+<li>
+<i>The impact of AI usage on university students’ willingness for autonomous learning</i>.
+</li>
+
+</ol>
+</div>
+""",
+        unsafe_allow_html=True
+    )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    st.info(
+        "📌 References are formatted in APA style and aligned with the theoretical framework of this study."
+    )
 
 
 # =========================================================
