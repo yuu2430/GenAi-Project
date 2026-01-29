@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 from scipy.stats import shapiro
 import plotly.express as px
 import seaborn as sns
+from docx import Document
+import os
+
 
 # =====================================================
 # GLOBAL COLOR THEME ( emphasize academic blue palette)
@@ -98,6 +101,7 @@ tabs = [
     "🎯 Objectives",
     "📐 Sampling & Sample Size",
     "🧪 Pilot Survey",
+    "📝 Questionnaire",
     "📊 Data Visualization",
     "📑 Inference"
 ]
@@ -296,6 +300,48 @@ elif active_tab == "🧪 Pilot Survey":
         - Provided empirical estimate of population proportion  
         - Reduced measurement and response bias  
         """)
+
+
+# =========================================================
+# QUESTIONNAIRE
+# =========================================================
+elif active_tab == "📝 Questionnaire":
+
+    st.header("Research Questionnaire")
+    st.caption("Survey Instrument Used for Data Collection")
+    st.markdown("---")
+
+    from docx import Document
+
+    @st.cache_data
+    def load_questionnaire():
+        doc = Document("Questionnaire.docx")
+        content = []
+        for para in doc.paragraphs:
+            if para.text.strip():
+                content.append(para.text)
+        return content
+
+    questionnaire_text = load_questionnaire()
+
+    for line in questionnaire_text:
+        if line.lower().startswith("section"):
+            st.subheader(line)
+        elif line.lower().startswith("reference"):
+            st.markdown(f"📌 **{line}**")
+        elif line.lower().startswith("description"):
+            st.markdown(f"**{line}**")
+        else:
+            st.write(line)
+
+    # Optional download button
+    with open("Questionnaire.docx", "rb") as f:
+        st.download_button(
+            "📥 Download Questionnaire (DOCX)",
+            f,
+            file_name="Research_Questionnaire.docx"
+        )
+
 
 
 # =========================================================
