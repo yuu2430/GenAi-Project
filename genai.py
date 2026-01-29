@@ -671,6 +671,8 @@ elif active_tab == "📑 Inference":
             st.metric("t-statistic", f"{t_stat:.3f}")
             st.metric("p-value (two-tailed)", f"{p_value:.10f}")
 
+        st.markdown("### Interpretation")
+
         if p_value < alpha:
             direction = "greater than" if mean > mu_0 else "less than"
             st.success(
@@ -693,8 +695,9 @@ elif active_tab == "📑 Inference":
 
         st.markdown("### 95% Confidence Interval for Mean")
         st.info(f"({ci_lower:.3f}, {ci_upper:.3f})")
-
         st.markdown("### Interpretation")
+
+        
 
         
     # =====================================================
