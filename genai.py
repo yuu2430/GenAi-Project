@@ -776,18 +776,31 @@ elif active_tab == "📑 Inference":
     st.header("Objective 2: To identify the level of dependence on GenAI among MSU students.")
 
     # =====================================================
-    # HYPOTHESIS DROPDOWN
+    # SESSION STATE FOR BUTTON SELECTION
     # =====================================================
-    hypothesis_list = [
-        "Normality of AI Dependency Score",
-        "Mean AI Dependency vs Neutral Value (One-Sample t-test)",
-        "CGPA vs AI Dependency (Pearson Correlation)"
-    ]
+    if "selected_hypothesis" not in st.session_state:
+        st.session_state.selected_hypothesis = "Normality of AI Dependency Score"
 
-    selected_hypothesis = st.selectbox(
-        "Select Hypothesis",
-        hypothesis_list
-    )
+    # =====================================================
+    # HYPOTHESIS BUTTONS (REPLACED DROPDOWN)
+    # =====================================================
+    st.subheader("Select Hypothesis")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        if st.button("Normality of AI Dependency Score"):
+            st.session_state.selected_hypothesis = "Normality of AI Dependency Score"
+
+    with col2:
+        if st.button("Mean AI Dependency vs Neutral Value (One-Sample t-test)"):
+            st.session_state.selected_hypothesis = "Mean AI Dependency vs Neutral Value (One-Sample t-test)"
+
+    with col3:
+        if st.button("CGPA vs AI Dependency (Pearson Correlation)"):
+            st.session_state.selected_hypothesis = "CGPA vs AI Dependency (Pearson Correlation)"
+
+    selected_hypothesis = st.session_state.selected_hypothesis
 
     st.markdown("---")
 
@@ -832,8 +845,6 @@ elif active_tab == "📑 Inference":
                 st.success("Fail to reject H₀ → Normality assumption satisfied.")
             else:
                 st.warning("Reject H₀ → Data deviates from normality.")
-
-        
 
     # =====================================================
     # HYPOTHESIS 2: ONE-SAMPLE T-TEST
@@ -895,8 +906,6 @@ elif active_tab == "📑 Inference":
                 "Fail to reject H₀ → No significant difference from the neutral value."
             )
 
-
-        # Confidence Interval
         t_crit = t.ppf(1 - alpha / 2, df=n - 1)
         margin = t_crit * (std / np.sqrt(n))
         ci_lower = mean - margin
@@ -905,6 +914,7 @@ elif active_tab == "📑 Inference":
         st.markdown("### 95% Confidence Interval for Mean")
         st.info(f"({ci_lower:.3f}, {ci_upper:.3f})")
         st.markdown("### Interpretation")
+
         if ci_lower <= mu_0 <= ci_upper:
             st.success(
                 f"The 95% confidence interval for the mean AI dependency score "
@@ -922,10 +932,6 @@ elif active_tab == "📑 Inference":
                 f"significantly {direction} the neutral value at the 5% level of significance."
                 "This indicates that university students’ average level of dependence on GenAI for academic purposes lies between 40.05% and 45.14% of the total scale range.")
 
-
-        
-
-        
     # =====================================================
     # HYPOTHESIS 3: PEARSON CORRELATION
     # =====================================================
