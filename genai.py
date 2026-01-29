@@ -984,4 +984,4 @@ elif active_tab == "📌 Conclusion":
 # FOOTER
 # =========================================================
 st.markdown("---")
-st.caption("Sem 4 - MSc Statistics - Final Year")
+st.caption("Team 4 - MSc Statistics - Final Year")
