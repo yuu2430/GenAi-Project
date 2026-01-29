@@ -323,7 +323,7 @@ elif active_tab == "📝 Questionnaire":
                 content.append(para.text)
         return content
 
-    questionnaire_text = load_questionnaire("Questionnaire.docx")
+    questionnaire_text = load_questionnaire()
 
     for line in questionnaire_text:
         if line.lower().startswith("section"):
