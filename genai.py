@@ -121,7 +121,7 @@ active_tab = st.sidebar.radio(
 if active_tab == "📘 Overview":
     st.title("Cognitive & Educational Impacts of Generative AI Usage Among University Students")
     st.markdown("""
-    **MSc Statistics** **Team 4**  
+    **MSc Statistics** - **Team 4**  
     **Institution:** The Maharaja Sayajirao University of Baroda  
     **Students:**  Rohan Shukla • Vaishali Sharma • Raiwant Kumar • Ashish Vaghela  
     **Mentor:** Prof. Murlidharan Kunnumal
