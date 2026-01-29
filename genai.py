@@ -238,8 +238,9 @@ elif active_tab == "📐 Sampling & Sample Size":
         st.latex(r"p = 0.827")
         st.markdown("Assumed population proportion")
         st.latex(r"q = 1 - p")
-        st.latex(r"E = 0.05")
         st.markdown("Margin of error")
+        st.latex(r"E = 0.05")
+        
         
     st.subheader("Proportional Allocation Principle (Theoretical Basis)")
 
