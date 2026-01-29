@@ -286,7 +286,7 @@ elif active_tab == "📐 Sampling & Sample Size":
     col1, col2 = st.columns(2)
 
     with col1:
-        st.metric("Sampling Method", "Probability Proportional to Size (PPS) sampling")
+        st.metric("Sampling Method", "Probability Proportional to Size (PPS)")
         st.metric("Population", "MSU Students")
         st.metric("Final Sample Size", "221")
 
