@@ -127,7 +127,7 @@ if active_tab == "📘 Overview":
             background: linear-gradient(90deg,
                 {THEME_COLORS['primary']},
                 {THEME_COLORS['secondary']});
-            padding: 26px 30px;
+            padding: 30px 30px;
             border-radius: 14px;
             color: black;
         ">
