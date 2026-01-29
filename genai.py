@@ -696,6 +696,21 @@ elif active_tab == "📑 Inference":
         st.markdown("### 95% Confidence Interval for Mean")
         st.info(f"({ci_lower:.3f}, {ci_upper:.3f})")
         st.markdown("### Interpretation")
+        if ci_lower <= mu_0 <= ci_upper:
+            st.success(
+                f"The 95% confidence interval for the mean AI dependency score "
+                f"includes the hypothesized value μ₀ = {mu_0}. "
+                "This indicates that, at the 5% level of significance, "
+                "there is insufficient evidence to conclude that the population mean "
+                "AI dependency score differs significantly from the neutral value.")
+        else:
+            direction = "greater than" if mean > mu_0 else "less than"
+            st.info(
+                f"The 95% confidence interval for the mean AI dependency score "
+                f"does not include the hypothesized value μ₀ = {mu_0}. "
+                f"This suggests that the population mean AI dependency score is "
+                f"significantly {direction} the neutral value at the 5% level of significance.")
+
 
         
 
