@@ -281,6 +281,8 @@ elif active_tab == "🎯 Objectives":
 elif active_tab == "📐 Sampling & Sample Size":
 
     st.header("Sampling Design and Sample Size Determination")
+    st.markdown("---")
+
 
     col1, col2 = st.columns(2)
 
@@ -514,6 +516,8 @@ elif active_tab == "📋 Dataset Overview":
 elif active_tab == "📊 Data Visualization":
 
     st.header("Objective 1: To find out how often students use AI tools and for what purpose, and see how this differs by their education level, or gender.")
+    st.markdown("---")
+
 
     # =====================================================
     # SESSION STATE
@@ -772,6 +776,8 @@ elif active_tab == "📊 Data Visualization":
 elif active_tab == "📑 Inference":
 
     st.header("Objective 2: To identify the level of dependence on GenAI among MSU students.")
+    st.markdown("---")
+
 
     # =====================================================
     # SESSION STATE FOR BUTTON SELECTION
