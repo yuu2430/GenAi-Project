@@ -373,8 +373,9 @@ elif active_tab == "📝 Questionnaire":
         "(https://github.com/yuu2430/GenAi-Project/blob/main/"
         "Cognitive%20and%20Educational%20impacts%20of%20GenAi%20usage%20among%20university%20students%20-%20Google%20Forms.pdf)"
     )
+
 # =========================================================
-# FORM RESPONSES (RAW DATA)
+# DATASET OVERVIEW
 # =========================================================
 # =========================================================
 # DATASET OVERVIEW
@@ -386,13 +387,22 @@ elif active_tab == "📋 Dataset Overview":
     st.markdown("---")
 
     FILE_NAME = "FINAL DATA OF PROJECT (1).xlsx"
-    SHEET_NAME = "Form Responses 1"
 
     try:
-        # Load only the required sheet
+        # Read Excel file
+        excel_file = pd.ExcelFile(FILE_NAME)
+
+        # Show available sheets (for transparency)
+        sheet_names = excel_file.sheet_names
+
+        # Auto-pick the first sheet (Google Forms responses)
+        SHEET_NAME = sheet_names[0]
+
+        st.info(f"Using sheet: **{SHEET_NAME}**")
+
         df = pd.read_excel(FILE_NAME, sheet_name=SHEET_NAME)
 
-        # Remove Timestamp column if present
+        # Remove Timestamp column safely
         df = df.drop(columns=["Timestamp"], errors="ignore")
 
         # ===============================
@@ -411,22 +421,20 @@ elif active_tab == "📋 Dataset Overview":
         st.subheader("Form Responses Preview")
         st.dataframe(df, use_container_width=True)
 
-
         # ===============================
-        # DESCRIPTIVE SUMMARY (NUMERIC)
+        # COLUMN INFORMATION
         # ===============================
-        with st.expander("Descriptive Statistics (Numerical Variables)"):
-            numeric_df = df.select_dtypes(include=np.number)
-            if numeric_df.empty:
-                st.info("No numerical variables available for summary.")
-            else:
-                st.dataframe(
-                    numeric_df.describe().T,
-                    use_container_width=True
-                )
+        with st.expander("Variable Information"):
+            col_info = pd.DataFrame({
+                "Variable Name": df.columns,
+                "Data Type": df.dtypes.astype(str),
+                "Missing Values": df.isnull().sum().values
+            })
+            st.dataframe(col_info, use_container_width=True)
 
-    except FileNotFoundError:
-        st.error("Excel file not found in the GitHub repository.")
+    except Exception as e:
+        st.error("Unable to load Excel file.")
+        st.code(str(e))
 
 # =========================================================
 # DATA VISUALIZATION
