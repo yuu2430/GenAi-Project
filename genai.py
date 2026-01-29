@@ -488,9 +488,7 @@ elif active_tab == "📊 Data Visualization":
             if st.button("🥧 Pie – AI Tools Used", use_container_width=True):
                 st.session_state.academic_viz = "Pie Chart – AI Tools Used"
 
-        with col_y:
-            if st.button("📊 Bar – Most Used Tools", use_container_width=True):
-                st.session_state.academic_viz = "Bar Chart – Most Frequently Used AI Tools"
+        
 
         with col_z:
             if st.button("📈 Grouped Bar – Purpose vs Frequency", use_container_width=True):
@@ -525,32 +523,7 @@ elif active_tab == "📊 Data Visualization":
 
             st.plotly_chart(fig, use_container_width=True)
 
-        # ---------------- BAR ----------------
-        elif academic_viz == "Bar Chart – Most Frequently Used AI Tools":
-
-            df2 = pd.read_excel(
-                "Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
-                sheet_name="Sheet2"
-            )
-
-            col = df2.columns[0]
-            df2[col] = df2[col].replace(
-                {"Perplexity": "Perplexity / Copilot", "Copilot": "Perplexity / Copilot"}
-            )
-
-            counts = df2[col].value_counts().reset_index()
-            counts.columns = ["AI Tool", "Number of Students"]
-
-            fig = px.bar(
-                counts,
-                x="AI Tool",
-                y="Number of Students",
-                text_auto=True,
-                template="plotly_white",
-                color_discrete_sequence=[THEME_COLORS["primary"]]
-            )
-
-            st.plotly_chart(fig, use_container_width=True)
+        
 
         # ---------------- GROUPED BAR ----------------
         else:
