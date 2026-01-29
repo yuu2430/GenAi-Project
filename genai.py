@@ -910,7 +910,8 @@ elif active_tab == "📌 Conclusion":
             "Frequency of AI Usage",
             "Normality of AI Dependency Score",
             "Mean AI Dependency vs Neutral Value",
-            "CGPA vs AI Dependency"],
+            "CGPA vs AI Dependency"
+        ],
         "Key Result": [
             "Majority of students perceive AI as impactful on education.",
             "ChatGPT is the most widely used AI tool across academic tasks.",
@@ -919,8 +920,6 @@ elif active_tab == "📌 Conclusion":
             "AI dependency scores follow a normal distribution.",
             "Mean AI dependency score is significantly lower than the neutral value (3).",
             "No significant linear relationship between AI dependency and CGPA."
-            
-            
         ],
         "Statistical Evidence": [
             "Pilot proportion p = 0.827",
@@ -928,33 +927,8 @@ elif active_tab == "📌 Conclusion":
             "Programme-wise and gender-wise pie charts",
             "Grouped bar charts on usage frequency",
             "Shapiro–Wilk p-value > 0.05",
-            "One-sample t-test p-value < 0.05; CI excludes 3",
-            "Pearson r ≈ 0; p-value > 0.05"
-            
-            
-        ],
-        "Conclusion / Implication": [
-            "The study topic is relevant and empirically justified.",
-            "GenAI functions mainly as an academic aid rather than a substitute.",
-            "Demographic and academic context influences AI adoption.",
-            "AI tools are used in a balanced, need-based manner."
-            "Parametric tests are appropriate for further analysis.",
-            "Students are moderately dependent on AI, not overly reliant.",
-            "Academic performance depends on multiple factors beyond AI use."]})
+            "One-sample t
 
-    st.dataframe(conclusion_df, use_container_width=True)
-
-    st.markdown("---")
-
-    st.subheader("Overall Conclusion")
-    st.info(
-        "The study concludes that Generative AI tools have become an integral part of "
-        "students’ academic workflows at MSU. While GenAI tools enhance learning efficiency "
-        "and accessibility, students demonstrate controlled usage rather than excessive dependence. "
-        "Importantly, AI dependency does not significantly influence academic performance, "
-        "highlighting the continued importance of individual effort, critical thinking, and "
-        "independent learning in higher education."
-    )
 
 # =========================================================
 # FOOTER
