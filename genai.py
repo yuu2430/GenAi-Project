@@ -684,7 +684,7 @@ elif active_tab == "📑 Objective 1":
         st.subheader("Hypothesis 3: Mean AI Dependency vs Neutral Value")
 
         st.markdown("""
-        *H₀:* Population mean AI Dependency Score = 3 (neutral value)  
+        *H₀:* Population mean AI Dependency Score = 3   
         *H₁:* Population mean AI Dependency Score ≠ 3  
 
         *Statistical Test Used:* Two-sided One-Sample t-test  
@@ -750,6 +750,7 @@ elif active_tab == "📑 Objective 1":
                 f"Since p-value > α = {alpha}, we fail to reject the null hypothesis. "
                 f"There is insufficient evidence to conclude that the mean "
                 f"AI Dependency Score differs significantly from μ = {mu_0}."
+                f"This indicates that university students’ average level of dependence on GenAI for academic purposes lies between 40.05% and 45.14% of the total scale range."
             )
    
 # =========================================================
