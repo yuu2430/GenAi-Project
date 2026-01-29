@@ -9,27 +9,32 @@ import seaborn as sns
 # =====================================================
 # GLOBAL COLOR THEME ( emphasize academic blue palette)
 # =====================================================
+# =====================================================
+# PROJECTOR-SAFE LIGHT ACADEMIC COLOR THEME
+# =====================================================
 THEME_COLORS = {
-    "primary": "#04408d",
-    "secondary": "#055cb8",
-    "accent1": "#5b97e1",
-    "accent2": "#a0bce4",
-    "accent3": "#267ed7",
-    "neutral": "#e6eef8"
+    "primary": "#5b9bd5",     # light academic blue
+    "secondary": "#9dc3e6",   # softer blue
+    "accent1": "#bdd7ee",     # very light blue
+    "accent2": "#ddebf7",     # pastel background blue
+    "accent3": "#2f75b5",     # slightly darker (for contrast)
+    "neutral": "#f4f8fc"      # near-white
 }
 
+# Bars: light → slightly darker (projector readable)
 BAR_COLORS = [
-    THEME_COLORS["primary"],
-    THEME_COLORS["secondary"],
-    THEME_COLORS["accent3"],
-    THEME_COLORS["accent1"]
+    "#5b9bd5",
+    "#9dc3e6",
+    "#bdd7ee",
+    "#2f75b5"
 ]
 
+# Pies: soft pastel sequence
 PIE_COLORS = [
-    THEME_COLORS["primary"],
-    THEME_COLORS["accent1"],
-    THEME_COLORS["accent2"],
-    THEME_COLORS["accent3"]
+    "#5b9bd5",
+    "#9dc3e6",
+    "#bdd7ee",
+    "#ddebf7"
 ]
 
 
