@@ -394,8 +394,7 @@ elif active_tab == "🧪 Pilot Survey":
 # =========================================================
 elif active_tab == "📝 Questionnaire":
 
-    st.header("Research Questionnaire")
-    st.caption("Survey Instrument Used for Data Collection")
+    st.header("Questionnaire Overview")
     st.markdown("---")
 
     from docx import Document
@@ -467,7 +466,6 @@ elif active_tab == "📝 Questionnaire":
 elif active_tab == "📋 Dataset Overview":
 
     st.header("Dataset Overview")
-    st.caption("Google Form Responses Used for Analysis")
     st.markdown("---")
 
     FILE_NAME = "FINAL DATA OF PROJECT (1).xlsx"
@@ -529,7 +527,7 @@ elif active_tab == "📊 Data Visualization":
     # =====================================================
     # MAIN NAVIGATION
     # =====================================================
-    st.markdown("### Select Visualization Type")
+    #st.markdown("### Select Visualization Type")
 
     col_a, col_b, col_c = st.columns(3)
 
@@ -692,7 +690,7 @@ elif active_tab == "📊 Data Visualization":
     else:
 
         st.subheader("Frequency of AI Used for Academic Purposes")
-        st.markdown("### Select Tool Visualization")
+        #st.markdown("### Select Tool Visualization")
 
         col_x, col_y, col_z = st.columns(3)
 
@@ -816,7 +814,7 @@ elif active_tab == "📑 Inference":
         *H₁:* AI Dependency Score does not follow a normal distribution  
 
         *Statistical Test Used:* Shapiro–Wilk Test  
-        *Data Source:* FINAL DATA OF PROJECT (1).xlsx → Sheet5
+        
         """)
 
         df = pd.read_excel(
@@ -862,7 +860,7 @@ elif active_tab == "📑 Inference":
 
         *Statistical Test Used:* Two-sided One-Sample t-test  
         *Significance Level:* α = 0.05  
-        *Data Source:* FINAL DATA OF PROJECT (1).xlsx → Sheet5
+        
         """)
 
         df = pd.read_excel(
@@ -947,7 +945,7 @@ elif active_tab == "📑 Inference":
         *H₁:* A significant linear relationship exists between CGPA and AI Dependency Score  
 
         *Statistical Test Used:* Pearson's Correlation  
-        *Data Source:* FINAL DATA OF PROJECT (1).xlsx → AI_dep vs CGPA
+        
         """)
 
         df = pd.read_excel(
@@ -999,7 +997,7 @@ elif active_tab == "📑 Inference":
 elif active_tab == "📌 Conclusion":
 
     st.header("Conclusion")
-    st.caption("Integrated Summary of Findings")
+    #st.caption("Integrated Summary of Findings")
     st.markdown("---")
 
     conclusion_df = pd.DataFrame({
