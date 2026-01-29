@@ -910,9 +910,7 @@ elif active_tab == "📌 Conclusion":
             "Frequency of AI Usage",
             "Normality of AI Dependency Score",
             "Mean AI Dependency vs Neutral Value",
-            "CGPA vs AI Dependency",
-            
-        ],
+            "CGPA vs AI Dependency"],
         "Key Result": [
             "Majority of students perceive AI as impactful on education.",
             "ChatGPT is the most widely used AI tool across academic tasks.",
