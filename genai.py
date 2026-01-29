@@ -784,7 +784,7 @@ elif active_tab == "📑 Inference":
     # =====================================================
     # HYPOTHESIS BUTTONS (REPLACED DROPDOWN)
     # =====================================================
-    st.subheader("Select Hypothesis")
+    st.subheader("")
 
     col1, col2, col3 = st.columns(3)
 
