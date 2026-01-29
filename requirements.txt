@@ -4,5 +4,6 @@ numpy
 matplotlib
 scipy
 plotly
-openpyxl
 seaborn
+python-docx
+openpyxl
