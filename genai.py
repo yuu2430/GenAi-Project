@@ -376,51 +376,57 @@ elif active_tab == "📝 Questionnaire":
 # =========================================================
 # FORM RESPONSES (RAW DATA)
 # =========================================================
+# =========================================================
+# DATASET OVERVIEW
+# =========================================================
 elif active_tab == "📋 Dataset Overview":
 
-    st.header("DATASET")
-    st.caption("Raw responses collected through Google Form")
+    st.header("Dataset Overview")
+    st.caption("Google Form Responses Used for Analysis")
     st.markdown("---")
 
     FILE_NAME = "FINAL DATA OF PROJECT (1).xlsx"
-    SHEET_NAME = "Form responses 1"
+    SHEET_NAME = "Form Responses 1"
 
     try:
         # Load only the required sheet
         df = pd.read_excel(FILE_NAME, sheet_name=SHEET_NAME)
 
+        # Remove Timestamp column if present
+        df = df.drop(columns=["Timestamp"], errors="ignore")
+
         # ===============================
-        # BASIC DATASET METRICS
+        # BASIC DATASET INFO
         # ===============================
         col1, col2, col3 = st.columns(3)
-        col1.metric("Total Responses", df.shape[0])
-        col2.metric("Total Variables", df.shape[1])
-        col3.metric("Missing Values", int(df.isnull().sum().sum()))
+        col1.metric("Number of Responses", df.shape[0])
+        col2.metric("Number of Variables", df.shape[1])
+        col3.metric("Total Missing Values", int(df.isnull().sum().sum()))
 
         st.markdown("---")
 
         # ===============================
         # DATA PREVIEW
         # ===============================
-        st.subheader("Response Data Preview")
+        st.subheader("Form Responses Preview")
         st.dataframe(df, use_container_width=True)
 
+
+        # ===============================
+        # DESCRIPTIVE SUMMARY (NUMERIC)
+        # ===============================
         with st.expander("Descriptive Statistics (Numerical Variables)"):
             numeric_df = df.select_dtypes(include=np.number)
             if numeric_df.empty:
-                st.info("No numerical variables found in this sheet.")
+                st.info("No numerical variables available for summary.")
             else:
                 st.dataframe(
                     numeric_df.describe().T,
                     use_container_width=True
                 )
 
-    
     except FileNotFoundError:
         st.error("Excel file not found in the GitHub repository.")
-    except ValueError:
-        st.error("Sheet name 'Form Responses 1' not found in the Excel file.")
-
 
 # =========================================================
 # DATA VISUALIZATION
