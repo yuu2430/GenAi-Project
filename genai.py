@@ -360,14 +360,14 @@ elif active_tab == "🧪 Pilot Survey":
         st.metric("Sampling Method", "Simple Random Sampling")
 
     with col2:
-        st.metric("Yes", "48")
-        st.metric("No", "10")
-        st.metric("Pilot Question", "Single Perception Item")
+        st.metric("**Yes**", "48")
+        st.metric("**No**", "10")
+        st.metric("**Pilot Question**", "Single Perception Item")
 
     st.markdown("---")
 
     st.subheader("Pilot Survey Question")
-    st.info("“Has Generative AI impacted your education?”")
+    st.info("“**Has Generative AI impacted your education?**”")
 
     st.subheader("Pilot Results Summary")
     st.markdown("""
