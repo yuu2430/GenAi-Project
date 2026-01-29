@@ -846,6 +846,20 @@ elif active_tab == "📑 Inference":
             else:
                 st.warning("Reject H₀ → Data deviates from normality.")
 
+    st.markdown("### Test Statistic Formula (Shapiro–Wilk Test)")
+    st.latex(r"""
+    W = \frac{\left( \sum_{i=1}^{n} a_i x_{(i)} \right)^2}
+    {\sum_{i=1}^{n} (x_i - \bar{x})^2}""")
+    st.markdown("### Where:")
+    st.markdown("""
+    - **\(W\)** = Shapiro–Wilk test statistic  
+    - **\(x_{(i)}\)** = i-th order statistic (sorted sample values)  
+    - **\(a_i\)** = constants derived from the expected values of order statistics of a standard normal distribution  
+    - **\(x_i\)** = observed sample values  
+    - **\(\bar{x}\)** = sample mean  
+    - **\(n\)** = sample size""")
+
+
     # =====================================================
     # HYPOTHESIS 2: ONE-SAMPLE T-TEST
     # =====================================================
