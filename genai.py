@@ -129,7 +129,7 @@ if active_tab == "📘 Overview":
                 {THEME_COLORS['secondary']});
             padding: 26px 30px;
             border-radius: 14px;
-            color: white;
+            color: black;
         ">
             <h2 style="margin-bottom:8px;">
             Cognitive & Educational Impacts of Generative AI Usage<br>
