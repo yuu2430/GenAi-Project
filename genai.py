@@ -559,9 +559,9 @@ elif active_tab == "📊 Data Visualization":
 # =========================================================
 # HYPOTHESES / TESTS TAB
 # =========================================================
-elif active_tab == "📑 Tests":
+elif active_tab == "📑 Objective 1":
 
-    st.header("Statistical Hypothesis Testing")
+    st.header("To identify the level of dependence on GenAI among MSU students.")
 
     # =====================================================
     # HYPOTHESIS DROPDOWN
