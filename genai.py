@@ -479,7 +479,7 @@ elif active_tab == "📊 Data Visualization":
     # =====================================================
     else:
 
-        st.subheader("AI Tools Used for Academic Purposes")
+        st.subheader("Frequency of AI Used for Academic Purposes")
         st.markdown("### Select Tool Visualization")
 
         col_x, col_y, col_z = st.columns(3)
