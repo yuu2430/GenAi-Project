@@ -904,42 +904,45 @@ elif active_tab == "📌 Conclusion":
 
     conclusion_df = pd.DataFrame({
         "Analysis Section": [
-            "Normality of AI Dependency Score",
-            "Mean AI Dependency vs Neutral Value",
-            "CGPA vs AI Dependency",
+            "Pilot Survey Findings",
             "AI Tools Across Academic Purposes",
             "Programme-wise & Gender-wise Usage",
             "Frequency of AI Usage",
-            "Pilot Survey Findings"
+            "Normality of AI Dependency Score",
+            "Mean AI Dependency vs Neutral Value",
+            "CGPA vs AI Dependency",
+            
         ],
         "Key Result": [
-            "AI dependency scores follow a normal distribution.",
-            "Mean AI dependency score is significantly lower than the neutral value (3).",
-            "No significant linear relationship between AI dependency and CGPA.",
+            "Majority of students perceive AI as impactful on education.",
             "ChatGPT is the most widely used AI tool across academic tasks.",
             "PG students and female students report higher AI usage.",
             "Most students use AI tools occasionally to frequently, not continuously.",
-            "Majority of students perceive AI as impactful on education."
+            "AI dependency scores follow a normal distribution.",
+            "Mean AI dependency score is significantly lower than the neutral value (3).",
+            "No significant linear relationship between AI dependency and CGPA."
+            
+            
         ],
         "Statistical Evidence": [
-            "Shapiro–Wilk p-value > 0.05",
-            "One-sample t-test p-value < 0.05; CI excludes 3",
-            "Pearson r ≈ 0; p-value > 0.05",
+            "Pilot proportion p = 0.827",
             "Descriptive frequency counts and bar charts",
             "Programme-wise and gender-wise pie charts",
             "Grouped bar charts on usage frequency",
-            "Pilot proportion p = 0.827"
+            "Shapiro–Wilk p-value > 0.05",
+            "One-sample t-test p-value < 0.05; CI excludes 3",
+            "Pearson r ≈ 0; p-value > 0.05"
+            
+            
         ],
         "Conclusion / Implication": [
-            "Parametric tests are appropriate for further analysis.",
-            "Students are moderately dependent on AI, not overly reliant.",
-            "Academic performance depends on multiple factors beyond AI use.",
+            "The study topic is relevant and empirically justified.",
             "GenAI functions mainly as an academic aid rather than a substitute.",
             "Demographic and academic context influences AI adoption.",
-            "AI tools are used in a balanced, need-based manner.",
-            "The study topic is relevant and empirically justified."
-        ]
-    })
+            "AI tools are used in a balanced, need-based manner."
+            "Parametric tests are appropriate for further analysis.",
+            "Students are moderately dependent on AI, not overly reliant.",
+            "Academic performance depends on multiple factors beyond AI use."]})
 
     st.dataframe(conclusion_df, use_container_width=True)
 
