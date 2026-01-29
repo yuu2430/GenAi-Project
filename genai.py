@@ -634,7 +634,7 @@ elif active_tab == "📑 Objective 1":
         st.subheader("Hypothesis 2: Mean AI Dependency vs Neutral Value")
 
         st.markdown("""
-        *H₀:* Population mean AI Dependency Score = 3 (neutral value)  
+        *H₀:* Population mean AI Dependency Score = 3  
         *H₁:* Population mean AI Dependency Score ≠ 3  
 
         *Statistical Test Used:* Two-sided One-Sample t-test  
@@ -669,7 +669,7 @@ elif active_tab == "📑 Objective 1":
 
         with col2:
             st.metric("t-statistic", f"{t_stat:.3f}")
-            st.metric("p-value (two-tailed)", f"{p_value:.6f}")
+            st.metric("p-value (two-tailed)", f"{p_value:.10f}")
 
         # Confidence Interval
         t_crit = t.ppf(1 - alpha / 2, df=n - 1)
@@ -705,7 +705,7 @@ elif active_tab == "📑 Objective 1":
         *H₀:* No significant linear relationship exists between CGPA and AI Dependency Score  
         *H₁:* A significant linear relationship exists between CGPA and AI Dependency Score  
 
-        *Statistical Test Used:* Pearson Product–Moment Correlation  
+        *Statistical Test Used:* Pearson's Correlation  
         *Data Source:* FINAL DATA OF PROJECT (1).xlsx → AI_dep vs CGPA
         """)
 
