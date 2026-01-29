@@ -745,10 +745,7 @@ elif active_tab == "📑 Inference":
             else:
                 st.warning("Reject H₀ → Data deviates from normality.")
 
-        st.markdown("### Test Formula")
-        st.latex(r"""
-        W = \frac{(\sum a_i x_{(i)})^2}{\sum (x_i - \bar{x})^2}
-        """)
+        
 
     # =====================================================
     # HYPOTHESIS 2: ONE-SAMPLE T-TEST
