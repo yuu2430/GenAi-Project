@@ -269,13 +269,14 @@ elif active_tab == "🧪 Pilot Survey":
 
 
 # =========================================================
-# DATA VISUALIZATION=========================================================
+# DATA VISUALIZATION
+#=========================================================
 elif active_tab == "📊 Data Visualization":
 
     st.header("Data Visualization")
 
     # =====================================================
-    # SESSION STATE INITIALIZATION
+    # SESSION STATE
     # =====================================================
     if "viz_type" not in st.session_state:
         st.session_state.viz_type = "Multiple Bar Chart – AI Tools vs Academic Purpose"
@@ -284,7 +285,7 @@ elif active_tab == "📊 Data Visualization":
         st.session_state.academic_viz = "Pie Chart – AI Tools Used"
 
     # =====================================================
-    # BUTTON-BASED MAIN NAVIGATION (PERSISTENT)
+    # MAIN NAVIGATION
     # =====================================================
     st.markdown("### Select Visualization Type")
 
@@ -303,21 +304,16 @@ elif active_tab == "📊 Data Visualization":
             st.session_state.viz_type = "AI Tools Used for Academic Purposes"
 
     viz_type = st.session_state.viz_type
-
     st.markdown("---")
 
     # =====================================================
-    # 1. MULTIPLE BAR CHART (LIGHT)
+    # 1. MULTIPLE BAR CHART
     # =====================================================
     if viz_type == "Multiple Bar Chart – AI Tools vs Academic Purpose":
 
         st.subheader("Usage of AI Tools Across Academic Purposes")
 
-        df = pd.read_excel(
-            "FINAL DATA OF PROJECT (1).xlsx",
-            sheet_name="Sheet3"
-        )
-
+        df = pd.read_excel("FINAL DATA OF PROJECT (1).xlsx", sheet_name="Sheet3")
         df.columns = df.columns.astype(str).str.strip()
         df = df.rename(columns={df.columns[0]: "Label"})
 
@@ -358,22 +354,19 @@ elif active_tab == "📊 Data Visualization":
             color="AI Tool",
             barmode="group",
             text_auto=True,
-            title="Usage of AI Tools Across Academic Purposes",
             template="plotly_white",
-            color_discrete_sequence=["#1f77b4", "#2ca02c", "#9467bd", "#ff7f0e"]
+            color_discrete_sequence=BAR_COLORS
         )
 
         fig.update_layout(
             height=550,
-            plot_bgcolor="white",
-            paper_bgcolor="white",
-            font=dict(color="black")
+            font=dict(color=THEME_COLORS["primary"])
         )
 
         st.plotly_chart(fig, use_container_width=True)
 
     # =====================================================
-    # 2. PROGRAMME & GENDER DISTRIBUTION (LIGHT)
+    # 2. PROGRAMME & GENDER DISTRIBUTION
     # =====================================================
     elif viz_type == "AI Usage Distribution (Programme & Gender)":
 
@@ -387,10 +380,12 @@ elif active_tab == "📊 Data Visualization":
                 ug_df,
                 names="Usage",
                 values="Count",
-                title="UG Students",
                 hole=0.45,
                 template="plotly_white",
-                color_discrete_sequence=["#2ca02c", "#d62728"]
+                color_discrete_sequence=[
+                    THEME_COLORS["primary"],
+                    THEME_COLORS["accent2"]
+                ]
             )
             st.plotly_chart(fig_ug, use_container_width=True)
 
@@ -400,10 +395,12 @@ elif active_tab == "📊 Data Visualization":
                 pg_df,
                 names="Usage",
                 values="Count",
-                title="PG Students",
                 hole=0.45,
                 template="plotly_white",
-                color_discrete_sequence=["#2ca02c", "#d62728"]
+                color_discrete_sequence=[
+                    THEME_COLORS["primary"],
+                    THEME_COLORS["accent2"]
+                ]
             )
             st.plotly_chart(fig_pg, use_container_width=True)
 
@@ -418,10 +415,12 @@ elif active_tab == "📊 Data Visualization":
                 female_df,
                 names="Usage",
                 values="Count",
-                title="Female Students",
                 hole=0.45,
                 template="plotly_white",
-                color_discrete_sequence=["#1f77b4", "#ff7f0e"]
+                color_discrete_sequence=[
+                    THEME_COLORS["secondary"],
+                    THEME_COLORS["accent3"]
+                ]
             )
             st.plotly_chart(fig_female, use_container_width=True)
 
@@ -431,15 +430,17 @@ elif active_tab == "📊 Data Visualization":
                 male_df,
                 names="Usage",
                 values="Count",
-                title="Male Students",
                 hole=0.45,
                 template="plotly_white",
-                color_discrete_sequence=["#1f77b4", "#ff7f0e"]
+                color_discrete_sequence=[
+                    THEME_COLORS["secondary"],
+                    THEME_COLORS["accent3"]
+                ]
             )
             st.plotly_chart(fig_male, use_container_width=True)
 
     # =====================================================
-    # 3. AI TOOLS USED FOR ACADEMIC PURPOSES (LIGHT)
+    # 3. AI TOOLS USED FOR ACADEMIC PURPOSES
     # =====================================================
     else:
 
@@ -462,6 +463,7 @@ elif active_tab == "📊 Data Visualization":
 
         academic_viz = st.session_state.academic_viz
 
+        # ---------------- PIE ----------------
         if academic_viz == "Pie Chart – AI Tools Used":
 
             df2 = pd.read_excel(
@@ -470,7 +472,10 @@ elif active_tab == "📊 Data Visualization":
             )
 
             col = df2.columns[0]
-            df2[col] = df2[col].replace({"Perplexity": "Perplexity / Copilot", "Copilot": "Perplexity / Copilot"})
+            df2[col] = df2[col].replace(
+                {"Perplexity": "Perplexity / Copilot", "Copilot": "Perplexity / Copilot"}
+            )
+
             counts = df2[col].value_counts().reset_index()
             counts.columns = ["AI Tool", "Number of Students"]
 
@@ -479,10 +484,13 @@ elif active_tab == "📊 Data Visualization":
                 names="AI Tool",
                 values="Number of Students",
                 hole=0.45,
-                template="plotly_white"
+                template="plotly_white",
+                color_discrete_sequence=PIE_COLORS
             )
+
             st.plotly_chart(fig, use_container_width=True)
 
+        # ---------------- BAR ----------------
         elif academic_viz == "Bar Chart – Most Frequently Used AI Tools":
 
             df2 = pd.read_excel(
@@ -491,7 +499,10 @@ elif active_tab == "📊 Data Visualization":
             )
 
             col = df2.columns[0]
-            df2[col] = df2[col].replace({"Perplexity": "Perplexity / Copilot", "Copilot": "Perplexity / Copilot"})
+            df2[col] = df2[col].replace(
+                {"Perplexity": "Perplexity / Copilot", "Copilot": "Perplexity / Copilot"}
+            )
+
             counts = df2[col].value_counts().reset_index()
             counts.columns = ["AI Tool", "Number of Students"]
 
@@ -501,10 +512,12 @@ elif active_tab == "📊 Data Visualization":
                 y="Number of Students",
                 text_auto=True,
                 template="plotly_white",
-                color_discrete_sequence=["#1f77b4"]
+                color_discrete_sequence=[THEME_COLORS["primary"]]
             )
+
             st.plotly_chart(fig, use_container_width=True)
 
+        # ---------------- GROUPED BAR ----------------
         else:
 
             df3 = pd.read_excel(
@@ -527,11 +540,13 @@ elif active_tab == "📊 Data Visualization":
                 color="Frequency",
                 barmode="group",
                 text_auto=True,
-                template="plotly_white"
+                template="plotly_white",
+                color_discrete_sequence=BAR_COLORS
             )
 
             fig.update_layout(height=550)
             st.plotly_chart(fig, use_container_width=True)
+
             
 # =========================================================
 # HYPOTHESES / TESTS TAB
