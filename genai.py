@@ -94,7 +94,7 @@ input[type="radio"] {
 # NAVIGATION
 # =========================================================
 st.sidebar.title("📊 Team 4 Project")
-st.sidebar.caption("MSc Statistics – Research Dashboard")
+st.sidebar.caption("MSc Statistics – Mid-Sem Project Presentation")
 
 tabs = [
     "📘 Overview",
@@ -109,7 +109,7 @@ tabs = [
 ]
 
 active_tab = st.sidebar.radio(
-    "Navigation",
+    "",
     tabs
 )
 
