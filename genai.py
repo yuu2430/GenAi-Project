@@ -702,7 +702,8 @@ elif active_tab == "📑 Inference":
                 f"includes the hypothesized value μ₀ = {mu_0}. "
                 "This indicates that, at the 5% level of significance, "
                 "there is insufficient evidence to conclude that the population mean "
-                "AI dependency score differs significantly from the neutral value.")
+                "AI dependency score differs significantly from the neutral value."
+                "This indicates that university students’ average level of dependence on GenAI for academic purposes lies between 40.05% and 45.14% of the total scale range.")
         else:
             direction = "greater than" if mean > mu_0 else "less than"
             st.info(
