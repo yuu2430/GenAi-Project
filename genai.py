@@ -355,9 +355,9 @@ elif active_tab == "🧪 Pilot Survey":
     col1, col2 = st.columns(2)
 
     with col1:
-        st.metric("Total Population (N)", "37,095")
-        st.metric("Pilot Sample Size (n)", "58")
-        st.metric("Sampling Method", "Simple Random Sampling")
+        st.metric("**Total Population (N)**", "37,095")
+        st.metric("**Pilot Sample Size (n)**", "58")
+        st.metric("**Sampling Method"**, "Simple Random Sampling")
 
     with col2:
         st.metric("**Yes**", "48")
