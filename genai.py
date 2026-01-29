@@ -856,7 +856,7 @@ elif active_tab == "📑 Inference":
         - **\(x_{(i)}\)** = i-th order statistic (sorted sample values)  
         - **\(a_i\)** = constants derived from the expected values of order statistics of a standard normal distribution  
         - **\(x_i\)** = observed sample values  
-        - **\(\bar{x}\)** = sample mean  
+        - **\(\x-bar\)** = sample mean  
         - **\(n\)** = sample size""")
 
 
