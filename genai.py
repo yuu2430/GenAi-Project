@@ -973,7 +973,7 @@ elif active_tab == "📌 Conclusion":
     st.markdown("---")
     st.markdown(
         "<div style='text-align:center; font-size:42px; color:black; margin-top:10px;'>"
-        "<b>Thank you</b>"
+        "<b>Thank you! :)</b>"
         "</div>",
         unsafe_allow_html=True
     )
