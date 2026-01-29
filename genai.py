@@ -400,6 +400,7 @@ elif active_tab == "📊 Data Visualization":
         st.subheader("Programme-wise AI Usage")
 
         col1, col2 = st.columns(2)
+        # UG
 
         with col1:
             ug_df = pd.DataFrame({"Usage": ["Yes", "No"], "Count": [112, 59]})
@@ -407,6 +408,7 @@ elif active_tab == "📊 Data Visualization":
                 ug_df,
                 names="Usage",
                 values="Count",
+                title="UG Students",
                 hole=0.45,
                 template="plotly_white",
                 color_discrete_sequence=[
@@ -422,6 +424,7 @@ elif active_tab == "📊 Data Visualization":
                 pg_df,
                 names="Usage",
                 values="Count",
+                title="PG Students",
                 hole=0.45,
                 template="plotly_white",
                 color_discrete_sequence=[
@@ -442,6 +445,7 @@ elif active_tab == "📊 Data Visualization":
                 female_df,
                 names="Usage",
                 values="Count",
+                title="Female Students",
                 hole=0.45,
                 template="plotly_white",
                 color_discrete_sequence=[
@@ -457,6 +461,7 @@ elif active_tab == "📊 Data Visualization":
                 male_df,
                 names="Usage",
                 values="Count",
+                title="Male Students",
                 hole=0.45,
                 template="plotly_white",
                 color_discrete_sequence=[
