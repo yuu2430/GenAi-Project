@@ -744,13 +744,15 @@ elif active_tab == "📑 Objective 1":
                 f"Since p-value < α = {alpha}, we reject the null hypothesis. "
                 f"The mean AI Dependency Score is statistically significantly "
                 f"{direction} the neutral value (μ = {mu_0})."
+                f"This indicates that university students’ average level of dependence on GenAI for academic purposes lies between 40.05% and 45.14% of the total scale range."
             )
         else:
             st.info(
                 f"Since p-value > α = {alpha}, we fail to reject the null hypothesis. "
                 f"There is insufficient evidence to conclude that the mean "
                 f"AI Dependency Score differs significantly from μ = {mu_0}."
-                f"This indicates that university students’ average level of dependence on GenAI for academic purposes lies between 40.05% and 45.14% of the total scale range."
+                
+                
             )
    
 # =========================================================
