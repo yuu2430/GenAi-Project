@@ -166,7 +166,7 @@ elif active_tab == "🎯 Objectives":
     st.markdown("""
     <div style="font-size:18px; line-height:1.8;">
 
-    1. To find out how often students use AI tools and for what purpose, and see how this differs by their education level, subject area, or gender.  
+    1. To find out how often students use AI tools and for what purpose, and see how this differs by their education level, or gender.  
     <br>
 
     2. To understand how students’ views on AI dependence differ across different age groups, genders, and study programs.  
@@ -303,7 +303,7 @@ elif active_tab == "🧪 Pilot Survey":
 #=========================================================
 elif active_tab == "📊 Data Visualization":
 
-    st.header("Data Visualization")
+    st.header("Objective 1: To find out how often students use AI tools and for what purpose, and see how this differs by their education level, or gender.")
 
     # =====================================================
     # SESSION STATE
