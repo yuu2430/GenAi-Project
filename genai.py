@@ -99,7 +99,7 @@ tabs = [
     "📐 Sampling & Sample Size",
     "🧪 Pilot Survey",
     "📊 Data Visualization",
-    "📑 Objective 1"
+    "📑 Inference"
 ]
 
 active_tab = st.sidebar.radio(
@@ -559,9 +559,9 @@ elif active_tab == "📊 Data Visualization":
 # =========================================================
 # HYPOTHESES / TESTS TAB
 # =========================================================
-elif active_tab == "📑 Objective 1":
+elif active_tab == "📑 Inference":
 
-    st.header("To identify the level of dependence on GenAI among MSU students.")
+    st.header("Objective 2: To identify the level of dependence on GenAI among MSU students.")
 
     # =====================================================
     # HYPOTHESIS DROPDOWN
