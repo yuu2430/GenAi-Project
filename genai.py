@@ -202,7 +202,7 @@ elif active_tab == "📐 Sampling & Sample Size":
     col1, col2 = st.columns(2)
 
     with col1:
-        st.metric("Sampling Method", "Convenience Sampling")
+        st.metric("Sampling Method", "Probability Proportional to Size (PPS) sampling")
         st.metric("Population", "MSU Students")
         st.metric("Final Sample Size", "221")
 
@@ -240,10 +240,7 @@ elif active_tab == "📐 Sampling & Sample Size":
         st.latex(r"q = 1 - p")
         st.latex(r"E = 0.05")
         st.markdown("Margin of error")
-        st.markdown(
-            "Using **p = 0.5** ensures **maximum variability** and provides a "
-            "**conservative estimate** of the required sample size.")
-
+        
     st.subheader("Proportional Allocation Principle (Theoretical Basis)")
 
     st.latex(r"n_i = \frac{N_i}{N} \times n")
