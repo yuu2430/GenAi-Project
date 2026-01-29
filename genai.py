@@ -231,33 +231,24 @@ elif active_tab == "📐 Sampling & Sample Size":
     st.dataframe(sampling_data, use_container_width=True)
 
     with st.expander("Sample Size Formula (Single Proportion)"):
-
-    with st.expander("Sample Size Formula (Single Proportion)"):
-
-    st.latex(r"n = \frac{z_{\alpha/2}^2 \, p \, q}{E^2}")
-
-    st.markdown("**Where:**")
-
-    col1, col2 = st.columns([2, 1])
-
-    with col1:
-        st.markdown("""
-        - **Critical value** for 95% confidence level  
-        - **Assumed population proportion**  
-        - **Complement of population proportion**  
-        - **Margin of error**
-        """)
-
-    with col2:
-        st.latex(r"z_{\alpha/2} = 1.96")
-        st.latex(r"p = 0.5")
-        st.latex(r"q = 1 - p")
-        st.latex(r"E = 0.05")
-
-    st.markdown(
-        "Using **p = 0.5** ensures **maximum variability** and provides a "
-        "**conservative estimate** of the required sample size."
-    )
+        st.latex(r"n = \frac{z_{\alpha/2}^2 \, p \, q}{E^2}")
+        st.markdown("**Where:**")
+        col1, col2 = st.columns([2, 1])
+        with col1:
+            st.markdown("""
+            - **Critical value** for 95% confidence level  
+            - **Assumed population proportion**  
+            - **Complement of population proportion**  
+            - **Margin of error**
+            """)
+        with col2:
+            st.latex(r"z_{\alpha/2} = 1.96")
+            st.latex(r"p = 0.5")
+            st.latex(r"q = 1 - p")
+            st.latex(r"E = 0.05")
+        st.markdown(
+            "Using **p = 0.5** ensures **maximum variability** and provides a "
+            "**conservative estimate** of the required sample size." )
 
 
 
