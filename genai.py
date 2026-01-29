@@ -896,6 +896,9 @@ elif active_tab == "📑 Inference":
 # =========================================================
 # CONCLUSION
 # =========================================================
+# =========================================================
+# CONCLUSION
+# =========================================================
 elif active_tab == "📌 Conclusion":
 
     st.header("Conclusion")
@@ -912,22 +915,54 @@ elif active_tab == "📌 Conclusion":
             "Mean AI Dependency vs Neutral Value",
             "CGPA vs AI Dependency"
         ],
+
         "Key Result": [
             "Majority of students perceive AI as impactful on education.",
             "ChatGPT is the most widely used AI tool across academic tasks.",
-            "PG students and female students report higher AI usage.",
+            "PG students and female students report comparatively higher AI usage.",
             "Most students use AI tools occasionally to frequently, not continuously.",
-            "AI dependency scores follow a normal distribution.",
+            "AI dependency scores follow an approximately normal distribution.",
             "Mean AI dependency score is significantly lower than the neutral value (3).",
-            "No significant linear relationship between AI dependency and CGPA."
+            "No significant linear relationship exists between AI dependency and CGPA."
         ],
+
         "Statistical Evidence": [
             "Pilot proportion p = 0.827",
-            "Descriptive frequency counts and bar charts",
+            "Descriptive frequency counts and grouped bar charts",
             "Programme-wise and gender-wise pie charts",
-            "Grouped bar charts on usage frequency",
-            "Shapiro–Wilk p-value > 0.05",
-            "One-sample t
+            "Grouped bar charts across frequency levels",
+            "Shapiro–Wilk test: p-value > 0.05",
+            "One-sample t-test: p-value < 0.05; 95% CI excludes 3",
+            "Pearson correlation: r ≈ 0; p-value > 0.05"
+        ],
+
+        "Conclusion / Implication": [
+            "The research problem is relevant and empirically supported.",
+            "GenAI tools primarily function as academic support tools.",
+            "AI adoption varies across demographic and academic contexts.",
+            "Students exhibit balanced, need-based AI usage behaviour.",
+            "Parametric statistical methods are appropriate for inference.",
+            "Students show moderate dependence on AI, not excessive reliance.",
+            "Academic performance is influenced by multiple factors beyond AI use."
+        ]
+    })
+
+    st.dataframe(conclusion_df, use_container_width=True)
+
+    st.markdown("---")
+
+    st.subheader("Overall Conclusion")
+
+    st.info(
+        "This study concludes that Generative AI tools have become an integral part of "
+        "students’ academic workflows at The Maharaja Sayajirao University of Baroda. "
+        "While GenAI tools significantly enhance learning efficiency, accessibility, and "
+        "academic support, students demonstrate controlled and purposeful usage rather than "
+        "excessive dependence. Statistical analysis reveals that AI dependency does not "
+        "significantly influence academic performance (CGPA), highlighting the continued "
+        "importance of individual effort, critical thinking, and independent learning in "
+        "higher education."
+    )
 
 
 # =========================================================
