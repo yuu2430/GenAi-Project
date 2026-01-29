@@ -131,14 +131,14 @@ if active_tab == "📘 Overview":
 # =========================================================
 elif active_tab == "🎯 Objectives":
 
-    st.header("Objectives of the Study")
+    st.header("Objective")
 
     obj_tabs = st.tabs(["Primary Objectives", "Analytical & Applied Objectives"])
 
     with obj_tabs[0]:
         st.markdown("""
-        1. Quantify the frequency and purpose of GenAI usage among students  
-        2. Examine the relationship between AI usage and cognitive engagement  
+        1. To find out how often students use AI tools and for what purpose, and see how this differs by their education level, subject area, or gender.  
+        2. To understand how students’ views on AI dependence differ across different age groups, genders, and study programs.  
         3. Study the mediating role of cognitive offloading in learning outcomes  
         """)
 
@@ -262,23 +262,46 @@ elif active_tab == "🧪 Pilot Survey":
 
 
 # =========================================================
-# DATA VISUALIZATION — FINAL VERSION
+# Data Visualization
 # =========================================================
 elif active_tab == "📊 Data Visualization":
 
     st.header("Data Visualization")
 
-    viz_type = st.selectbox(
-        "Select Visualization Type",
-        [
-            "Multiple Bar Chart – AI Tools vs Academic Purpose",
-            "AI Usage Distribution (Programme & Gender)",
-            "AI Tools Used for Academic Purposes"
-        ]
-    )
+    # =====================================================
+    # SESSION STATE INITIALIZATION
+    # =====================================================
+    if "viz_type" not in st.session_state:
+        st.session_state.viz_type = "Multiple Bar Chart – AI Tools vs Academic Purpose"
+
+    if "academic_viz" not in st.session_state:
+        st.session_state.academic_viz = "Pie Chart – AI Tools Used"
 
     # =====================================================
-    # 1. MULTIPLE BAR CHART (AI TOOLS vs PURPOSE)
+    # BUTTON-BASED MAIN NAVIGATION (PERSISTENT)
+    # =====================================================
+    st.markdown("### Select Visualization Type")
+
+    col_a, col_b, col_c = st.columns(3)
+
+    with col_a:
+        if st.button("📊 AI Tools vs Academic Purpose", use_container_width=True):
+            st.session_state.viz_type = "Multiple Bar Chart – AI Tools vs Academic Purpose"
+
+    with col_b:
+        if st.button("🥧 Programme & Gender Distribution", use_container_width=True):
+            st.session_state.viz_type = "AI Usage Distribution (Programme & Gender)"
+
+    with col_c:
+        if st.button("🛠️ AI Tools Used", use_container_width=True):
+            st.session_state.viz_type = "AI Tools Used for Academic Purposes"
+
+    viz_type = st.session_state.viz_type
+
+    st.markdown("---")
+
+    # =====================================================
+    # 1. MULTIPLE BAR CHART
     # =====================================================
     if viz_type == "Multiple Bar Chart – AI Tools vs Academic Purpose":
 
@@ -330,21 +353,14 @@ elif active_tab == "📊 Data Visualization":
             barmode="group",
             text_auto=True,
             title="Usage of AI Tools Across Academic Purposes",
-            template="plotly_dark",
-            color_discrete_sequence=["#636EFA", "#00CC96", "#AB63FA", "#FFA15A"]
+            template="plotly_dark"
         )
 
-        fig.update_layout(
-            height=550,
-            xaxis_title="Academic Purpose",
-            yaxis_title="Number of Students",
-            legend_title="AI Tool"
-        )
-
+        fig.update_layout(height=550)
         st.plotly_chart(fig, use_container_width=True)
 
     # =====================================================
-    # 2. AI USAGE DISTRIBUTION (LOGICALLY CORRECT)
+    # 2. PROGRAMME & GENDER DISTRIBUTION
     # =====================================================
     elif viz_type == "AI Usage Distribution (Programme & Gender)":
 
@@ -352,42 +368,16 @@ elif active_tab == "📊 Data Visualization":
 
         col1, col2 = st.columns(2)
 
-        # UG
         with col1:
-            ug_df = pd.DataFrame({
-                "Usage": ["Yes", "No"],
-                "Count": [112, 59]
-            })
-
-            fig_ug = px.pie(
-                ug_df,
-                names="Usage",
-                values="Count",
-                title="UG Students",
-                hole=0.45,
-                template="plotly_dark",
-                color_discrete_sequence=["#00CC96", "#EF553B"]
-            )
-
+            ug_df = pd.DataFrame({"Usage": ["Yes", "No"], "Count": [112, 59]})
+            fig_ug = px.pie(ug_df, names="Usage", values="Count",
+                            title="UG Students", hole=0.45, template="plotly_dark")
             st.plotly_chart(fig_ug, use_container_width=True)
 
-        # PG
         with col2:
-            pg_df = pd.DataFrame({
-                "Usage": ["Yes", "No"],
-                "Count": [47, 3]
-            })
-
-            fig_pg = px.pie(
-                pg_df,
-                names="Usage",
-                values="Count",
-                title="PG Students",
-                hole=0.45,
-                template="plotly_dark",
-                color_discrete_sequence=["#00CC96", "#EF553B"]
-            )
-
+            pg_df = pd.DataFrame({"Usage": ["Yes", "No"], "Count": [47, 3]})
+            fig_pg = px.pie(pg_df, names="Usage", values="Count",
+                            title="PG Students", hole=0.45, template="plotly_dark")
             st.plotly_chart(fig_pg, use_container_width=True)
 
         st.markdown("---")
@@ -395,61 +385,43 @@ elif active_tab == "📊 Data Visualization":
 
         col3, col4 = st.columns(2)
 
-        # Female
         with col3:
-            female_df = pd.DataFrame({
-                "Usage": ["Yes", "No"],
-                "Count": [99, 29]
-            })
-
-            fig_female = px.pie(
-                female_df,
-                names="Usage",
-                values="Count",
-                title="Female Students",
-                hole=0.45,
-                template="plotly_dark",
-                color_discrete_sequence=["#636EFA", "#FECB52"]
-            )
-
+            female_df = pd.DataFrame({"Usage": ["Yes", "No"], "Count": [99, 29]})
+            fig_female = px.pie(female_df, names="Usage", values="Count",
+                                title="Female Students", hole=0.45, template="plotly_dark")
             st.plotly_chart(fig_female, use_container_width=True)
 
-        # Male
         with col4:
-            male_df = pd.DataFrame({
-                "Usage": ["Yes", "No"],
-                "Count": [60, 33]
-            })
-
-            fig_male = px.pie(
-                male_df,
-                names="Usage",
-                values="Count",
-                title="Male Students",
-                hole=0.45,
-                template="plotly_dark",
-                color_discrete_sequence=["#636EFA", "#FECB52"]
-            )
-
+            male_df = pd.DataFrame({"Usage": ["Yes", "No"], "Count": [60, 33]})
+            fig_male = px.pie(male_df, names="Usage", values="Count",
+                              title="Male Students", hole=0.45, template="plotly_dark")
             st.plotly_chart(fig_male, use_container_width=True)
 
     # =====================================================
     # 3. AI TOOLS USED FOR ACADEMIC PURPOSES
     # =====================================================
-    elif viz_type == "AI Tools Used for Academic Purposes":
+    else:
 
-        academic_viz = st.selectbox(
-            "Select Visualization",
-            [
-                "Pie Chart – AI Tools Used",
-                "Bar Chart – Most Frequently Used AI Tools",
-                "Grouped Bar Chart – Frequency vs Academic Purpose"
-            ]
-        )
+        st.subheader("AI Tools Used for Academic Purposes")
+        st.markdown("### Select Tool Visualization")
 
-        # ---------------------------------
-        # PIE – AI TOOLS USED
-        # ---------------------------------
+        col_x, col_y, col_z = st.columns(3)
+
+        with col_x:
+            if st.button("🥧 Pie – AI Tools Used", use_container_width=True):
+                st.session_state.academic_viz = "Pie Chart – AI Tools Used"
+
+        with col_y:
+            if st.button("📊 Bar – Most Used Tools", use_container_width=True):
+                st.session_state.academic_viz = "Bar Chart – Most Frequently Used AI Tools"
+
+        with col_z:
+            if st.button("📈 Grouped Bar – Purpose vs Frequency", use_container_width=True):
+                st.session_state.academic_viz = "Grouped Bar Chart – Frequency vs Academic Purpose"
+
+        academic_viz = st.session_state.academic_viz
+
+        # -------- PIE --------
         if academic_viz == "Pie Chart – AI Tools Used":
 
             df2 = pd.read_excel(
@@ -458,29 +430,15 @@ elif active_tab == "📊 Data Visualization":
             )
 
             col = df2.columns[0]
-            df2[col] = df2[col].replace({
-                "Perplexity": "Perplexity / Copilot",
-                "Copilot": "Perplexity / Copilot"
-            })
-
+            df2[col] = df2[col].replace({"Perplexity": "Perplexity / Copilot", "Copilot": "Perplexity / Copilot"})
             counts = df2[col].value_counts().reset_index()
             counts.columns = ["AI Tool", "Number of Students"]
 
-            fig = px.pie(
-                counts,
-                names="AI Tool",
-                values="Number of Students",
-                hole=0.45,
-                title="Distribution of AI Tools Used for Academic Purposes",
-                template="plotly_dark",
-                color_discrete_sequence=["#636EFA", "#00CC96", "#AB63FA", "#FFA15A"]
-            )
-
+            fig = px.pie(counts, names="AI Tool", values="Number of Students",
+                         hole=0.45, template="plotly_dark")
             st.plotly_chart(fig, use_container_width=True)
 
-        # ---------------------------------
-        # BAR – MOST USED TOOLS
-        # ---------------------------------
+        # -------- BAR --------
         elif academic_viz == "Bar Chart – Most Frequently Used AI Tools":
 
             df2 = pd.read_excel(
@@ -489,29 +447,15 @@ elif active_tab == "📊 Data Visualization":
             )
 
             col = df2.columns[0]
-            df2[col] = df2[col].replace({
-                "Perplexity": "Perplexity / Copilot",
-                "Copilot": "Perplexity / Copilot"
-            })
-
+            df2[col] = df2[col].replace({"Perplexity": "Perplexity / Copilot", "Copilot": "Perplexity / Copilot"})
             counts = df2[col].value_counts().reset_index()
             counts.columns = ["AI Tool", "Number of Students"]
 
-            fig = px.bar(
-                counts,
-                x="AI Tool",
-                y="Number of Students",
-                text_auto=True,
-                title="Most Frequently Used AI Tools for Academic Purposes",
-                template="plotly_dark",
-                color_discrete_sequence=["#636EFA"]
-            )
-
+            fig = px.bar(counts, x="AI Tool", y="Number of Students",
+                         text_auto=True, template="plotly_dark")
             st.plotly_chart(fig, use_container_width=True)
 
-        # ---------------------------------
-        # GROUPED BAR – FREQUENCY vs PURPOSE
-        # ---------------------------------
+        # -------- GROUPED BAR --------
         else:
 
             df3 = pd.read_excel(
@@ -534,16 +478,11 @@ elif active_tab == "📊 Data Visualization":
                 color="Frequency",
                 barmode="group",
                 text_auto=True,
-                title="Frequency of GenAI Usage Across Academic Purposes",
-                template="plotly_dark",
-                color_discrete_sequence=["#00CC96", "#636EFA", "#FFA15A"]
+                template="plotly_dark"
             )
 
             fig.update_layout(height=550)
-
             st.plotly_chart(fig, use_container_width=True)
-
-
 # =========================================================
 # HYPOTHESES / TESTS TAB
 # =========================================================
