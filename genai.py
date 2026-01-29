@@ -119,51 +119,124 @@ active_tab = st.sidebar.radio(
 # OVERVIEW
 # =========================================================
 if active_tab == "📘 Overview":
-    st.title("Cognitive & Educational Impacts of Generative AI Usage Among University Students")
-    st.markdown("""
-    **MSc Statistics** - **Team 4**  
-    **Institution:** The Maharaja Sayajirao University of Baroda  
-    **Students:**  Rohan Shukla • Vaishali Sharma • Raiwant Kumar • Ashish Vaghela  
-    **Mentor:** Prof. Murlidharan Kunnumal
-    
-    
-    """)
-    st.caption("Project Dashboard")
+
+    # ---------- HERO TITLE ----------
+    st.markdown(
+        f"""
+        <div style="
+            background: linear-gradient(90deg,
+                {THEME_COLORS['primary']},
+                {THEME_COLORS['secondary']});
+            padding: 26px 30px;
+            border-radius: 14px;
+            color: white;
+        ">
+            <h2 style="margin-bottom:8px;">
+            Cognitive & Educational Impacts of Generative AI Usage<br>
+            Among University Students
+            </h2>
+            <p style="font-size:16px; opacity:0.95;">
+            MSc Statistics · Research Dashboard
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ---------- PROJECT INFO CARD ----------
+    st.markdown(
+        f"""
+        <div style="
+            background-color:{THEME_COLORS['accent2']};
+            padding:18px 22px;
+            border-radius:12px;
+            font-size:16px;
+            line-height:1.7;
+        ">
+        <b>Programme:</b> MSc Statistics (Team 4)<br>
+        <b>Institution:</b> The Maharaja Sayajirao University of Baroda<br>
+        <b>Students:</b> Rohan Shukla • Vaishali Sharma • Raiwant Kumar • Ashish Vaghela<br>
+        <b>Mentor:</b> Prof. Murlidharan Kunnumal
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
     st.markdown("---")
 
+    # ---------- OVERVIEW CONTENT ----------
     st.header("Project Overview")
 
-    col1, col2 = st.columns([1.2, 1])
+    col1, col2 = st.columns(2)
 
     with col1:
-        st.subheader("Introduction")
-        st.write("""
-        Generative Artificial Intelligence (GenAI) tools such as ChatGPT, Gemini, and Copilot
-        have become integral to university learning environments. These tools assist students
-        in content creation, coding, idea generation, and exam preparation.
+        st.markdown(
+            f"""
+            <div style="
+                background-color:{THEME_COLORS['neutral']};
+                padding:18px;
+                border-radius:12px;
+                border-left:5px solid {THEME_COLORS['primary']};
+            ">
+            <h4>Introduction</h4>
+            <p style="font-size:16px; line-height:1.7;">
+            Generative Artificial Intelligence (GenAI) tools such as ChatGPT, Gemini, and Copilot
+            have become integral to university learning environments. These tools assist students
+            in content creation, coding, idea generation, and exam preparation.<br><br>
 
-        As GenAI becomes embedded in academic workflows, it is important to understand its
-        influence on cognitive engagement, learning depth, motivation, and independent thinking.
-        """)
+            As GenAI becomes embedded in academic workflows, it is important to understand its
+            influence on cognitive engagement, learning depth, motivation, and independent thinking.
+            </p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
     with col2:
-        st.subheader("Why This Project?")
-        st.write("""
-        Existing research on GenAI largely focuses on usability and performance.
-        The deeper **cognitive and educational impacts** remain under-explored.
+        st.markdown(
+            f"""
+            <div style="
+                background-color:{THEME_COLORS['neutral']};
+                padding:18px;
+                border-radius:12px;
+                border-left:5px solid {THEME_COLORS['accent3']};
+            ">
+            <h4>Why This Project?</h4>
+            <p style="font-size:16px; line-height:1.7;">
+            Existing research on GenAI largely focuses on usability and performance.
+            The deeper <b>cognitive and educational impacts</b> remain under-explored.<br><br>
 
-        This study addresses this gap through a structured **statistical analysis**
-        of AI usage patterns, learning behaviour, and academic outcomes.
-        """)
+            This study addresses this gap through a structured <b>statistical analysis</b>
+            of AI usage patterns, learning behaviour, and academic outcomes.
+            </p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
     st.markdown("---")
 
+    # ---------- AIM ----------
     st.subheader("Aim of the Study")
-    st.info("""
-    To examine the cognitive and educational impacts of Generative AI usage among
-    university students, with emphasis on learning behaviour, academic performance,
-    and critical thinking abilities.
-    """)
+    st.markdown(
+        f"""
+        <div style="
+            background-color:{THEME_COLORS['accent2']};
+            padding:18px 22px;
+            border-radius:12px;
+            font-size:17px;
+            line-height:1.7;
+            border-left:5px solid {THEME_COLORS['primary']};
+        ">
+        To examine the cognitive and educational impacts of Generative AI usage among
+        university students, with emphasis on learning behaviour, academic performance,
+        and critical thinking abilities.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 # =========================================================
 # OBJECTIVES
