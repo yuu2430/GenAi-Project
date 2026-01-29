@@ -233,10 +233,12 @@ elif active_tab == "📐 Sampling & Sample Size":
     with st.expander("Sample Size Formula (Single Proportion)"):
         st.latex(r"""n = \frac{z_{\alpha/2}^2 \, p \, q}{E^2}""")
         st.markdown("""**Where:**  
-        - \( z_{\\alpha/2} = 1.96 \) — critical value for 95% confidence level 
-        - \( p = 0.5 \) — assumed population proportion  
-        - \( q = 1 - p \)  
-        - \( E = 0.05 \) — margin of error""")
+        - \( Z = 1.96 \) (95% confidence level)  
+        - \( p = 0.5 \), \( q = 1 - p \)  
+        - \( e = 0.05 \)  
+
+        Using \( p = 0.5 \) ensures maximum variability and a conservative estimate.
+        """))
 
 
 
