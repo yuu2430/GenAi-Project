@@ -368,6 +368,12 @@ elif active_tab == "🧪 Pilot Survey":
     st.info("“**Has Generative AI impacted your education?**”")
 
     st.subheader("Pilot Results Summary")
+    col3, col4 = st.columns(2)
+    with col1:
+        st.metric("**Yes**", "48")
+
+    with col2:
+        st.metric("**No**", "10")
     st.markdown("""
     - **Yes:** 48 students  
     - **No:** 10 students  
