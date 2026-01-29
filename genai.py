@@ -710,7 +710,8 @@ elif active_tab == "📑 Inference":
                 f"The 95% confidence interval for the mean AI dependency score "
                 f"does not include the hypothesized value μ₀ = {mu_0}. "
                 f"This suggests that the population mean AI dependency score is "
-                f"significantly {direction} the neutral value at the 5% level of significance.")
+                f"significantly {direction} the neutral value at the 5% level of significance."
+                "This indicates that university students’ average level of dependence on GenAI for academic purposes lies between 40.05% and 45.14% of the total scale range.")
 
 
         
