@@ -93,7 +93,7 @@ input[type="radio"] {
 # =========================================================
 # NAVIGATION
 # =========================================================
-st.sidebar.title("📊 GenAI Project")
+st.sidebar.title("📊 Team 4 Project")
 st.sidebar.caption("MSc Statistics – Research Dashboard")
 
 tabs = [
