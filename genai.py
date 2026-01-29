@@ -381,7 +381,7 @@ elif active_tab == "📋 Dataset Overview":
     st.markdown("---")
 
     FILE_NAME = "FINAL DATA OF PROJECT (1).xlsx"
-    SHEET_NAME = "Form Responses 1"
+    SHEET_NAME = "Form responses 1"
 
     try:
         # Load only the required sheet
