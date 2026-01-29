@@ -559,7 +559,7 @@ elif active_tab == "📊 Data Visualization":
 # =========================================================
 # HYPOTHESES / TESTS TAB
 # =========================================================
-elif active_tab == "📑 Tests":
+elif active_tab == "📑 Objective 1":
 
     st.header("Statistical Hypothesis Testing")
 
