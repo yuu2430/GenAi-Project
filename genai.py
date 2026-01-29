@@ -124,53 +124,53 @@ if active_tab == "📘 Overview":
     # HERO TITLE
     # =====================================================
     st.markdown(
-        f"""
-        <div style="
-            background: linear-gradient(90deg, {THEME_COLORS['primary']}, {THEME_COLORS['secondary']});
-            padding: 26px 32px;
-            border-radius: 14px;
-        ">
-            <h1 style="
-                color:white;
-                margin:0;
-                font-size:30px;
-                font-weight:600;
-                line-height:1.25;
-            ">
-                Cognitive & Educational Impacts of Generative AI Usage
-            </h1>
+f"""
+<div style="
+    background: linear-gradient(90deg, {THEME_COLORS['primary']}, {THEME_COLORS['secondary']});
+    padding:26px 32px;
+    border-radius:14px;
+">
+    <h1 style="
+        color:white;
+        margin:0;
+        font-size:30px;
+        font-weight:600;
+        line-height:1.25;
+    ">
+        Cognitive & Educational Impacts of Generative AI Usage
+    </h1>
 
-            <h3 style="
-                color:white;
-                margin-top:4px;
-                margin-bottom:10px;
-                font-size:20px;
-                font-weight:400;
-                opacity:0.85;
-            ">
-                Among University Students
-            </h3>
+    <h3 style="
+        color:white;
+        margin-top:4px;
+        margin-bottom:10px;
+        font-size:20px;
+        font-weight:400;
+        opacity:0.85;
+    ">
+        Among University Students
+    </h3>
 
-            <div style="
-                width:72px;
-                height:3px;
-                background-color:white;
-                opacity:0.85;
-                border-radius:2px;
-                margin-bottom:12px;
-            "></div>
+    <div style="
+        width:72px;
+        height:3px;
+        background-color:white;
+        opacity:0.85;
+        border-radius:2px;
+        margin-bottom:12px;
+    "></div>
 
-            <p style="
-                margin:0;
-                font-size:14px;
-                color:white;
-                opacity:0.8;
-                letter-spacing:0.3px;
-            ">
-                MSc Statistics · Research Dashboard
-            </p>
-        </div>
-        """,
+    <p style="
+        margin:0;
+        font-size:14px;
+        color:white;
+        opacity:0.8;
+        letter-spacing:0.3px;
+    ">
+        MSc Statistics · Research Dashboard
+    </p>
+</div>
+""",
         unsafe_allow_html=True
     )
 
@@ -180,100 +180,24 @@ if active_tab == "📘 Overview":
     # PROJECT INFO CARD
     # =====================================================
     st.markdown(
-        f"""
-        <div style="
-            background-color:{THEME_COLORS['accent2']};
-            padding:18px 22px;
-            border-radius:12px;
-            font-size:16px;
-            line-height:1.7;
-        ">
-        <b>Programme:</b> MSc Statistics (Team 4)<br>
-        <b>Institution:</b> The Maharaja Sayajirao University of Baroda<br>
-        <b>Students:</b> Rohan Shukla • Vaishali Sharma • Raiwant Kumar • Ashish Vaghela<br>
-        <b>Mentor:</b> Prof. Murlidharan Kunnumal
-        </div>
-        """,
+f"""
+<div style="
+    background-color:{THEME_COLORS['accent2']};
+    padding:18px 22px;
+    border-radius:12px;
+    font-size:16px;
+    line-height:1.7;
+">
+<b>Programme:</b> MSc Statistics (Team 4)<br>
+<b>Institution:</b> The Maharaja Sayajirao University of Baroda<br>
+<b>Students:</b> Rohan Shukla • Vaishali Sharma • Raiwant Kumar • Ashish Vaghela<br>
+<b>Mentor:</b> Prof. Murlidharan Kunnumal
+</div>
+""",
         unsafe_allow_html=True
     )
 
     st.markdown("---")
-
-    # =====================================================
-    # PROJECT OVERVIEW CONTENT
-    # =====================================================
-    st.header("Project Overview")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.markdown(
-            f"""
-            <div style="
-                background-color:{THEME_COLORS['neutral']};
-                padding:18px;
-                border-radius:12px;
-                border-left:5px solid {THEME_COLORS['primary']};
-            ">
-            <h4>Introduction</h4>
-            <p style="font-size:16px; line-height:1.7;">
-            Generative Artificial Intelligence (GenAI) tools such as ChatGPT, Gemini, and Copilot
-            have become integral to university learning environments. These tools assist students
-            in content creation, coding, idea generation, and exam preparation.<br><br>
-
-            As GenAI becomes embedded in academic workflows, it is important to understand its
-            influence on cognitive engagement, learning depth, motivation, and independent thinking.
-            </p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    with col2:
-        st.markdown(
-            f"""
-            <div style="
-                background-color:{THEME_COLORS['neutral']};
-                padding:18px;
-                border-radius:12px;
-                border-left:5px solid {THEME_COLORS['accent3']};
-            ">
-            <h4>Why This Project?</h4>
-            <p style="font-size:16px; line-height:1.7;">
-            Existing research on GenAI largely focuses on usability and performance.
-            The deeper <b>cognitive and educational impacts</b> remain under-explored.<br><br>
-
-            This study addresses this gap through a structured <b>statistical analysis</b>
-            of AI usage patterns, learning behaviour, and academic outcomes.
-            </p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    st.markdown("---")
-
-    # =====================================================
-    # AIM OF THE STUDY
-    # =====================================================
-    st.subheader("Aim of the Study")
-    st.markdown(
-        f"""
-        <div style="
-            background-color:{THEME_COLORS['accent2']};
-            padding:18px 22px;
-            border-radius:12px;
-            font-size:17px;
-            line-height:1.7;
-            border-left:5px solid {THEME_COLORS['primary']};
-        ">
-        To examine the cognitive and educational impacts of Generative AI usage among
-        university students, with emphasis on learning behaviour, academic performance,
-        and critical thinking abilities.
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
 
 # =========================================================
 # OBJECTIVES
