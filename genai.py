@@ -374,10 +374,10 @@ elif active_tab == "🧪 Pilot Survey":
     - **No:** 10 students  
     """)
     col3, col4 = st.columns(2)
-    with col1:
+    with col3:
         st.metric("**Yes**", "48")
 
-    with col2:
+    with col4:
         st.metric("**No**", "10")
 
     st.subheader("Estimated Proportion from Pilot Study")
