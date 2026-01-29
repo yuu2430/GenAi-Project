@@ -741,46 +741,34 @@ elif active_tab == "📊 Data Visualization":
 
         # ---------------- GROUPED BAR ----------------
         else:
-            data = {
-                "Never": [35, 11, 13, 21, 62, 99],
-                "Rarely": [19, 21, 16, 18, 37, 22],
-                "Sometimes": [67, 69, 79, 58, 49, 43],
-                "Often": [67, 87, 79, 80, 41, 30],
-                "Always": [33, 33, 34, 44, 32, 27]
-            }
-            
-            index = [
-                "Project / Assignment",
-                "Concept Learning",
-                "Summarizing / Writing",
-                "Exam Preparation",
-                "Research / Idea generation",
-                "Programming and Coding"
-            ]
-            
-            df = pd.DataFrame(data, index=index)
-            
-            # Plot heatmap
-            plt.figure(figsize=(10, 6))
-            sns.heatmap(
-                df,
-                annot=True,
-                fmt="d",
-                cmap="Blues",          # 👈 White to Dark Blue
-                linewidths=0.5,
-                linecolor="white",
-                cbar_kws={"label": "Number of Students"}
-            )
-            
-            plt.title("Frequency heatmap showing theGenAI usage levels across academic activities.", fontsize=14)
-            plt.xlabel("Frequency")
-            plt.ylabel("Activity")
-            plt.xticks(rotation=0)
-            plt.yticks(rotation=0)
-            plt.tight_layout()
-            plt.show()
 
-            
+            df3 = pd.read_excel(
+                "Cognitive and Educational impacts of GenAi usage among university students  (Responses).xlsx",
+                sheet_name="Sheet3"
+            )
+
+            df3 = df3.rename(columns={df3.columns[0]: "Frequency"})
+
+            df_long = df3.melt(
+                id_vars="Frequency",
+                var_name="Academic Purpose",
+                value_name="Number of Students"
+            )
+
+            fig = px.bar(
+                df_long,
+                x="Academic Purpose",
+                y="Number of Students",
+                color="Frequency",
+                barmode="group",
+                text_auto=True,
+                template="plotly_white",
+                color_discrete_sequence=BAR_COLORS
+            )
+
+            fig.update_layout(height=550)
+            st.plotly_chart(fig, use_container_width=True)
+           
 # =========================================================
 # HYPOTHESES / TESTS TAB
 # =========================================================
