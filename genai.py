@@ -561,7 +561,9 @@ elif active_tab == "📊 Data Visualization":
 # =========================================================
 elif active_tab == "📑 Objective 1":
 
-    st.header("Statistical Hypothesis Testing")
+    st.header("To understand how students’ views on AI dependence differ across different age groups, genders, and study programs.
+
+")
 
     # =====================================================
     # HYPOTHESIS DROPDOWN
