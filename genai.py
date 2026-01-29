@@ -305,6 +305,7 @@ elif active_tab == "🧪 Pilot Survey":
 # =========================================================
 # QUESTIONNAIRE
 # =========================================================
+
 elif active_tab == "📝 Questionnaire":
 
     st.header("Research Questionnaire")
@@ -322,7 +323,7 @@ elif active_tab == "📝 Questionnaire":
                 content.append(para.text)
         return content
 
-    questionnaire_text = load_questionnaire()
+    questionnaire_text = load_questionnaire("Questionnaire.docx")
 
     for line in questionnaire_text:
         if line.lower().startswith("section"):
