@@ -599,7 +599,7 @@ elif active_tab == "📑 Tests":
     hypothesis_list = [
         "Normality of AI Dependency Score",
         "CGPA vs AI Dependency",
-        "Faculty vs AI Dependency (One-Way ANOVA)"
+        "Mean AI Dependency vs Neutral Value (One-Sample t-test)"
     ]
 
     selected_hypothesis = st.selectbox(
@@ -617,11 +617,11 @@ elif active_tab == "📑 Tests":
         st.subheader("Hypothesis 1: Normality of AI Dependency Score")
 
         st.markdown("""
-        **H₀:** AI Dependency Score follows a normal distribution  
-        **H₁:** AI Dependency Score does not follow a normal distribution  
+        *H₀:* AI Dependency Score follows a normal distribution  
+        *H₁:* AI Dependency Score does not follow a normal distribution  
 
-        **Statistical Test Used:** Shapiro–Wilk Test  
-        **Data Source:** Sheet – `Sheet5`
+        *Statistical Test Used:* Shapiro–Wilk Test  
+        *Data Source:* FINAL DATA OF PROJECT (1).xlsx → Sheet5
         """)
 
         df = pd.read_excel(
@@ -664,11 +664,11 @@ elif active_tab == "📑 Tests":
         st.subheader("Hypothesis 2: CGPA vs AI Dependency")
 
         st.markdown("""
-        **H₀:** No significant relationship exists between CGPA and AI Dependency Score  
-        **H₁:** A significant relationship exists between CGPA and AI Dependency Score  
+        *H₀:* No significant relationship exists between CGPA and AI Dependency Score  
+        *H₁:* A significant relationship exists between CGPA and AI Dependency Score  
 
-        **Statistical Test Used:** Spearman Rank Correlation  
-        **Data Source:** Sheet – `AI_dep vs CGPA`
+        *Statistical Test Used:* Spearman Rank Correlation  
+        *Data Source:* FINAL DATA OF PROJECT (1).xlsx → AI_dep vs CGPA
         """)
 
         df = pd.read_excel(
@@ -694,7 +694,7 @@ elif active_tab == "📑 Tests":
             "Strong"
         )
 
-        st.info(f"Observed relationship strength: **{strength} correlation**")
+        st.info(f"Observed relationship strength: *{strength} correlation*")
 
         st.markdown("### Test Formula")
         st.latex(r"""
@@ -707,68 +707,80 @@ elif active_tab == "📑 Tests":
             st.info("Fail to reject H₀ → No significant relationship detected.")
 
     # =====================================================
-    # HYPOTHESIS 3: FACULTY vs AI DEPENDENCY (ANOVA)
+    # HYPOTHESIS 3: ONE-SAMPLE T-TEST
     # =====================================================
-    elif selected_hypothesis == "Faculty vs AI Dependency (One-Way ANOVA)":
+    elif selected_hypothesis == "Mean AI Dependency vs Neutral Value (One-Sample t-test)":
 
-        st.subheader("Hypothesis 3: Faculty-wise Differences in AI Dependency")
+        st.subheader("Hypothesis 3: Mean AI Dependency vs Neutral Value")
 
         st.markdown("""
-        **H₀:** Mean AI Dependency Score is the same across all faculties  
-        **H₁:** At least one faculty differs in mean AI Dependency Score  
+        *H₀:* Population mean AI Dependency Score = 3 (neutral value)  
+        *H₁:* Population mean AI Dependency Score ≠ 3  
 
-        **Statistical Test Used:** One-Way ANOVA  
-        **Data Source:** Sheet – `Form responses 1`
+        *Statistical Test Used:* Two-sided One-Sample t-test  
+        *Significance Level:* α = 0.05  
+        *Data Source:* FINAL DATA OF PROJECT (1).xlsx → Sheet5
         """)
 
         df = pd.read_excel(
             "FINAL DATA OF PROJECT (1).xlsx",
-            sheet_name="ANOVA"
+            sheet_name="Sheet5"
         )
         df.columns = df.columns.astype(str).str.strip()
+        dep_col = next(c for c in df.columns if "dep" in c.lower())
+        scores = df[dep_col].dropna()
 
-        if not {"Faculty", "AI_DEP_SCORE"}.issubset(df.columns):
-            st.error("Required columns (Faculty, AI_DEP_SCORE) not found.")
-            st.stop()
+        mu_0 = 3
+        alpha = 0.05
 
-        # Group data correctly
-        groups = [
-            g["AI_DEP_SCORE"].dropna()
-            for _, g in df.groupby("Faculty")
-            if g["AI_DEP_SCORE"].dropna().shape[0] >= 2
-        ]
+        n = len(scores)
+        mean = np.mean(scores)
+        std = np.std(scores, ddof=1)
 
-        if len(groups) < 2:
-            st.error("Not enough faculties with sufficient observations for ANOVA.")
-            st.stop()
+        from scipy.stats import ttest_1samp, t
 
-        from scipy.stats import f_oneway
-        f_stat, p_value = f_oneway(*groups)
+        t_stat, p_value = ttest_1samp(scores, mu_0)
 
         col1, col2 = st.columns(2)
-        col1.metric("F-statistic", f"{f_stat:.3f}")
-        col2.metric("p-value", f"{p_value:.4f}")
 
-        st.markdown("### Test Formula")
-        st.latex(r"""
-        F = \frac{\text{Between-group Mean Square}}{\text{Within-group Mean Square}}
-        """)
+        with col1:
+            st.metric("Sample Size (n)", n)
+            st.metric("Sample Mean", f"{mean:.3f}")
+            st.metric("Sample Std. Dev.", f"{std:.3f}")
 
+        with col2:
+            st.metric("t-statistic", f"{t_stat:.3f}")
+            st.metric("p-value (two-tailed)", f"{p_value:.10f}")
+
+        # -------------------------------
+        # CONFIDENCE INTERVAL
+        # -------------------------------
+        t_crit = t.ppf(1 - alpha / 2, df=n - 1)
+        margin = t_crit * (std / np.sqrt(n))
+        ci_lower = mean - margin
+        ci_upper = mean + margin
+
+        st.markdown("### 95% Confidence Interval for Mean")
+        st.info(f"({ci_lower:.3f}, {ci_upper:.3f})")
+
+        # -------------------------------
+        # INTERPRETATION
+        # -------------------------------
         st.markdown("### Interpretation")
 
-        if p_value < 0.05:
+        if p_value < alpha:
+            direction = "greater than" if mean > mu_0 else "less than"
             st.success(
-                "Since p-value < 0.05, we reject the null hypothesis. "
-                "Mean AI Dependency Scores differ significantly across faculties."
+                f"Since p-value < α = {alpha}, we reject the null hypothesis. "
+                f"The mean AI Dependency Score is statistically significantly "
+                f"{direction} the neutral value (μ = {mu_0})."
             )
         else:
             st.info(
-                "Since p-value > 0.05, we fail to reject the null hypothesis. "
-                "No statistically significant difference in mean AI Dependency Scores "
-                "is observed across faculties."
+                f"Since p-value > α = {alpha}, we fail to reject the null hypothesis. "
+                f"There is insufficient evidence to conclude that the mean "
+                f"AI Dependency Score differs significantly from μ = {mu_0}."
             )
-
-
    
 # =========================================================
 # FOOTER
