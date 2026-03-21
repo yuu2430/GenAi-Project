@@ -160,7 +160,7 @@ if active_tab == "📘 Overview":
         ">
         <b>Programme:</b> MSc Statistics (Team 4)<br>
         <b>Institution:</b> The Maharaja Sayajirao University of Baroda<br>
-        <b>Students:</b> Rohan Shukla • Vaishali Sharma • Raiwant Kumar • Ashish Vaghela<br>
+        <b>Students:</b> Vaishali Sharma • Rohan Shukla • Raiwant Kumar • Ashish Vaghela<br>
         <b>Mentor:</b> Prof. Murlidharan Kunnumal
         </div>
         """,
