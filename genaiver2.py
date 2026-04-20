@@ -248,30 +248,24 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     PAGES = {
-    "Overview":                "overview",
-    "Objectives":              "objectives",
-    "Pilot Survey":            "pilot",
-    "Sampling Design":         "sampling",
-    "Questionnaire":           "questionnaire",
-    "Reliability Analysis":    "reliability",
-    "Statistical Inference":   "inference",   # ← replaces the 6 objective entries
-    "Conclusion":              "conclusion",
-    "References":              "references",}
+        "Overview":                "overview",
+        "Objectives":              "objectives",
+        "Pilot Survey":            "pilot",
+        "Sampling Design":         "sampling",
+        "Questionnaire":           "questionnaire",
+        "Reliability Analysis":    "reliability",
+        "Objective 1 — Descriptive":   "descriptive",
+        "Objective 2 — AI Dependency": "anova",
+        "Objective 3 — Ind. Learning": "wilcoxon",
+        "Objective 4 — Critical Thinking": "kruskal",
+        "Objective 5 — Creativity": "correlation",
+        "Objective 6 — ML Model":  "ml",
+        "Conclusion":              "conclusion",
+        "References":              "references",
+    }
 
     page  = st.radio("", list(PAGES.keys()), label_visibility="collapsed")
     active = PAGES[page]
-    obj_map = {
-    "Objective 1 — AI Usage Patterns":       "descriptive",
-    "Objective 2 — AI Dependency":           "anova",
-    "Objective 3 — Independent Learning":    "wilcoxon",
-    "Objective 4 — Critical Thinking":       "kruskal",
-    "Objective 5 — Creativity":              "correlation",
-    "Objective 6 — ML Model":               "ml",}
-
-if active == "inference":
-    with st.sidebar:
-        selected_obj = st.selectbox("Select Objective", list(obj_map.keys()))
-    active = obj_map[selected_obj]
 
     st.markdown("""
     <div style='padding:20px 16px 0; border-top:1px solid #1e2e42; margin-top:16px;'>
@@ -365,6 +359,62 @@ if active == "overview":
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+    # Abstract
+    st.markdown(f"""
+    <div style='font-family:"Libre Baskerville",serif; font-size:15px; line-height:1.95;
+                color:{C["slate"]}; max-width:860px; margin-bottom:32px;'>
+    Primary data were collected from <strong>221 students</strong> across <strong>13 faculties</strong>
+    using a structured questionnaire administered via Probability Proportional to Size (PPS) sampling.
+    Reliability of all psychometric scales was confirmed using Cronbach's Alpha (α ≥ 0.83 across all constructs).
+    The study employs descriptive analysis, normality testing, non-parametric inference, correlation analysis,
+    and supervised machine learning to address six research objectives.<br><br>
+    Findings reveal that students exhibit <strong>moderate, purposeful GenAI use</strong>, with average
+    dependency levels significantly below the neutral benchmark of 3.0. AI usage is positively associated
+    with independent learning (ρ = 0.459) and critical thinking (ρ = 0.466), while no significant relationship
+    is observed between AI dependency and CGPA or creativity. Faculty affiliation — not gender or level of
+    study — is the only significant demographic predictor of AI dependency.
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.4px; color:{C['teal']}; margin-bottom:16px;'>Study at a Glance</div>", unsafe_allow_html=True)
+
+    cols = st.columns(4)
+    for col, v, l in zip(cols,
+        ["221","13","6","4"],
+        ["Students surveyed","Faculties covered","Research objectives","AI tools studied"]):
+        col.metric(l, v)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    st.markdown(f"<div style='font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.4px; color:{C['teal']}; margin-bottom:16px;'>Key Findings</div>", unsafe_allow_html=True)
+
+    findings = [
+        ("Mean AI Dependency = 2.63",
+         "Significantly below the neutral midpoint of 3.0 (t = −5.74, p < 0.0001). Students use AI purposefully, not compulsively."),
+        ("Faculty drives dependency differences",
+         "Arts and Technology students show significantly higher AI dependency than smaller faculties (Welch ANOVA p = 0.041)."),
+        ("AI promotes independent learning",
+         "Median Independent Learning Score (3.35) significantly exceeds the neutral benchmark (Wilcoxon W = 13,589, p < 0.001)."),
+        ("Higher AI use correlates with stronger critical thinking",
+         "Spearman ρ = 0.466 between AI usage group and critical thinking score (Kruskal-Wallis H = 49.65, p < 10⁻¹¹)."),
+        ("No significant effect on creativity",
+         "Spearman ρ = 0.087, p = 0.198 — AI usage frequency does not significantly predict creative output."),
+        ("71% predictive accuracy for academic divisions",
+         "KNN (k=5) classifier using five AI-related features achieves 71.1% accuracy on held-out test set."),
+    ]
+
+    for i in range(0, 6, 2):
+        c1, c2 = st.columns(2)
+        for col, (title, desc) in zip([c1, c2], findings[i:i+2]):
+            col.markdown(f"""
+            <div style='background:{C["surface"]}; border:1px solid {C["border"]};
+                        border-radius:8px; padding:20px 22px; margin-bottom:14px;
+                        border-left:3px solid {C["teal"]};'>
+                <div style='font-weight:600; color:{C["ink"]}; font-size:14.5px; margin-bottom:6px;'>{title}</div>
+                <div style='font-size:13.5px; color:{C["muted"]}; line-height:1.65;'>{desc}</div>
+            </div>""", unsafe_allow_html=True)
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVES
 # ══════════════════════════════════════════════════════════════
