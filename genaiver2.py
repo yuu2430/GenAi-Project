@@ -328,6 +328,10 @@ HIGH_CT = np.clip(np.random.normal(3.7, 0.6, 60),  1, 5)
 # OVERVIEW
 # ══════════════════════════════════════════════════════════════
 if active == "overview":
+    # ── LOGO ─────────────────────────────
+    col1, col2, col3 = st.columns([1,2,1])
+    with col2:
+        st.image("msu_logo.png", width=110)
     st.markdown(f"""
     <div style='background:linear-gradient(135deg,{C["ink"]} 0%,{C["mid"]} 100%);
                 border-radius:12px; padding:40px 48px; color:white; margin-bottom:32px;'>
@@ -340,10 +344,23 @@ if active == "overview":
             Cognitive & Educational Impacts of<br>Generative AI Usage Among University Students
         </div>
         <div style='font-size:14px; color:#94b4cc; max-width:680px; line-height:1.8;'>
-            A statistically rigorous investigation into how GenAI tools — ChatGPT, Gemini,
-            Copilot, and Perplexity — influence AI dependency, independent learning,
-            critical thinking, creativity, and academic performance across 13 faculties
-            of The Maharaja Sayajirao University of Baroda.
+            
+        </div>
+        <div style='display:flex; justify-content:space-between; margin-top:28px; font-size:13px; color:#d1d9e6;'>
+
+            <div>
+                <b>MSc Statistics (Team 4)</b><br>
+                Vaishali Sharma<br>
+                Ashish Vaghela<br>
+                Raiwant Kumar<br>
+                Rohan Shukla
+            </div>
+
+            <div style='text-align:right;'>
+                <b>Guided by:</b><br>
+                Prof. Murlidharan Kunnumal
+            </div>
+
         </div>
     </div>
     """, unsafe_allow_html=True)
