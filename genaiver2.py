@@ -3,8 +3,8 @@ GenAI Impact Study — Full Dashboard
 MSc Statistics (Team 4) | The Maharaja Sayajirao University of Baroda
 Academic Year 2025-26
 
-Run: streamlit run genaiver2_updated.py
-Requires: data.xlsx and msu_logo.png in the same directory
+Run: streamlit run genai_dashboard_final.py
+Requires: data.xlsx in the same directory
 """
 
 import streamlit as st
@@ -17,8 +17,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 from scipy.stats import shapiro, ttest_1samp, pearsonr, spearmanr, kruskal, t as t_dist
 import warnings
-import base64
-import os
 warnings.filterwarnings("ignore")
 
 # ── PAGE CONFIG ──────────────────────────────────────────────
@@ -236,26 +234,10 @@ plt.rcParams.update({
     "axes.facecolor":    "white",
 })
 
-# ── LOGO HELPER ───────────────────────────────────────────────
-def get_logo_b64(path="msu_logo.png"):
-    if os.path.exists(path):
-        with open(path, "rb") as f:
-            return base64.b64encode(f.read()).decode()
-    return None
-
 # ── SIDEBAR ───────────────────────────────────────────────────
 with st.sidebar:
-    logo_b64 = get_logo_b64()
-    if logo_b64:
-        st.markdown(f"""
-        <div style='padding:20px 16px 8px; text-align:center;'>
-            <img src='data:image/png;base64,{logo_b64}'
-                 style='height:70px; filter:brightness(0) invert(1) opacity(0.85);'/>
-        </div>
-        """, unsafe_allow_html=True)
-
     st.markdown("""
-    <div style='padding:8px 16px 12px; border-bottom:1px solid #1e2e42;'>
+    <div style='padding:20px 16px 12px; border-bottom:1px solid #1e2e42;'>
         <div style='font-family:"Libre Baskerville",serif; font-size:15px; color:#e0e7ef; font-weight:700; line-height:1.4;'>
             GenAI Impact Study
         </div>
@@ -265,37 +247,31 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-    # ── PAGES (Objectives 1-6 merged into "Statistical Inference") ──
     PAGES = {
-        "Overview":             "overview",
-        "Objectives":           "objectives",
-        "Pilot Survey":         "pilot",
-        "Sampling Design":      "sampling",
-        "Questionnaire":        "questionnaire",
-        "Reliability Analysis": "reliability",
-        "Statistical Inference":"inference",   # ← single entry for all 6 objectives
-        "Conclusion":           "conclusion",
-        "References":           "references",
-    }
+    "Overview":                "overview",
+    "Objectives":              "objectives",
+    "Pilot Survey":            "pilot",
+    "Sampling Design":         "sampling",
+    "Questionnaire":           "questionnaire",
+    "Reliability Analysis":    "reliability",
+    "Statistical Inference":   "inference",   # ← replaces the 6 objective entries
+    "Conclusion":              "conclusion",
+    "References":              "references",}
 
     page  = st.radio("", list(PAGES.keys()), label_visibility="collapsed")
     active = PAGES[page]
+    obj_map = {
+    "Objective 1 — AI Usage Patterns":       "descriptive",
+    "Objective 2 — AI Dependency":           "anova",
+    "Objective 3 — Independent Learning":    "wilcoxon",
+    "Objective 4 — Critical Thinking":       "kruskal",
+    "Objective 5 — Creativity":              "correlation",
+    "Objective 6 — ML Model":               "ml",}
 
-    # ── Objective dropdown — only shown when Statistical Inference is selected ──
-    OBJ_MAP = {
-        "Objective 1 — AI Usage Patterns":       "descriptive",
-        "Objective 2 — AI Dependency":           "anova",
-        "Objective 3 — Independent Learning":    "wilcoxon",
-        "Objective 4 — Critical Thinking":       "kruskal",
-        "Objective 5 — Creativity":              "correlation",
-        "Objective 6 — ML Model":               "ml",
-    }
-
-    if active == "inference":
-        st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
-        selected_obj = st.selectbox("Select Objective", list(OBJ_MAP.keys()),
-                                    label_visibility="visible")
-        active = OBJ_MAP[selected_obj]
+if active == "inference":
+    with st.sidebar:
+        selected_obj = st.selectbox("Select Objective", list(obj_map.keys()))
+    active = obj_map[selected_obj]
 
     st.markdown("""
     <div style='padding:20px 16px 0; border-top:1px solid #1e2e42; margin-top:16px;'>
@@ -355,98 +331,40 @@ MOD_CT  = np.clip(np.random.normal(3.1, 0.7, 141), 1, 5)
 HIGH_CT = np.clip(np.random.normal(3.7, 0.6, 60),  1, 5)
 
 # ══════════════════════════════════════════════════════════════
-# OVERVIEW  ← Updated: MSU logo, project report cover info, no key findings
+# OVERVIEW
 # ══════════════════════════════════════════════════════════════
 if active == "overview":
-
-    logo_b64 = get_logo_b64()
-    logo_html = (
-        f"<img src='data:image/png;base64,{logo_b64}' "
-        f"style='height:100px; margin-bottom:14px; filter:brightness(0) invert(1);'/><br>"
-        if logo_b64 else ""
-    )
+    # ── encode logo ──
+    import base64, os
+    logo_path = "msu_logo.png"   # put the logo file in the same folder as your script
+    if os.path.exists(logo_path):
+        with open(logo_path, "rb") as f:
+            logo_b64 = base64.b64encode(f.read()).decode()
+        logo_html = f"<img src='data:image/png;base64,{logo_b64}' style='height:90px; margin-bottom:16px; filter:brightness(0) invert(1);'/>"
+    else:
+        logo_html = ""
 
     st.markdown(f"""
     <div style='background:linear-gradient(135deg,{C["ink"]} 0%,{C["mid"]} 100%);
-                border-radius:12px; padding:40px 48px; color:white; margin-bottom:32px;
-                text-align:center;'>
+                border-radius:12px; padding:40px 48px; color:white; margin-bottom:32px; text-align:center;'>
         {logo_html}
         <div style='font-size:13px; font-weight:700; text-transform:uppercase;
-                    letter-spacing:2px; color:{C["teal_lt"]}; margin-bottom:4px;'>
-            The Maharaja Sayajirao University of Baroda
+                    letter-spacing:2px; color:{C["teal_lt"]}; margin-bottom:6px;'>
+            THE MAHARAJA SAYAJIRAO UNIVERSITY OF BARODA
         </div>
-        <div style='font-size:12.5px; color:#94b4cc; margin-bottom:2px;'>Faculty of Science · Department of Statistics</div>
-        <div style='font-size:12px; color:#7a9ab8; margin-bottom:22px;'>Academic Year 2025-26</div>
-
-        <div style='display:inline-block; background:rgba(255,255,255,0.08);
-                    border-radius:6px; padding:4px 18px; margin-bottom:16px;
-                    font-size:11px; font-weight:600; text-transform:uppercase;
-                    letter-spacing:2px; color:{C["teal_lt"]};'>
-            Project Report
+        <div style='font-size:12px; color:#94b4cc; margin-bottom:4px;'>Faculty of Science · Department of Statistics</div>
+        <div style='font-size:12px; color:#94b4cc; margin-bottom:20px;'>Academic Year 2025-26</div>
+        <div style='font-family:"Libre Baskerville",serif; font-size:28px;
+                    font-weight:700; line-height:1.35; margin-bottom:16px;'>
+            Cognitive & Educational Impacts of<br>Generative AI Usage Among University Students
         </div>
-
-        <div style='font-family:"Libre Baskerville",serif; font-size:26px;
-                    font-weight:700; line-height:1.4; margin-bottom:20px;
-                    font-style:italic;'>
-            "Cognitive and Educational Impacts of<br>
-            Generative AI Usage Among University Students"
-        </div>
-
-        <div style='border-top:1px solid rgba(255,255,255,0.12); padding-top:18px;
-                    display:flex; justify-content:center; gap:60px; flex-wrap:wrap;'>
-            <div style='text-align:left;'>
-                <div style='font-size:11px; color:#5d7a96; font-weight:600;
-                            text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;'>
-                    MSc Statistics — Team 4
-                </div>
-                <div style='font-size:13px; color:#94b4cc; line-height:2;'>
-                    Vaishali Sharma<br>
-                    Ashish Vaghela<br>
-                    Raiwant Kumar<br>
-                    Rohan Shukla
-                </div>
-            </div>
-            <div style='text-align:left;'>
-                <div style='font-size:11px; color:#5d7a96; font-weight:600;
-                            text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;'>
-                    Guided By
-                </div>
-                <div style='font-size:13px; color:#94b4cc; line-height:2;'>
-                    Prof. Murlidharan Kunnumal
-                </div>
-            </div>
+        <div style='font-size:13px; color:#94b4cc; margin-bottom:20px;'>
+            <strong style='color:white;'>MSc Statistics · Team 4</strong><br>
+            Vaishali Sharma &nbsp;·&nbsp; Ashish Vaghela &nbsp;·&nbsp; Raiwant Kumar &nbsp;·&nbsp; Rohan Shukla<br>
+            <span style='font-size:12px;'>Guided by: Prof. Murlidharan Kunnumal</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
-
-    # Abstract
-    st.markdown(f"""
-    <div style='font-family:"Libre Baskerville",serif; font-size:15px; line-height:1.95;
-                color:{C["slate"]}; max-width:860px; margin-bottom:32px;'>
-    Primary data were collected from <strong>221 students</strong> across <strong>13 faculties</strong>
-    using a structured questionnaire administered via Probability Proportional to Size (PPS) sampling.
-    Reliability of all psychometric scales was confirmed using Cronbach's Alpha (α ≥ 0.83 across all constructs).
-    The study employs descriptive analysis, normality testing, non-parametric inference, correlation analysis,
-    and supervised machine learning to address six research objectives.<br><br>
-    Findings reveal that students exhibit <strong>moderate, purposeful GenAI use</strong>, with average
-    dependency levels significantly below the neutral benchmark of 3.0. AI usage is positively associated
-    with independent learning (ρ = 0.459) and critical thinking (ρ = 0.466), while no significant relationship
-    is observed between AI dependency and CGPA or creativity. Faculty affiliation — not gender or level of
-    study — is the only significant demographic predictor of AI dependency.
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-    st.markdown(f"<div style='font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.4px; color:{C['teal']}; margin-bottom:16px;'>Study at a Glance</div>", unsafe_allow_html=True)
-
-    cols = st.columns(4)
-    for col, v, l in zip(cols,
-        ["221","13","6","4"],
-        ["Students surveyed","Faculties covered","Research objectives","AI tools studied"]):
-        col.metric(l, v)
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVES
 # ══════════════════════════════════════════════════════════════
@@ -957,6 +875,7 @@ elif active == "wilcoxon":
 
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
 
+    # Why Wilcoxon
     st.markdown("**Why Wilcoxon and not a t-test?**")
     st.markdown(f"""
     <div class='hyp' style='margin-bottom:20px;'>
@@ -967,6 +886,7 @@ elif active == "wilcoxon":
     equivalent that tests whether the median differs from a specified value without requiring normality.
     </div>""", unsafe_allow_html=True)
 
+    # Formula then results then plot
     st.markdown("**Test Statistic:**")
     st.latex(r"W = \sum \left[ \text{rank}(|d_i|) \times \text{sign}(d_i) \right] \quad \text{where } d_i = x_i - \mu_0")
     st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:20px;'>Under H₁ (one-sided: greater than), a large W indicates positive differences dominate — consistent with a median above 3.0.</div>", unsafe_allow_html=True)
@@ -1032,6 +952,7 @@ elif active == "kruskal":
 
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
 
+    # Formula + stats on left, interpretation on right
     col_l, col_r = st.columns([1.1, 1])
     with col_l:
         st.markdown("**Kruskal-Wallis H Test**")
@@ -1161,8 +1082,7 @@ elif active == "correlation":
         ax2.scatter(ai_u2 + np.random.uniform(-0.18, 0.18, 221), indep,
                     alpha=0.35, s=22, color=C["navy"], edgecolors="none")
         m2, b2 = np.polyfit(ai_u2, indep, 1)
-        xs2 = np.linspace(1, 5, 100)
-        ax2.plot(xs2, m2*xs2 + b2, color=C["teal"], lw=2.5, label="Trend (ρ = 0.459, p < 0.001)")
+        ax2.plot(xs, m2*xs + b2, color=C["teal"], lw=2.5, label="Trend (ρ = 0.459, p < 0.001)")
         ax2.set_xlabel("AI Usage Frequency (1=Infrequent, 5=Very Frequent)")
         ax2.set_ylabel("Independent Learning Score")
         ax2.legend(fontsize=10)
