@@ -248,15 +248,21 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     PAGES = {
-    "Overview":                "overview",
-    "Objectives":              "objectives",
-    "Pilot Survey":            "pilot",
-    "Sampling Design":         "sampling",
-    "Questionnaire":           "questionnaire",
-    "Reliability Analysis":    "reliability",
-    "Statistical Inference":   "inference",   # ✅ NEW
-    "Conclusion":              "conclusion",
-    "References":              "references",}
+        "Overview":                "overview",
+        "Objectives":              "objectives",
+        "Pilot Survey":            "pilot",
+        "Sampling Design":         "sampling",
+        "Questionnaire":           "questionnaire",
+        "Reliability Analysis":    "reliability",
+        "Objective 1 — Descriptive":   "descriptive",
+        "Objective 2 — AI Dependency": "anova",
+        "Objective 3 — Ind. Learning": "wilcoxon",
+        "Objective 4 — Critical Thinking": "kruskal",
+        "Objective 5 — Creativity": "correlation",
+        "Objective 6 — ML Model":  "ml",
+        "Conclusion":              "conclusion",
+        "References":              "references",
+    }
 
     page  = st.radio("", list(PAGES.keys()), label_visibility="collapsed")
     active = PAGES[page]
@@ -650,26 +656,7 @@ elif active == "reliability":
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 1 — DESCRIPTIVE
 # ══════════════════════════════════════════════════════════════
-elif active == "inference":
-
-    page_header("Analysis", "Statistical Inference",
-                "Select a research objective to view detailed statistical analysis.")
-
-    objective = st.selectbox(
-        "Choose Objective",
-        [
-            "Objective 1 — Descriptive Analysis",
-            "Objective 2 — AI Dependency",
-            "Objective 3 — Independent Learning",
-            "Objective 4 — Critical Thinking",
-            "Objective 5 — Creativity",
-            "Objective 6 — Machine Learning Model"
-        ]
-    )
-
-    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-    
-elif active == "Objective 1 — Descriptive Analysis":
+elif active == "descriptive":
     page_header("Objective 1", "Descriptive Analysis of AI Usage",
                 "How often do students use AI tools, for what purposes, and do patterns differ by level of study or gender?")
 
@@ -748,7 +735,7 @@ elif active == "Objective 1 — Descriptive Analysis":
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 2 — AI DEPENDENCY
 # ══════════════════════════════════════════════════════════════
-elif active == "Objective 2 — AI Dependency":
+elif active == "anova":
     page_header("Objective 2", "AI Dependency Level",
                 "Identifying and quantifying the level of GenAI dependency among MSU students using the GAIDS scale.")
 
@@ -902,13 +889,13 @@ elif active == "Objective 2 — AI Dependency":
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 3 — WILCOXON
 # ══════════════════════════════════════════════════════════════
-elif active == "Objective 3 — Independent Learning":
+elif active == "wilcoxon":
     page_header("Objective 3", "Independent Learning Beyond the Classroom",
                 "Does AI promote self-directed learning beyond prescribed classroom content?")
 
     hyp_block(
-        "The median Independent Learning Score = 3.0 (the neutral midpoint)",
-        "The median Independent Learning Score > 3.0 (one-sided test)",
+        "The median Independent Learning Score = 3.0",
+        "The median Independent Learning Score > 3.0",
         "Wilcoxon Signed-Rank Test"
     )
 
@@ -982,7 +969,7 @@ elif active == "Objective 3 — Independent Learning":
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 4 — KRUSKAL
 # ══════════════════════════════════════════════════════════════
-elif active == "Objective 4 — Critical Thinking":
+elif active == "kruskal":
     page_header("Objective 4", "AI Usage and Critical Thinking",
                 "Does higher AI tool usage correspond to stronger self-reported critical thinking?")
 
@@ -1063,7 +1050,7 @@ elif active == "Objective 4 — Critical Thinking":
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 5 — CORRELATION
 # ══════════════════════════════════════════════════════════════
-elif active == "Objective 5 — Creativity":
+elif active == "correlation":
     page_header("Objective 5", "Creativity and Independent Learning",
                 "Does AI usage frequency significantly relate to creativity or independent learning?")
 
@@ -1158,7 +1145,7 @@ elif active == "Objective 5 — Creativity":
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 6 — ML
 # ══════════════════════════════════════════════════════════════
-elif active == "Objective 6 — Machine Learning Model":
+elif active == "ml":
     page_header("Objective 6", "Predictive Model for Academic Performance",
                 "Can AI-related cognitive and behavioural profiles predict a student's academic performance division?")
 
