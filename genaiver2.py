@@ -942,7 +942,7 @@ elif active == "wilcoxon":
 
     fig, ax = plt.subplots(figsize=(9, 4))
     ax.hist(IND_RAW, bins=16, color=C["teal"], edgecolor="white", alpha=0.88)
-    ax.axvline(3.0,  color=C["red"],   lw=2, ls="--", label="Neutral = 3.0 (μ₀)")
+    ax.axvline(3.0,  color=C["red"],   lw=2, ls="--", label="Neutral = 3.0")
     ax.axvline(np.median(IND_RAW), color=C["amber"], lw=2.5, ls="-",
                label=f"Sample median = {np.median(IND_RAW):.3f}")
     ax.set_xlabel("Independent Learning Score")
