@@ -363,7 +363,7 @@ if active == "overview":
     # Abstract
     st.markdown(f"""
     <div style='font-family:"Libre Baskerville",serif; font-size:15px; line-height:1.95;
-                color:{C["slate"]}; max-width:860px; margin-bottom:32px; text-align: justify;'>
+                color:{C["slate"]}; width:100%; padding:0 40px; margin-bottom:32px; text-align: justify; text-justify:inter-word;'>
     Primary data were collected from <strong>221 students</strong> across <strong>13 faculties</strong>
     using a structured questionnaire administered via Probability Proportional to Size (PPS) sampling.
     Reliability of all psychometric scales was confirmed using Cronbach's Alpha (α ≥ 0.83 across all constructs).
