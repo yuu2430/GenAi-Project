@@ -14,7 +14,7 @@ Re-prompting Required	YES / NO	Whether the AI required a follow-up prompt or rep
 
 1.2 Scoring Methodology
 Accuracy was the primary outcome variable. It was calculated as the percentage of the 5 questions per subject for which the AI provided a correct response (partial credit of 0.5 was assigned to responses coded as '2 Answers' - cases where the AI gave two alternative answers without identifying the correct one). Response time, detail rate, and re-prompting rate are secondary performance indicators that contextualise the accuracy findings and inform a composite assessment of each tool.
-Colour Key in Tables:  ██ Green = Strong performance   ██ Orange = Moderate   ██ Red = Weak performance
+Colour Key in Tables:  Green = Strong performance   Orange = Moderate   Red = Weak performance
 Accuracy thresholds: ≥ 90% = Green   |   70–89% = Orange   |   < 70% = Red   Response time: < 9s = Green   |   9–14s = Orange   |   ≥ 15s = Red
  
 2. Comprehensive Performance Table - All Tools × All Subjects
