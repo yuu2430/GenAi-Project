@@ -347,47 +347,47 @@ if active == "overview":
 
     # ── HERO SECTION ─────────────────────
     st.markdown(f"""
-<div style='background:linear-gradient(135deg,{C["ink"]} 0%,{C["mid"]} 100%);
+    <div style='background:linear-gradient(135deg,{C["ink"]} 0%,{C["mid"]} 100%);
             border-radius:12px; padding:40px 48px; color:white; margin-bottom:32px;'>
 
-    <div style='font-family:"Libre Baskerville",serif; font-size:24px;
+        <div style='font-family:"Libre Baskerville",serif; font-size:24px;
                 font-weight:700; margin-bottom:8px;'>
-        PROJECT REPORT
-    </div>
+            PROJECT REPORT
+        </div>
 
-    <div style='font-size:13px; color:#94b4cc; margin-bottom:10px;'>on</div>
+        <div style='font-size:13px; color:#94b4cc; margin-bottom:10px;'>on</div>
 
-    <div style='font-family:"Libre Baskerville",serif; font-size:26px;
-                font-weight:600; line-height:1.5; font-style:italic; margin-bottom:18px;'>
+        <div style='font-family:"Libre Baskerville",serif; font-size:26px;
+        font-weight:600; line-height:1.5; font-style:italic; margin-bottom:18px;'>
         “Cognitive and Educational Impacts of<br>
         Generative AI Usage Among University Students”
-    </div>
-
-    <div style='font-size:14px; color:#94b4cc; max-width:700px; line-height:1.8;'>
-        A statistical investigation into how Generative AI tools — ChatGPT, Gemini,
-        Copilot, and Perplexity — influence student dependency, independent learning,
-        critical thinking, creativity, and academic performance across multiple faculties.
-    </div>
-
-    <div style='display:flex; justify-content:space-between; margin-top:28px; font-size:13px; color:#d1d9e6;'>
-
-        <div>
-            <b>MSc Statistics (Team 4)</b><br>
-            Vaishali Sharma<br>
-            Ashish Vaghela<br>
-            Raiwant Kumar<br>
-            Rohan Shukla
         </div>
 
-        <div style='text-align:right;'>
-            <b>Guided by:</b><br>
-            Prof. Murlidharan Kunnumal
+        <div style='font-size:14px; color:#94b4cc; max-width:700px; line-height:1.8;'>
+            A statistical investigation into how Generative AI tools — ChatGPT, Gemini,
+            Copilot, and Perplexity — influence student dependency, independent learning,
+            critical thinking, creativity, and academic performance across multiple faculties.
         </div>
 
-    </div>
+        <div style='display:flex; justify-content:space-between; margin-top:28px; font-size:13px; color:#d1d9e6;'>
 
-</div>
-""", unsafe_allow_html=True)
+            <div>
+                <b>MSc Statistics (Team 4)</b><br>
+                Vaishali Sharma<br>
+                Ashish Vaghela<br>
+                Raiwant Kumar<br>
+                Rohan Shukla
+            </div>
+
+            <div style='text-align:right;'>
+                <b>Guided by:</b><br>
+                Prof. Murlidharan Kunnumal
+            </div>
+
+        </div>
+
+      </div>
+      """, unsafe_allow_html=True)
 
     # ── ABSTRACT ─────────────────────────
     st.markdown(f"""
