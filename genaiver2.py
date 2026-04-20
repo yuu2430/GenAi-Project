@@ -328,68 +328,27 @@ HIGH_CT = np.clip(np.random.normal(3.7, 0.6, 60),  1, 5)
 # OVERVIEW
 # ══════════════════════════════════════════════════════════════
 if active == "overview":
-
-    # ── LOGO ─────────────────────────────
-    col1, col2, col3 = st.columns([1,2,1])
-    with col2:
-        st.image("msu_logo.png", width=130)
-
-    # ── UNIVERSITY HEADER ─────────────────
-    st.markdown("""
-    <div style='text-align:center; font-size:13px; color:#4a5568; line-height:1.8; margin-top:-8px; margin-bottom:18px;'>
-        THE MAHARAJA SAYAJIRAO UNIVERSITY OF BARODA<br>
-        FACULTY OF SCIENCE<br>
-        DEPARTMENT OF STATISTICS<br>
-        ACADEMIC YEAR 2025–26
+    st.markdown(f"""
+    <div style='background:linear-gradient(135deg,{C["ink"]} 0%,{C["mid"]} 100%);
+                border-radius:12px; padding:40px 48px; color:white; margin-bottom:32px;'>
+        <div style='font-size:11px; font-weight:600; text-transform:uppercase;
+                    letter-spacing:1.6px; color:{C["teal_lt"]}; margin-bottom:12px;'>
+            MSc Statistics · Team 4 · MSU Baroda · 2025-26
+        </div>
+        <div style='font-family:"Libre Baskerville",serif; font-size:30px;
+                    font-weight:700; line-height:1.3; margin-bottom:16px;'>
+            Cognitive & Educational Impacts of<br>Generative AI Usage Among University Students
+        </div>
+        <div style='font-size:14px; color:#94b4cc; max-width:680px; line-height:1.8;'>
+            A statistically rigorous investigation into how GenAI tools — ChatGPT, Gemini,
+            Copilot, and Perplexity — influence AI dependency, independent learning,
+            critical thinking, creativity, and academic performance across 13 faculties
+            of The Maharaja Sayajirao University of Baroda.
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
-
-    # ── HERO SECTION ─────────────────────
-    st.markdown(f"""
-    <div style='background:linear-gradient(135deg,{C["ink"]} 0%,{C["mid"]} 100%);
-            border-radius:12px; padding:40px 48px; color:white; margin-bottom:32px;'>
-
-        <div style='font-family:"Libre Baskerville",serif; font-size:24px;
-                font-weight:700; margin-bottom:8px;'>
-            PROJECT REPORT
-        </div>
-
-        <div style='font-size:13px; color:#94b4cc; margin-bottom:10px;'>on</div>
-
-        <div style='font-family:"Libre Baskerville",serif; font-size:26px;
-        font-weight:600; line-height:1.5; font-style:italic; margin-bottom:18px;'>
-        “Cognitive and Educational Impacts of<br>
-        Generative AI Usage Among University Students”
-        </div>
-
-        <div style='font-size:14px; color:#94b4cc; max-width:700px; line-height:1.8;'>
-            A statistical investigation into how Generative AI tools — ChatGPT, Gemini,
-            Copilot, and Perplexity — influence student dependency, independent learning,
-            critical thinking, creativity, and academic performance across multiple faculties.
-        </div>
-
-        <div style='display:flex; justify-content:space-between; margin-top:28px; font-size:13px; color:#d1d9e6;'>
-
-            <div>
-                <b>MSc Statistics (Team 4)</b><br>
-                Vaishali Sharma<br>
-                Ashish Vaghela<br>
-                Raiwant Kumar<br>
-                Rohan Shukla
-            </div>
-
-            <div style='text-align:right;'>
-                <b>Guided by:</b><br>
-                Prof. Murlidharan Kunnumal
-            </div>
-
-        </div>
-
-      </div>
-      """, unsafe_allow_html=True)
-
-    # ── ABSTRACT ─────────────────────────
+    # Abstract
     st.markdown(f"""
     <div style='font-family:"Libre Baskerville",serif; font-size:15px; line-height:1.95;
                 color:{C["slate"]}; max-width:860px; margin-bottom:32px;'>
@@ -398,7 +357,6 @@ if active == "overview":
     Reliability of all psychometric scales was confirmed using Cronbach's Alpha (α ≥ 0.83 across all constructs).
     The study employs descriptive analysis, normality testing, non-parametric inference, correlation analysis,
     and supervised machine learning to address six research objectives.<br><br>
-
     Findings reveal that students exhibit <strong>moderate, purposeful GenAI use</strong>, with average
     dependency levels significantly below the neutral benchmark of 3.0. AI usage is positively associated
     with independent learning (ρ = 0.459) and critical thinking (ρ = 0.466), while no significant relationship
@@ -407,8 +365,6 @@ if active == "overview":
     </div>
     """, unsafe_allow_html=True)
 
-
-    # ── STUDY AT A GLANCE ─────────────────
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
     st.markdown(f"<div style='font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.4px; color:{C['teal']}; margin-bottom:16px;'>Study at a Glance</div>", unsafe_allow_html=True)
 
@@ -418,27 +374,21 @@ if active == "overview":
         ["Students surveyed","Faculties covered","Research objectives","AI tools studied"]):
         col.metric(l, v)
 
-
-    # ── KEY FINDINGS ──────────────────────
     st.markdown("<br>", unsafe_allow_html=True)
+
     st.markdown(f"<div style='font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.4px; color:{C['teal']}; margin-bottom:16px;'>Key Findings</div>", unsafe_allow_html=True)
 
     findings = [
         ("Mean AI Dependency = 2.63",
          "Significantly below the neutral midpoint of 3.0 (t = −5.74, p < 0.0001). Students use AI purposefully, not compulsively."),
-
         ("Faculty drives dependency differences",
          "Arts and Technology students show significantly higher AI dependency than smaller faculties (Welch ANOVA p = 0.041)."),
-
         ("AI promotes independent learning",
          "Median Independent Learning Score (3.35) significantly exceeds the neutral benchmark (Wilcoxon W = 13,589, p < 0.001)."),
-
         ("Higher AI use correlates with stronger critical thinking",
          "Spearman ρ = 0.466 between AI usage group and critical thinking score (Kruskal-Wallis H = 49.65, p < 10⁻¹¹)."),
-
         ("No significant effect on creativity",
          "Spearman ρ = 0.087, p = 0.198 — AI usage frequency does not significantly predict creative output."),
-
         ("71% predictive accuracy for academic divisions",
          "KNN (k=5) classifier using five AI-related features achieves 71.1% accuracy on held-out test set."),
     ]
@@ -453,7 +403,6 @@ if active == "overview":
                 <div style='font-weight:600; color:{C["ink"]}; font-size:14.5px; margin-bottom:6px;'>{title}</div>
                 <div style='font-size:13.5px; color:{C["muted"]}; line-height:1.65;'>{desc}</div>
             </div>""", unsafe_allow_html=True)
-
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVES
 # ══════════════════════════════════════════════════════════════
