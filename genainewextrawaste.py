@@ -847,6 +847,10 @@ elif active == "anova":
         hyp_block("The AI Dependency Scores within each gender group follow a normal distribution","At least one group does NOT follow a normal distribution","Shapiro-Wilk Test")
         st.markdown("**Shapiro-Wilk Test Statistic:**")
         st.latex(r"W = \frac{\left(\sum_{i=1}^n a_i x_{(i)}\right)^2}{\sum_{i=1}^n (x_i - \bar{x})^2}")
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>"
+            "W = test statistic · x_(i) = ordered sample values · x̄ = sample mean · "
+            "aᵢ = constants based on sample size · n = sample size"
+            "</div>", unsafe_allow_html=True)
         norm_g = pd.DataFrame({"Group":["Male","Female"],"p-value":[0.1960,0.5269],"Decision":["p > 0.05 — Normally distributed ✅","p > 0.05 — Normally distributed ✅"]})
         st.dataframe(norm_g.set_index("Group"), use_container_width=True)
         result_pass("Both groups are normally distributed. Normality assumption is satisfied.")
@@ -854,6 +858,11 @@ elif active == "anova":
         step("Step 3 — Homogeneity of Variance (Levene's Test)")
         hyp_block("Variances of AI Dependency Score are equal across gender groups","Variances are NOT equal","Levene's Test")
         st.latex(r"L = \frac{(N-k)\sum_{i=1}^k n_i(\bar{Z}_{i.} - \bar{Z}_{..})^2}{(k-1)\sum_{i=1}^k \sum_{j=1}^{n_i}(Z_{ij} - \bar{Z}_{i.})^2}")
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>"
+            "L = test statistic · N = total sample size · k = number of groups · "
+            "nᵢ = sample size of group i · Zᵢⱼ = |xᵢⱼ − x̄ᵢ| · "
+            "Z̄ᵢ. = group mean deviation · Z̄.. = overall mean deviation"
+            "</div>", unsafe_allow_html=True)
         lev_g = pd.DataFrame({"Test":["Levene's Test"],"p-value":[0.6959],"Decision":["p > 0.05 — Variances are equal ✅"]})
         st.dataframe(lev_g.set_index("Test"), use_container_width=True)
         result_pass("Equal variance assumption satisfied.")
@@ -865,6 +874,10 @@ elif active == "anova":
         hyp_block("μ_male = μ_female — No significant difference in mean AI Dependency Score between genders","μ_male ≠ μ_female — A significant difference exists (two-sided)","Independent Samples t-test")
         st.markdown("**Test Statistic Formula:**")
         st.latex(r"t = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{s_p^2\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}, \quad s_p^2 = \frac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_1+n_2-2}")
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>"
+            "t = test statistic · x̄₁, x̄₂ = sample means · n₁, n₂ = sample sizes · "
+            "sₚ² = pooled variance · s₁², s₂² = sample variances"
+            "</div>", unsafe_allow_html=True)
         c1,c2,c3 = st.columns(3)
         c1.metric("t-statistic","-0.7270"); c2.metric("p-value","0.4680"); c3.metric("Decision","Fail to Reject H₀")
         result_info("<b>Fail to Reject H₀</b> — p = 0.468 > 0.05. There is no statistically significant difference in AI Dependency Scores between male and female students. Gender does not significantly predict how much a student depends on GenAI tools.")
@@ -933,6 +946,10 @@ elif active == "anova":
             step("Step 5 — Final Test: One-Way ANOVA")
             hyp_block("μ_Government = μ_Semi-Private = μ_Private — No difference across schooling backgrounds","At least one group mean differs","One-Way ANOVA")
             st.latex(r"F = \frac{\text{Between-group variance (MSB)}}{\text{Within-group variance (MSW)}} = \frac{\sum_i n_i(\bar{x}_i - \bar{x})^2 / (k-1)}{\sum_i\sum_j(x_{ij}-\bar{x}_i)^2 / (N-k)}")
+            st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>"
+            "F = test statistic · MSB = mean square between groups · "
+            "MSW = mean square within groups · k = number of groups · N = total sample size"
+            "</div>", unsafe_allow_html=True)
             c1,c2,c3 = st.columns(3)
             c1.metric("F-statistic","0.2547"); c2.metric("p-value","0.7754"); c3.metric("Decision","Fail to Reject H₀")
             result_info("<b>Fail to Reject H₀</b> — p = 0.775 > 0.05. Schooling background (Government / Semi-Private / Private school) has no significant effect on AI Dependency Score. Prior schooling environment does not predict how dependent a student becomes on GenAI tools.")
@@ -964,6 +981,10 @@ elif active == "anova":
             step("Step 5 — Final Test: Kruskal-Wallis H Test")
             hyp_block("All faculty groups have the same distribution of AI Dependency Scores","At least one faculty group has a significantly different distribution","Kruskal-Wallis H Test")
             st.latex(r"H = \frac{12}{N(N+1)} \sum_{j=1}^{k} \frac{R_j^2}{n_j} - 3(N+1)")
+            st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>"
+            "H = test statistic · N = total observations · nᵢ = group size · "
+            "Rᵢ = sum of ranks for group i"
+            "</div>", unsafe_allow_html=True)
             st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:14px;'>N = total sample size, nⱼ = size of group j, Rⱼ = sum of ranks for group j. Under H₀, H ~ χ²(k−1) = χ²(4).</div>", unsafe_allow_html=True)
             c1,c2,c3 = st.columns(3)
             c1.metric("H-statistic","12.9905"); c2.metric("p-value","0.0113"); c3.metric("Decision","Reject H₀ ✓")
@@ -1017,6 +1038,10 @@ elif active == "anova":
         hyp_block("The overall AI Dependency Score follows a normal distribution","The AI Dependency Score does NOT follow a normal distribution","Shapiro-Wilk Test")
         st.markdown("**Shapiro-Wilk Statistic:**")
         st.latex(r"W = \frac{\left(\sum_{i=1}^n a_i x_{(i)}\right)^2}{\sum_{i=1}^n (x_i - \bar{x})^2}")
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>"
+            "W = test statistic · dᵢ = paired differences · "
+            "Rank(dᵢ) = rank of |dᵢ| · n = number of pairs"
+            "</div>", unsafe_allow_html=True)
         c1,c2,c3 = st.columns(3)
         c1.metric("Shapiro-Wilk W","0.9888"); c2.metric("p-value","0.1676"); c3.metric("Decision","Fail to Reject H₀")
         result_pass("Normality satisfied — p = 0.1676 > 0.05. The AI Dependency Score is approximately normally distributed, validating the use of the one-sample t-test.")
@@ -1153,6 +1178,10 @@ elif active == "kruskal":
     )
     st.markdown("**Jonckheere-Terpstra Statistic:**")
     st.latex(r"J = \sum_{i < j} \sum_{a \in G_i, b \in G_j} \mathbf{1}(b > a) + 0.5 \cdot \mathbf{1}(b = a)")
+    st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>"
+            "J = test statistic · k = number of ordered groups · "
+            "nᵢ = sample size of group i · assumes ordered trend (e.g., Low < Moderate < High)"
+            "</div>", unsafe_allow_html=True)
     st.markdown(f"<div style='font-size:13.5px; color:{C['slate']}; line-height:1.8; margin-bottom:12px;'>J counts the number of concordant pairs — pairs where the value in the higher-ordered group is greater than the value in the lower-ordered group. The standardised Z-statistic is then compared to the standard normal distribution. A large J (large Z) supports the ordered alternative.</div>", unsafe_allow_html=True)
     st.latex(r"Z = \frac{J - \mu_J}{\sigma_J}, \quad \mu_J = \frac{N^2 - \sum n_i^2}{4}, \quad \sigma_J^2 = \frac{N^2(2N+3) - \sum n_i^2(2n_i+3)}{72}")
     c1,c2,c3,c4 = st.columns(4)
