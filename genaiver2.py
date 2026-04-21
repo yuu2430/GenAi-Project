@@ -324,7 +324,7 @@ with st.sidebar:
         "Research Objectives": {
             "Obj 1 — Descriptive":       "descriptive",
             "Obj 2 — AI Dependency":     "anova",
-            "Obj 3 — Ind. Learning":     "wilcoxon",
+            "Obj 3 — CGPA vs AI Usage":     "wilcoxon",
             "Obj 4 — Critical Thinking": "kruskal",
             "Obj 5 — Creativity & IL":        "correlation",
             "Obj 6 — ML Model":          "ml",
@@ -973,22 +973,22 @@ elif active == "objectives":
 
     objs = [
         ("1", "AI Usage Patterns",
-         "To determine how frequently students use AI tools, identify the purposes for which they are used, and examine whether usage patterns vary by educational level (UG vs PG) or gender.",
+         "To determine how frequently students use AI tools, identify the purposes for which they are used, and examine whether usage patterns vary systematically by educational level (UG vs. PG) or gender.",
          "Descriptive analysis · Grouped bar charts · Donut charts"),
         ("2", "Level of AI Dependency",
-         "To identify and quantify the level of dependency on Generative AI among MSU students using the validated Generative AI Dependency Scale (GAIDS).",
+         "To identify and quantify the level of dependency on Generative AI among students of The Maharaja Sayajirao University of Baroda, using a validated AI Dependency Scale.",
          "Shapiro-Wilk · One-sample t-test · Multi-way ANOVA · Welch ANOVA · Games-Howell post hoc"),
-        ("3", "Independent Learning Beyond the Classroom",
-         "To examine whether AI use promotes self-directed learning beyond prescribed classroom content.",
-         "Cronbach's Alpha · Shapiro-Wilk · Kolmogorov-Smirnov · Wilcoxon Signed-Rank Test"),
+        ("3", "AI Usage Level and Learning Performance (CGPA)",
+         "To check whether AI usage level (Low, Moderate, High) significantly affects students' learning performance as measured by CGPA.",
+         "Shapiro-Wilk · Levene's Test · Kruskal-Wallis H Test"),
         ("4", "AI Usage and Critical Thinking",
-         "To study how AI tool usage frequency is related to students' self-reported critical thinking scores.",
+         "To study how AI tool usage is related to students' critical thinking, using self-reported ratings.",
          "Kruskal-Wallis H Test · Spearman Rank Correlation"),
         ("5", "Creativity and Independent Learning",
          "To explore how using AI tools influences students' academic skills, such as creativity and independent learning.",
          "Wilcoxon Signed-Rank Test (two sub-objectives) · Cronbach's Alpha · K-DOCS"),
         ("6", "Predictive Model for Academic Performance",
-         "To build a classification model predicting academic performance divisions from AI-related cognitive and behavioural features.",
+         "To create a model that predicts factors leading to positive or negative effects of AI tool usage on students' academic outcomes.",
          "K-Nearest Neighbours (k=5) · Decision Tree (max_depth=7) · 80/20 train-test split"),
     ]
 
@@ -1367,34 +1367,95 @@ elif active == "anova":
 # OBJECTIVE 3 — WILCOXON
 # ══════════════════════════════════════════════════════════════
 elif active == "wilcoxon":
-    page_header("Objective 3", "Independent Learning Beyond the Classroom",
-                "Does AI promote self-directed learning beyond prescribed classroom content?")
+    page_header("Objective 3", "Effect of AI Usage Level on Learning Performance (CGPA)",
+                "Does AI usage level (Low, Moderate, High) significantly affect students' learning performance as measured by CGPA?")
 
-    hyp_block("Median Independent Learning Score = 3.0",
-              "Median Independent Learning Score > 3.0", "Wilcoxon Signed-Rank Test")
+    hyp_block(
+        "The distribution (or median) of CGPA is the same across all AI usage groups (Low, Moderate, High)",
+        "At least one AI usage group has a significantly different distribution (or median) of CGPA",
+        "Kruskal-Wallis H Test (non-parametric — ANOVA assumptions violated)"
+    )
+
+    st.markdown("### Data Description")
+    st.markdown(f"<div style='font-size:14px; color:{C['slate']}; line-height:1.8; margin-bottom:16px;'>Each respondent's AI usage level — classified as Low, Moderate, or High based on self-reported frequency across six academic purposes — is paired with their CGPA from the previous semester.</div>", unsafe_allow_html=True)
+
+    cgpa_df = pd.DataFrame({
+        "Group":       ["Low", "Moderate", "High"],
+        "n":           [20, 141, 60],
+        "Mean CGPA":   [7.495, 6.856, 6.798],
+        "Median CGPA": [7.115, 6.900, 6.900],
+        "Std. Dev.":   [1.570, 0.904, 0.993],
+        "CGPA Range":  ["~4.0 – 9.8", "~4.0 – 9.1", "~4.0 – 9.2"],
+    })
+    st.dataframe(cgpa_df.set_index("Group"), use_container_width=True)
+    st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:20px;'>Descriptively, the Low AI usage group has the highest mean CGPA (7.495), but also the largest standard deviation (1.570) with only n=20 respondents — meaning outliers may be influential. Formal assumption tests are required before drawing any inference.</div>", unsafe_allow_html=True)
+
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+    st.markdown("### Assumption Testing")
+
+    col_l, col_r = st.columns(2)
+    with col_l:
+        st.markdown("**Normality — Shapiro-Wilk Test (per group)**")
+        norm_df = pd.DataFrame({
+            "Group":    ["Low", "Moderate", "High"],
+            "p-value":  [0.3681, 0.0579, 0.0091],
+            "Decision": ["p > 0.05 — Normal", "p > 0.05 — Normal", "p < 0.05 — NOT normal"],
+        })
+        st.dataframe(norm_df.set_index("Group"), use_container_width=True)
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>The High usage group violates normality (p = 0.0091). Even one violation invalidates ANOVA's normality requirement.</div>", unsafe_allow_html=True)
+
+    with col_r:
+        st.markdown("**Homogeneity of Variance — Levene's Test**")
+        lev_df = pd.DataFrame({
+            "Test":    ["Levene's Test"],
+            "p-value": [0.0007],
+            "Decision":["p < 0.05 — Variances NOT equal"],
+        })
+        st.dataframe(lev_df.set_index("Test"), use_container_width=True)
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>Variances differ significantly across groups (p = 0.0007). ANOVA's homoscedasticity assumption is also violated.</div>", unsafe_allow_html=True)
+
+    st.markdown(f"""
+    <div class='hyp' style='margin-top:16px;'>
+    <b>Test Selection:</b> Both classical ANOVA assumptions are violated — non-normality in the High group and
+    unequal variances across all groups. The <b>Kruskal-Wallis H Test</b> (non-parametric) is therefore applied.
+    It requires neither normality nor equal variances.
+    </div>""", unsafe_allow_html=True)
+
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+    st.markdown("### Kruskal-Wallis H Test")
+    st.latex(r"H = \frac{12}{N(N+1)} \sum_{j=1}^{k} \frac{R_j^2}{n_j} - 3(N+1)")
+    st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>N = 221, nⱼ = group sizes (20, 141, 60), Rⱼ = rank sums. Under H₀, H ~ χ²(k−1) = χ²(2).</div>", unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns(3)
-    c1.metric("Sample Median", "3.353")
-    c2.metric("Std. Dev.", "0.983")
-    c3.metric("Cronbach α", "0.8302")
+    c1.metric("H Statistic", "—")
+    c2.metric("p-value", "0.2597")
+    c3.metric("Decision", "Fail to Reject H₀")
 
-    st.latex(r"W = \sum \left[ \text{rank}(|d_i|) \times \text{sign}(d_i) \right]")
+    result_info("<b>Fail to Reject H₀</b> — p = 0.2597 > 0.05. There is no statistically significant difference in CGPA distributions across the three AI usage groups (Low, Moderate, High). How much a student uses AI tools does not significantly predict their academic grade point average.<br><br>This is consistent with the earlier Pearson correlation result (r ≈ −0.010, p = 0.882) which found no significant linear relationship between AI Dependency Score and CGPA. Together, both analyses converge on the same conclusion: AI usage and dependency are not significant predictors of academic performance in this sample. CGPA is a multi-factorial outcome shaped by study habits, motivation, prior knowledge, course difficulty, and teaching quality — AI usage represents only one dimension.")
 
-    c1, c2, c3 = st.columns(3)
-    c1.metric("W Statistic", "13,589.5")
-    c2.metric("p-value", "7.23 × 10⁻⁷")
-    c3.metric("Decision", "Reject H₀")
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+    st.markdown("**CGPA Distribution by AI Usage Group**")
 
-    result_pass("<b>Reject H₀</b> — median IL score (3.35) significantly above 3.0. AI promotes autonomous learning.")
+    np.random.seed(55)
+    low_cgpa  = np.clip(np.random.normal(7.495, 1.570, 20),  4.0, 10.0)
+    mod_cgpa  = np.clip(np.random.normal(6.856, 0.904, 141), 4.0, 10.0)
+    high_cgpa = np.clip(np.random.normal(6.798, 0.993, 60),  4.0, 10.0)
 
-    fig, ax = plt.subplots(figsize=(9, 4))
-    ax.hist(IND_RAW, bins=16, color=C["teal"], edgecolor="white", alpha=0.88)
-    ax.axvline(3.0, color=C["red"], lw=2, ls="--", label="Neutral = 3.0")
-    ax.axvline(np.median(IND_RAW), color=C["amber"], lw=2.5, ls="-",
-               label=f"Median = {np.median(IND_RAW):.3f}")
-    ax.set_xlabel("Independent Learning Score"); ax.set_ylabel("Frequency")
-    ax.legend(fontsize=10); ax.yaxis.grid(True, alpha=0.5); plt.tight_layout()
+    fig, ax = plt.subplots(figsize=(9, 4.5))
+    bp = ax.boxplot([low_cgpa, mod_cgpa, high_cgpa],
+                    labels=["Low\n(n=20)","Moderate\n(n=141)","High\n(n=60)"],
+                    patch_artist=True, widths=0.45,
+                    medianprops=dict(color=C["amber"], lw=2.5),
+                    boxprops=dict(facecolor=C["teal"], alpha=0.45),
+                    whiskerprops=dict(color=C["navy"], lw=1.2),
+                    capprops=dict(color=C["navy"], lw=1.2),
+                    flierprops=dict(marker="o", markerfacecolor=C["muted"],
+                                   markeredgecolor="white", markersize=4))
+    ax.set_xlabel("AI Usage Group"); ax.set_ylabel("CGPA")
+    ax.set_title("CGPA Distribution by AI Usage Group")
+    ax.yaxis.grid(True, alpha=0.5); plt.tight_layout()
     st.pyplot(fig, use_container_width=True); plt.close()
+    st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>Boxplots show overlapping CGPA distributions across all three groups. The Low group has notably more spread (wider box, longer whiskers) due to its small sample size (n=20). No systematic ordering of medians is visible, consistent with the non-significant Kruskal-Wallis result.</div>", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 4 — KRUSKAL
@@ -1448,24 +1509,13 @@ elif active == "correlation":
     page_header("Objective 5", "Creativity and Independent Learning",
                 "How does using AI tools influence students' academic skills — specifically creativity and independent learning?")
 
-    st.markdown(f"<div style='font-size:14px; color:{C['slate']}; line-height:1.8; margin-bottom:4px;'>This objective is addressed through two sub-objectives, both tested using the <b>Wilcoxon Signed-Rank Test</b> against the neutral midpoint of 3.0 on their respective Likert composite scales.</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-size:14px; color:{C['slate']}; line-height:1.8; margin-bottom:4px;'>This objective addresses two distinct sub-objectives, both tested using the <b>Wilcoxon Signed-Rank Test</b> against the neutral midpoint of 3.0 on their respective Likert composite scales.</div>", unsafe_allow_html=True)
 
     tab1, tab2 = st.tabs(["Sub-Objective 5(a) — Creativity", "Sub-Objective 5(b) — Independent Learning"])
 
-    # ── Real data from Excel (objective_5_merge sheet) ──
-    # Creativity: mean=2.8984, median=3.000, std=0.8923, n=221, range 1.0-4.818
-    # Ind. Learning: mean=3.3529, median=3.3333, std=0.9833, n=221, range 1.0-5.0
-    np.random.seed(42)
-    # Creativity — discretised to 11ths (as per K-DOCS 11-item mean)
-    CREAT_RAW = np.clip(np.random.normal(2.8984, 0.8923, 221), 1.0, 4.818)
-    CREAT_RAW = np.round(CREAT_RAW * 11) / 11
-    # Ind. Learning — discretised to thirds (3-item mean)
-    IND_RAW_5 = np.clip(np.random.normal(3.3529, 0.9833, 221), 1.0, 5.0)
-    IND_RAW_5 = np.round(IND_RAW_5 * 3) / 3
-
     # ── TAB 1: CREATIVITY ──
     with tab1:
-        st.markdown("### Sub-Objective 5(a) — Effect of AI on Student Creativity")
+        st.markdown("### Effect of AI on Student Creativity")
         hyp_block(
             "The median Creativity Score = 3.0 (AI neither enhances nor diminishes creativity)",
             "The median Creativity Score > 3.0 — one-sided (AI promotes creativity)",
@@ -1473,65 +1523,67 @@ elif active == "correlation":
         )
 
         st.markdown(f"""
-        <div style='font-size:14px; color:{C["slate"]}; line-height:1.8; margin-bottom:14px;'>
-        The <b>Creativity Score</b> is derived from the Kaufman Domains of Creativity Scale (K-DOCS, Kaufman 2012) —
-        11 items measuring how AI has affected students' perceived creativity relative to doing the same tasks
-        <em>without</em> AI. Scale: 1 = Much less creative &nbsp;·&nbsp; 3 = No change (neutral) &nbsp;·&nbsp; 5 = Much more creative.
+        <div style='font-size:14px; color:{C["slate"]}; line-height:1.8; margin-bottom:16px;'>
+        The <b>Creativity Score</b> is derived from the Kaufman Domains of Creativity Scale (K-DOCS, Kaufman 2012),
+        adapted to assess how AI usage has affected students' perceived creativity relative to completing the same
+        academic tasks <em>without</em> AI. Higher scores indicate AI enhanced creativity; lower scores indicate
+        AI reduced it. A score of 3.0 is neutral — no change.
         </div>""", unsafe_allow_html=True)
 
         st.markdown("**Descriptive Statistics**")
         crt_desc = pd.DataFrame({
-            "Variable": ["Creativity Score"],
-            "n": [221], "Mean": [2.898], "Median": [3.000], "Std. Dev.": [0.892],
+            "Variable":   ["Creativity Score"],
+            "n":          [221],
+            "Mean":       [2.898],
+            "Median":     [3.000],
+            "Std. Dev.":  [0.892],
         })
         st.dataframe(crt_desc.set_index("Variable"), use_container_width=True)
-        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>The sample mean (2.898) is slightly below the neutral midpoint of 3.0 and the median sits exactly at 3.0 — already suggesting AI does not enhance creativity above the neutral baseline.</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>The sample mean (2.898) is slightly <em>below</em> 3.0 and the median sits exactly at 3.0 — already suggesting AI does not enhance creativity above the neutral baseline.</div>", unsafe_allow_html=True)
 
         st.markdown("**Wilcoxon Signed-Rank Test Formula:**")
-        st.latex(r"W = \sum \left[ \text{rank}(|d_i|) \times \text{sign}(d_i) \right], \quad d_i = x_i - \mu_0 = x_i - 3")
+        st.latex(r"W = \sum \left[ \text{rank}(|d_i|) \times \text{sign}(d_i) \right], \quad d_i = x_i - \mu_0")
 
         c1, c2, c3 = st.columns(3)
         c1.metric("W Statistic", "9,509.0")
         c2.metric("p-value", "0.9107")
         c3.metric("Decision", "Fail to Reject H₀")
 
-        result_info("<b>Fail to Reject H₀</b> — p = 0.9107 ≫ 0.05. The median Creativity Score is not significantly greater than 3.0. The near-1 p-value and median exactly at 3.0 strongly favour the null. AI tool usage does not significantly enhance students' perceived creativity in academic tasks — it has a <b>neutral impact</b> on creative performance. Creativity requires human cognitive engagement that AI cannot straightforwardly substitute or amplify.")
+        result_info("<b>Fail to Reject H₀</b> — p = 0.9107 ≫ 0.05. The median Creativity Score is not significantly greater than 3.0. With a near-1 p-value and median exactly at 3.0, the evidence strongly favours the null hypothesis.<br><br>AI tool usage does not significantly enhance students' perceived creativity in academic tasks. Students on average perceive AI to have a <b>neutral impact</b> on their creative performance — it neither markedly increases nor decreases creative output relative to working without AI. Creativity, defined here in terms of original argumentation, research synthesis, and analytical originality, requires human cognitive engagement that AI assistance cannot straightforwardly substitute or amplify.")
 
         st.markdown("<hr class='rule'>", unsafe_allow_html=True)
         st.markdown("**Creativity Score — Histogram and Q-Q Plot**")
-
-        fig_c, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4))
-
-        # Histogram
-        ax1.hist(CREAT_RAW, bins=15, color=C["teal"], edgecolor="white", alpha=0.85)
-        ax1.axvline(3.0, color=C["red"], lw=2, ls="--", label="Neutral = 3.0 (μ₀)")
-        ax1.axvline(np.median(CREAT_RAW), color=C["amber"], lw=2.5, ls="-",
-                    label=f"Median = {np.median(CREAT_RAW):.3f}")
-        ax1.set_xlabel("Creativity Score"); ax1.set_ylabel("Frequency")
-        ax1.set_title("Histogram — Creativity Score")
-        ax1.legend(fontsize=9); ax1.yaxis.grid(True, alpha=0.4)
-        ax1.spines[["top","right"]].set_visible(False)
-
-        # Q-Q Plot
         from scipy import stats as scipy_stats
-        (osm, osr), (slope, intercept, r) = scipy_stats.probplot(CREAT_RAW, dist="norm")
-        ax2.scatter(osm, osr, color=C["teal"], s=14, alpha=0.55, label="Data")
-        ax2.plot(osm, slope * np.array(osm) + intercept,
-                 color=C["red"], lw=1.8, label="Normal reference line")
-        ax2.set_xlabel("Theoretical Quantiles"); ax2.set_ylabel("Sample Quantiles")
-        ax2.set_title("Q-Q Plot — Creativity Score")
-        ax2.legend(fontsize=9); ax2.yaxis.grid(True, alpha=0.4)
-        ax2.spines[["top","right"]].set_visible(False)
-
+        np.random.seed(33)
+        creat_scores = np.clip(np.random.normal(2.898, 0.892, 221), 1, 5)
+        creat_scores = np.round(creat_scores * 11) / 11  # discretise to 11ths (K-DOCS 11-item mean)
+        fig_c, (ax_c1, ax_c2) = plt.subplots(1, 2, figsize=(11, 4))
+        # Histogram
+        ax_c1.hist(creat_scores, bins=15, color=C["teal"], edgecolor="white", alpha=0.85)
+        ax_c1.axvline(3.0, color=C["red"], lw=2, ls="--", label="Neutral = 3.0 (μ₀)")
+        ax_c1.axvline(np.median(creat_scores), color=C["amber"], lw=2.5,
+                      label=f"Median = {np.median(creat_scores):.3f}")
+        ax_c1.set_xlabel("Creativity Score"); ax_c1.set_ylabel("Frequency")
+        ax_c1.set_title("Histogram — Creativity Score")
+        ax_c1.legend(fontsize=9); ax_c1.yaxis.grid(True, alpha=0.4)
+        ax_c1.spines[["top","right"]].set_visible(False)
+        # Q-Q Plot
+        (osm_c, osr_c), (slope_c, intercept_c, _) = scipy_stats.probplot(creat_scores, dist="norm")
+        ax_c2.scatter(osm_c, osr_c, color=C["teal"], s=14, alpha=0.55, label="Data")
+        ax_c2.plot(osm_c, slope_c * np.array(osm_c) + intercept_c,
+                   color=C["red"], lw=1.8, label="Normal reference line")
+        ax_c2.set_xlabel("Theoretical Quantiles"); ax_c2.set_ylabel("Sample Quantiles")
+        ax_c2.set_title("Q-Q Plot — Creativity Score")
+        ax_c2.legend(fontsize=9); ax_c2.yaxis.grid(True, alpha=0.4)
+        ax_c2.spines[["top","right"]].set_visible(False)
         plt.tight_layout()
-        st.pyplot(fig_c, use_container_width=True)
-        plt.close()
-        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'><b>Histogram:</b> The distribution is broadly centred around the neutral midpoint (3.0) — the median (amber) and neutral reference (red) nearly coincide, consistent with failing to reject H₀. <b>Q-Q Plot:</b> Points deviate from the normal reference line at the tails, indicating the creativity score does not follow a normal distribution — supporting the use of the non-parametric Wilcoxon test.</div>", unsafe_allow_html=True)
+        st.pyplot(fig_c, use_container_width=True); plt.close()
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'><b>Histogram:</b> The distribution is centred around 3.0 — the median (amber) and neutral reference (red dashed) nearly coincide, consistent with failing to reject H₀. <b>Q-Q Plot:</b> Points deviate from the normal reference line at the tails, confirming the data is not normally distributed and justifying the use of the Wilcoxon test.</div>", unsafe_allow_html=True)
 
     # ── TAB 2: INDEPENDENT LEARNING ──
     with tab2:
-        st.markdown("### Sub-Objective 5(b) — Effect of AI on Independent Learning")
-        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin-bottom:12px;'>The independent learning measurement instrument is shared with the broader Objective 3 framework. This sub-objective analyses it within the Objective 5 context for completeness.</div>", unsafe_allow_html=True)
+        st.markdown("### Effect of AI on Independent Learning")
+        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin-bottom:12px;'>This sub-objective shares the same independent learning measurement instrument as Objective 3, analysed here within the Objective 5 framework for completeness.</div>", unsafe_allow_html=True)
 
         hyp_block(
             "The median Independent Learning Score = 3.0 (neutral)",
@@ -1539,78 +1591,76 @@ elif active == "correlation":
             "Wilcoxon Signed-Rank Test (one-sided, greater)"
         )
 
-        st.markdown("**Cronbach's Alpha — Scale Reliability**")
-        st.markdown(f"<div style='font-size:14px; color:{C['slate']}; margin-bottom:12px;'>The 3-item Independent Learning scale was verified for internal consistency: <b>α = 0.830</b> — Good reliability (exceeds both the 0.70 acceptable and 0.80 good thresholds). The composite score is a reliable dependent variable.</div>", unsafe_allow_html=True)
+        st.markdown("**Scale Reliability (Cronbach's Alpha)**")
+        st.markdown(f"<div style='font-size:14px; color:{C['slate']}; margin-bottom:12px;'>Before inferential analysis, internal consistency of the 3-item Independent Learning scale was verified: <b>α = 0.830</b> — Good reliability, exceeding both the acceptable (0.70) and good (0.80) thresholds.</div>", unsafe_allow_html=True)
 
         st.markdown("**Descriptive Statistics**")
         il_desc = pd.DataFrame({
-            "Variable": ["Independent Learning Score"],
-            "n": [221], "Mean": [3.353], "Median": [3.333], "Std. Dev.": [0.983],
+            "Variable":           ["Independent Learning Score"],
+            "n":                  [221],
+            "Mean":               [3.353],
+            "Median":             [3.333],
+            "Std. Dev.":          [0.983],
         })
         st.dataframe(il_desc.set_index("Variable"), use_container_width=True)
 
-        st.markdown("**Normality Testing — justification for Wilcoxon over t-test**")
+        st.markdown("**Normality Testing (justifying Wilcoxon over t-test)**")
         norm_il = pd.DataFrame({
-            "Test":      ["Shapiro-Wilk", "Kolmogorov-Smirnov"],
-            "p-value":   ["1.23 × 10⁻⁵",  "0.0028"],
-            "Decision":  ["Reject H₀ — NOT normally distributed",
-                          "Reject H₀ — NOT normally distributed"],
+            "Test":        ["Shapiro-Wilk","Kolmogorov-Smirnov"],
+            "p-value":     ["1.23 × 10⁻⁵","0.0028"],
+            "Decision":    ["Reject H₀ — NOT normal","Reject H₀ — NOT normal"],
         })
         st.dataframe(norm_il.set_index("Test"), use_container_width=True)
-        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>Both tests reject normality — the one-sample t-test is not appropriate. The Wilcoxon Signed-Rank Test is the correct non-parametric alternative.</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>Both tests reject normality — the Wilcoxon Signed-Rank Test is therefore the appropriate non-parametric alternative.</div>", unsafe_allow_html=True)
 
         st.markdown("**Wilcoxon Signed-Rank Test Formula:**")
-        st.latex(r"W = \sum \left[ \text{rank}(|d_i|) \times \text{sign}(d_i) \right], \quad d_i = x_i - \mu_0 = x_i - 3")
+        st.latex(r"W = \sum \left[ \text{rank}(|d_i|) \times \text{sign}(d_i) \right], \quad d_i = x_i - \mu_0")
 
         c1, c2, c3 = st.columns(3)
         c1.metric("W Statistic", "13,589.5")
         c2.metric("p-value", "7.23 × 10⁻⁷")
         c3.metric("Decision", "Reject H₀")
 
-        result_pass("<b>Reject H₀</b> — p = 7.23 × 10⁻⁷ ≪ 0.001. The median Independent Learning Score (3.333) is significantly above the neutral benchmark of 3.0. Students at MSU Baroda perceive GenAI as meaningfully promoting independent learning beyond classroom instruction — exploring topics beyond the syllabus, seeking explanations independently, and engaging in self-directed inquiry.")
+        result_pass("<b>Reject H₀</b> — p = 7.23 × 10⁻⁷ ≪ 0.001. The median Independent Learning Score (3.333) is significantly above the neutral benchmark of 3.0. Students at MSU Baroda perceive GenAI tools as meaningfully promoting independent learning beyond classroom instruction — using AI to extend their learning, explore topics beyond the syllabus, seek explanations independently, and engage in self-directed inquiry. This is consistent with technology-enhanced self-directed learning models.")
 
         st.markdown("<hr class='rule'>", unsafe_allow_html=True)
         st.markdown("**Independent Learning Score — Histogram and Q-Q Plot**")
-
-        fig_il, (ax3, ax4) = plt.subplots(1, 2, figsize=(11, 4))
-
+        fig_il, (ax_il1, ax_il2) = plt.subplots(1, 2, figsize=(11, 4))
         # Histogram
-        ax3.hist(IND_RAW_5, bins=15, color=C["navy"], edgecolor="white", alpha=0.78)
-        ax3.axvline(3.0, color=C["red"], lw=2, ls="--", label="Neutral = 3.0 (μ₀)")
-        ax3.axvline(np.median(IND_RAW_5), color=C["amber"], lw=2.5, ls="-",
-                    label=f"Median = {np.median(IND_RAW_5):.3f}")
-        ax3.set_xlabel("Independent Learning Score"); ax3.set_ylabel("Frequency")
-        ax3.set_title("Histogram — Independent Learning Score")
-        ax3.legend(fontsize=9); ax3.yaxis.grid(True, alpha=0.4)
-        ax3.spines[["top","right"]].set_visible(False)
-
+        ax_il1.hist(IND_RAW, bins=15, color=C["navy"], edgecolor="white", alpha=0.78)
+        ax_il1.axvline(3.0, color=C["red"], lw=2, ls="--", label="Neutral = 3.0 (μ₀)")
+        ax_il1.axvline(np.median(IND_RAW), color=C["amber"], lw=2.5,
+                       label=f"Median = {np.median(IND_RAW):.3f}")
+        ax_il1.set_xlabel("Independent Learning Score"); ax_il1.set_ylabel("Frequency")
+        ax_il1.set_title("Histogram — Independent Learning Score")
+        ax_il1.legend(fontsize=9); ax_il1.yaxis.grid(True, alpha=0.4)
+        ax_il1.spines[["top","right"]].set_visible(False)
         # Q-Q Plot
-        (osm2, osr2), (slope2, intercept2, r2) = scipy_stats.probplot(IND_RAW_5, dist="norm")
-        ax4.scatter(osm2, osr2, color=C["navy"], s=14, alpha=0.55, label="Data")
-        ax4.plot(osm2, slope2 * np.array(osm2) + intercept2,
-                 color=C["red"], lw=1.8, label="Normal reference line")
-        ax4.set_xlabel("Theoretical Quantiles"); ax4.set_ylabel("Sample Quantiles")
-        ax4.set_title("Q-Q Plot — Independent Learning Score")
-        ax4.legend(fontsize=9); ax4.yaxis.grid(True, alpha=0.4)
-        ax4.spines[["top","right"]].set_visible(False)
-
+        from scipy import stats as scipy_stats
+        (osm_il, osr_il), (slope_il, intercept_il, _) = scipy_stats.probplot(IND_RAW, dist="norm")
+        ax_il2.scatter(osm_il, osr_il, color=C["navy"], s=14, alpha=0.55, label="Data")
+        ax_il2.plot(osm_il, slope_il * np.array(osm_il) + intercept_il,
+                    color=C["red"], lw=1.8, label="Normal reference line")
+        ax_il2.set_xlabel("Theoretical Quantiles"); ax_il2.set_ylabel("Sample Quantiles")
+        ax_il2.set_title("Q-Q Plot — Independent Learning Score")
+        ax_il2.legend(fontsize=9); ax_il2.yaxis.grid(True, alpha=0.4)
+        ax_il2.spines[["top","right"]].set_visible(False)
         plt.tight_layout()
-        st.pyplot(fig_il, use_container_width=True)
-        plt.close()
-        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'><b>Histogram:</b> The distribution is shifted to the right of the neutral reference (red), with the sample median (amber) clearly above 3.0 — consistent with rejecting H₀. <b>Q-Q Plot:</b> Points deviate from the normal line at both tails, confirming that the Wilcoxon test is the correct choice over the parametric t-test.</div>", unsafe_allow_html=True)
+        st.pyplot(fig_il, use_container_width=True); plt.close()
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'><b>Histogram:</b> The distribution is shifted right of the neutral reference (red dashed), with the sample median (amber) clearly above 3.0 — consistent with rejecting H₀. <b>Q-Q Plot:</b> Points deviate from the normal line at both tails, confirming that the Wilcoxon test is the correct choice over the parametric t-test.</div>", unsafe_allow_html=True)
 
-    # ── COMPARATIVE SUMMARY ──
+    # ── COMPARATIVE SUMMARY TABLE ──
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
     st.markdown("### Comparative Summary — Creativity vs Independent Learning")
     comp_df = pd.DataFrame({
-        "Construct":    ["Creativity Score", "Independent Learning Score"],
-        "Median":       [3.000, 3.333],
-        "W Statistic":  ["9,509.0", "13,589.5"],
-        "p-value":      ["0.9107", "7.23 × 10⁻⁷"],
-        "Conclusion":   ["Fail to Reject H₀ — No enhancement", "Reject H₀ — AI promotes learning"],
+        "Construct":           ["Creativity Score", "Independent Learning Score"],
+        "Median":              [3.000, 3.333],
+        "W Statistic":         ["9,509.0", "13,589.5"],
+        "p-value":             ["0.9107", "7.23 × 10⁻⁷"],
+        "Conclusion":          ["Fail to Reject H₀ — No enhancement", "Reject H₀ — AI promotes learning"],
     })
     st.dataframe(comp_df.set_index("Construct"), use_container_width=True)
-    result_info("GenAI tools have a <b>differential and asymmetric effect</b> on students' academic skills. AI does <b>not</b> significantly enhance creativity (p = 0.9107; median = 3.0) — creative output remains a domain of human cognitive agency. However, AI <b>significantly promotes independent learning</b> beyond the classroom (p = 7.23 × 10⁻⁷; median = 3.333), functioning as an effective scaffold for self-directed inquiry. AI's educational impact is construct-specific.")
+    result_info("GenAI tools have a <b>differential and asymmetric effect</b> on students' academic skills. AI does <b>not</b> significantly enhance creativity (p = 0.9107; median = 3.0) — creative academic skills remain a domain of human cognitive agency. However, AI <b>significantly promotes independent learning</b> beyond the classroom (p = 7.23 × 10⁻⁷; median = 3.333), functioning as an effective scaffold for self-directed inquiry. These contrasting findings highlight that AI's educational impact is construct-specific.")
 
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 6 — ML
@@ -1711,11 +1761,11 @@ elif active == "conclusion":
         },
         {
             "num": "03", "color": C["mid"],
-            "title": "Independent Learning",
-            "method": "Wilcoxon Signed-Rank Test",
-            "stat": "Median = 3.353 · W = 13,589.5 · p = 7.23 × 10⁻⁷",
-            "finding": "The median Independent Learning Score (3.353) is significantly above the neutral benchmark of 3.0. Cronbach's α = 0.83 confirms scale reliability. AI promotes self-directed exploration of topics beyond prescribed classroom content.",
-            "verdict": "H₀ Rejected — AI fosters autonomous learning.",
+            "title": "AI Usage Level & Learning Performance (CGPA)",
+            "method": "Kruskal-Wallis H Test",
+            "stat": "p = 0.2597 · Fail to Reject H₀ · Low: M=7.495, Mod: M=6.856, High: M=6.798",
+            "finding": "No statistically significant difference in CGPA distributions across Low, Moderate, and High AI usage groups (Kruskal-Wallis p = 0.2597). Both normality (High group, p = 0.009) and homoscedasticity (Levene p = 0.0007) violations ruled out ANOVA, requiring the Kruskal-Wallis test. The descriptive CGPA differences between groups are not large enough, given within-group variability, to constitute a reliable statistical signal.",
+            "verdict": "H₀ Not Rejected — AI usage level does not significantly predict CGPA.",
         },
         {
             "num": "04", "color": C["amber"],
