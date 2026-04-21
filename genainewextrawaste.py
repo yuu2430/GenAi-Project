@@ -637,34 +637,44 @@ elif active == "objectives":
 # ══════════════════════════════════════════════════════════════
 # PILOT SURVEY — UPDATED AS PROVIDED
 # ══════════════════════════════════════════════════════════════
+# PILOT SURVEY
+# ══════════════════════════════════════════════════════════════
 elif active == "pilot":
     page_header("Methodology", "Pilot Survey",
                 "Conducted prior to full data collection to validate the questionnaire and estimate the population proportion.")
+
     c1, c2, c3 = st.columns(3)
+    #c1.metric("Total Population (N)", "37,095")
     c1.metric("Pilot Sample (n)", "58")
     c2.metric("Affirmative Responses", "48")
     c3.metric("Estimated Proportion", "0.827")
+
     st.markdown("<br>", unsafe_allow_html=True)
+
     col_l, col_r = st.columns([1.1, 1])
     with col_l:
         st.markdown(f"""
         <div style='font-size:14px; color:{C["slate"]}; line-height:1.9;'>
         A simple random sample of <strong>58 students</strong> was surveyed with one binary question:
         </div>""", unsafe_allow_html=True)
+
         st.markdown(f"""
         <div style='background:#f0f7ff; border-left:3px solid {C["teal"]}; padding:14px 18px;
                     border-radius:0 6px 6px 0; font-size:14.5px; font-style:italic;
                     color:{C["navy"]}; margin:16px 0;'>
             "Has Generative AI impacted your education?" (Yes / No)
         </div>""", unsafe_allow_html=True)
+
         st.markdown(f"""
         <div style='font-size:14px; color:{C["slate"]}; line-height:1.9;'>
         48 of 58 respondents answered Yes, yielding the pilot proportion estimate used in the sample
         size formula. The 82.7% affirmative rate confirmed both the relevance of the research problem
         and provided the empirical <em>p</em> for Cochran's formula.
         </div>""", unsafe_allow_html=True)
+
         st.markdown("<br>**Sample Size Calculation — Cochran's Formula:**")
         st.latex(r"n = \frac{z_{\alpha/2}^2 \cdot p \cdot q}{E^2} = \frac{(1.96)^2 \times 0.827 \times 0.173}{(0.05)^2} \approx \mathbf{221}")
+
     with col_r:
         fig = go.Figure(go.Pie(
             labels=["Yes — AI has impacted education", "No"],
@@ -682,6 +692,7 @@ elif active == "pilot":
                           legend=dict(orientation="h", y=-0.1),
                           paper_bgcolor="white")
         st.plotly_chart(fig, use_container_width=True)
+
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
     st.markdown("**Functions of the Pilot Study**")
     for item in [
@@ -692,8 +703,6 @@ elif active == "pilot":
     ]:
         st.markdown(f"<div style='font-size:14px; color:{C['slate']}; padding:4px 0 4px 16px; border-left:2px solid {C['border']};'>{item}</div>", unsafe_allow_html=True)
         st.markdown("")
-
-
 # ══════════════════════════════════════════════════════════════
 # SAMPLING — UNCHANGED
 # ══════════════════════════════════════════════════════════════
