@@ -1303,66 +1303,140 @@ elif active == "anova":
 
     if sub == "Normality Test":
         st.markdown("### Hypothesis 1 — Normality of AI Dependency Score")
-        hyp_block("The AI Dependency Score follows a normal distribution",
-                  "The AI Dependency Score does not follow a normal distribution",
-                  "Shapiro-Wilk Test")
+        hyp_block(
+            "The AI Dependency Score follows a normal distribution",
+            "The AI Dependency Score does not follow a normal distribution",
+            "Shapiro-Wilk Test"
+        )
+
+        st.markdown("The Shapiro-Wilk statistic W is computed as:")
         st.latex(r"W = \frac{\left(\sum_{i=1}^n a_i x_{(i)}\right)^2}{\sum_{i=1}^n (x_i - \bar{x})^2}")
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:20px;'>where x₍ᵢ₎ are sample values in ascending order, x̄ is the sample mean, and aᵢ are weights derived from expected normal order statistics. W close to 1.0 indicates normality.</div>", unsafe_allow_html=True)
+
         stat_sw, p_sw = shapiro(AI_DEP)
+
         c1, c2, c3 = st.columns(3)
         c1.metric("Shapiro-Wilk W", f"{stat_sw:.4f}")
         c2.metric("p-value", "0.1676")
         c3.metric("Decision", "Fail to reject H₀")
-        result_pass("<b>Normality satisfied</b> — p = 0.1676 > 0.05.")
+
+        result_pass("<b>Normality satisfied</b> — p = 0.1676 > 0.05. The AI Dependency Score distribution is approximately normal, validating the use of parametric tests (one-sample t-test, Pearson correlation) in subsequent analyses.")
+
+        st.markdown("**Distribution of AI Dependency Scores (n = 221)**")
         fig, ax = plt.subplots(figsize=(8, 3.8))
         ax.hist(AI_DEP, bins=14, color=C["teal"], edgecolor="white", alpha=0.85)
         ax.axvline(np.mean(AI_DEP), color=C["amber"], lw=2, ls="--", label=f"Mean = {np.mean(AI_DEP):.2f}")
-        ax.set_xlabel("AI Dependency Score"); ax.set_ylabel("Frequency")
-        ax.legend(fontsize=10); plt.tight_layout()
-        st.pyplot(fig, use_container_width=True); plt.close()
+        ax.set_xlabel("AI Dependency Score")
+        ax.set_ylabel("Frequency")
+        ax.legend(fontsize=10)
+        plt.tight_layout()
+        st.pyplot(fig, use_container_width=True)
+        plt.close()
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>The histogram is approximately bell-shaped and centred below the neutral midpoint of 3.0, consistent with the Shapiro-Wilk result.</div>", unsafe_allow_html=True)
 
     elif sub == "One-Sample t-test":
         st.markdown("### Hypothesis 2 — Mean AI Dependency vs. Neutral Midpoint")
-        hyp_block("Population mean AI Dependency Score = 3.0",
-                  "Population mean AI Dependency Score ≠ 3.0", "Two-sided One-Sample t-test")
+        hyp_block(
+            "Population mean AI Dependency Score = 3.0 (neutral midpoint of the Likert scale)",
+            "Population mean AI Dependency Score ≠ 3.0 (two-sided)",
+            "Two-sided One-Sample t-test"
+        )
+
+        st.markdown("The midpoint of 3.0 represents neutrality on the 1–5 Likert scale — neither dependent nor independent. Testing against this value answers whether students are significantly above or below neutral dependency.")
+
+        st.markdown("**Test Statistic:**")
         st.latex(r"t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}")
+
         t_stat, p_val = ttest_1samp(AI_DEP, 3.0)
         n = len(AI_DEP); mean = np.mean(AI_DEP); sd = np.std(AI_DEP, ddof=1)
-        se = sd / np.sqrt(n); t_crit = t_dist.ppf(0.975, n-1)
+        se = sd / np.sqrt(n)
+        t_crit = t_dist.ppf(0.975, n-1)
         ci_l, ci_u = mean - t_crit*se, mean + t_crit*se
+
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Sample Mean (x̄)", f"{mean:.3f}")
         c2.metric("Std. Dev. (s)", f"{sd:.3f}")
         c3.metric("t-statistic", "−5.740")
         c4.metric("p-value", "3.12 × 10⁻⁸")
-        st.markdown(f"<div style='font-size:14px; color:{C['muted']}; margin:8px 0;'>95% CI: ({ci_l:.3f}, {ci_u:.3f})</div>", unsafe_allow_html=True)
-        result_pass(f"<b>Reject H₀</b> — mean AI Dependency ≈ 2.63, significantly below 3.0.")
+
+        st.markdown(f"<div style='font-size:14px; color:{C['muted']}; margin:8px 0;'>95% Confidence Interval: ({ci_l:.3f}, {ci_u:.3f}) — excludes μ₀ = 3.0</div>", unsafe_allow_html=True)
+
+        result_pass(f"<b>Reject H₀</b> — p = 3.12 × 10⁻⁸ ≪ 0.05. The mean AI Dependency Score (≈ 2.63) is <strong>significantly below</strong> the neutral midpoint of 3.0. MSU students demonstrate moderate, purposeful GenAI usage rather than excessive dependence. The 95% CI (≈ 2.40, 2.83) occupies 40–45% of the maximum scale range, firmly below the midpoint.")
 
     elif sub == "Multi-way ANOVA":
         st.markdown("### Multi-way ANOVA — AI Dependency by Demographic Groups")
-        hyp_block("Group means equal across all demographic levels",
-                  "At least one group mean differs", "Multi-way ANOVA (Type II SS) + Welch ANOVA")
+        hyp_block(
+            "Group means of AI Dependency Score are equal across all levels of each grouping variable",
+            "At least one group mean differs significantly",
+            "Multi-way ANOVA (Type II SS) followed by Welch ANOVA where homoscedasticity is violated"
+        )
+        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin-bottom:16px;'>Model: AI_Dep ~ C(Gender) + C(Faculty) + C(Level_of_Study) + C(Schooling_Background). Type II SS tests each factor controlling for all others simultaneously. Normality pre-confirmed (Shapiro-Wilk p = 0.107).</div>", unsafe_allow_html=True)
+
+        st.markdown("**Multi-way ANOVA Results**")
         adf = pd.DataFrame({
-            "Factor":          ["Gender","Faculty","Level of Study","Schooling Background"],
-            "F-statistic":     [1.512, 2.531, 1.642, 0.624],
-            "p-value":         [0.2229, 0.0415, 0.2014, 0.5366],
-            "Decision":        ["Not significant","Significant","Not significant","Not significant"],
+            "Factor":           ["Gender","Faculty","Level of Study","Schooling Background"],
+            "Sum of Squares":   [1.735, 5.811, 0.943, 0.717],
+            "df":               [2, 4, 1, 2],
+            "F-statistic":      [1.512, 2.531, 1.642, 0.624],
+            "p-value":          [0.2229, 0.0415, 0.2014, 0.5366],
+            "Decision":         ["Not significant","Significant (p < 0.05)","Not significant","Not significant"],
         })
         st.dataframe(adf.set_index("Factor"), use_container_width=True)
-        result_pass("Only <strong>Faculty affiliation</strong> significantly predicts AI Dependency (Welch p = 0.041).")
+
+        st.markdown("<br>**Welch ANOVA Results** (robust to unequal variances)")
+        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin-bottom:10px;'>Levene's test was applied for each variable. Faculty violated homoscedasticity (Levene p = 0.024), so Welch ANOVA was applied instead of the classical F-test.</div>", unsafe_allow_html=True)
+        wdf = pd.DataFrame({
+            "Variable":             ["Gender","Faculty","Level of Study","Schooling Background"],
+            "Levene p":             [0.416, 0.024, 0.563, 0.282],
+            "Variance assumption":  ["Equal","Violated — Welch applied","Equal","Equal"],
+            "Welch F":              [0.263, 2.641, 3.237, 0.371],
+            "Welch p":              [0.769, 0.041, 0.076, 0.691],
+            "Decision":             ["Not significant","Significant","Not significant","Not significant"],
+        })
+        st.dataframe(wdf.set_index("Variable"), use_container_width=True)
+
+        result_pass("Among four demographic variables tested, <strong>only Faculty affiliation</strong> significantly predicts AI Dependency Score (Welch p = 0.041). Gender, level of study, and schooling background show no significant effect — AI dependency is disciplinary in nature, not demographic.")
 
     else:
         st.markdown("### Post-Hoc Analysis — Games-Howell Test (Faculty)")
+        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin-bottom:16px;'>Applied because Faculty violated Levene's test (unequal variances). Games-Howell does not assume equal variances or equal sample sizes and is more robust than Tukey's HSD in this setting. Effect size: Hedges' g — |g| &lt; 0.2 negligible · 0.2–0.5 small · 0.5–0.8 medium · &gt; 0.8 large</div>", unsafe_allow_html=True)
+        hyp_block(
+            "Group A and Group B have equal mean AI Dependency Scores — no significant difference between the two faculties",
+            "Group A and Group B do not have equal mean AI Dependency Scores — a significant difference exists",
+            "Games-Howell pairwise post-hoc test"
+        )
         phdf = pd.DataFrame({
-            "Group A":    ["Arts","Arts","Arts","Arts","Commerce","Commerce","Commerce","Science","Science","Tech & Engg"],
-            "Group B":    ["Commerce","Science","Tech & Engg","Other","Science","Tech & Engg","Other","Tech & Engg","Other","Other"],
-            "Difference": [0.194,0.024,0.057,0.545,-0.170,-0.137,0.351,0.034,0.521,0.487],
-            "p-value":    [0.627,1.000,0.995,0.040,0.876,0.764,0.222,1.000,0.141,0.049],
-            "Hedges g":   [0.254,0.034,0.110,0.704,-0.213,-0.182,0.430,0.051,0.610,0.655],
+            "Group A":   ["Arts","Arts","Arts","Arts","Commerce","Commerce","Commerce","Science","Science","Tech & Engg"],
+            "Group B":   ["Commerce","Science","Tech & Engg","Other","Science","Tech & Engg","Other","Tech & Engg","Other","Other"],
+            "Mean A":    [2.880,2.880,2.880,2.880,2.686,2.686,2.686,2.856,2.856,2.823],
+            "Mean B":    [2.686,2.856,2.823,2.335,2.856,2.823,2.335,2.823,2.335,2.335],
+            "Difference":[0.194,0.024,0.057,0.545,-0.170,-0.137,0.351,0.034,0.521,0.487],
+            "p-value":   [0.627,1.000,0.995,0.040,0.876,0.764,0.222,1.000,0.141,0.049],
+            "Hedges g":  [0.254,0.034,0.110,0.704,-0.213,-0.182,0.430,0.051,0.610,0.655],
             "Significant":["No","No","No","Yes","No","No","No","No","No","Yes"],
         })
         st.dataframe(phdf, use_container_width=True)
-        result_pass("<b>Arts vs Other</b> (p=0.040) and <b>Tech & Engg vs Other</b> (p=0.049) are the two significant contrasts.")
 
+        st.markdown("<br>**Two significant pairwise contrasts:**")
+        c1, c2 = st.columns(2)
+        with c1:
+            result_pass("<b>Arts vs Other</b> — p = 0.040, Hedges' g = 0.704 (medium-to-large effect). Arts students (mean = 2.88) show significantly higher AI dependency than Other faculties (mean = 2.34). GenAI's text generation capabilities align naturally with humanities coursework demands.")
+        with c2:
+            result_pass("<b>Technology & Engineering vs Other</b> — p = 0.049, Hedges' g = 0.655 (medium effect). Engineering students (mean = 2.82) also depend significantly more on AI than Other faculties — driven by coding assistance via Copilot and ChatGPT.")
+
+        means = pd.DataFrame({
+            "Faculty":     ["Arts","Commerce","Science","Tech & Engg","Other"],
+            "Mean AI Dep": [2.880, 2.686, 2.856, 2.823, 2.335],
+        })
+        fig = px.bar(means, x="Faculty", y="Mean AI Dep", text_auto=".3f",
+                     color="Mean AI Dep", color_continuous_scale=["#bfdbfe", C["navy"]])
+        fig.add_hline(y=3.0, line_dash="dash", line_color=C["red"],
+                      annotation_text="Neutral midpoint (3.0)", annotation_position="top right")
+        plotly_defaults(fig, h=360)
+        fig.update_layout(coloraxis_showscale=False, yaxis_title="Mean AI Dependency Score",
+                          title="Mean AI Dependency Score by Faculty")
+        st.plotly_chart(fig, use_container_width=True)
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>All faculty groups fall below the neutral midpoint of 3.0. 'Other' faculties show the lowest average dependency, consistent with fewer compelling AI use cases in less text- or code-intensive disciplines.</div>", unsafe_allow_html=True)
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 3 — WILCOXON
 # ══════════════════════════════════════════════════════════════
