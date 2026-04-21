@@ -1087,7 +1087,7 @@ elif active == "sampling":
     c2.metric("Total Population (N)", "37,095")
     c3.metric("Final Sample (n)", "221")
 
-    st.markdown("<br>**Proportional Allocation Formula:**")
+    st.markdown("**Proportional Allocation Formula:**")
     st.latex(r"n_i = \frac{N_i}{N} \times n")
     st.markdown(f"<div style='font-size:13.5px; color:{C['muted']};'>where n_i = sample size for faculty i, N_i = faculty population, N = 37,095, n = 221</div>", unsafe_allow_html=True)
 
