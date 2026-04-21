@@ -889,7 +889,24 @@ if active == "ai_accuracy":
 # OVERVIEW — FIXED: uses Streamlit columns + proper HTML blocks
 # ══════════════════════════════════════════════════════════════
 elif active == "overview":
+    # ── Hero banner — rendered via a single clean HTML block ──
+    st.markdown(f"""
+    <div class="hero-banner">
+        <div class="hero-uni">The Maharaja Sayajirao University of Baroda</div>
+        <div class="hero-dept">Faculty of Science · Department of Statistics</div>
+        <div class="hero-year">Academic Year 2025-26</div>
+        <div class="hero-title">
+            Cognitive &amp; Educational Impacts of<br>Generative AI Usage Among University Students
+        </div>
+        <div class="hero-team">
+            <strong style="color:white;">MSc Statistics · Team 4</strong><br>
+            Vaishali Sharma &nbsp;·&nbsp; Ashish Vaghela &nbsp;·&nbsp; Raiwant Kumar &nbsp;·&nbsp; Rohan Shukla<br>
+            <span style="font-size:12px; opacity:0.7;">Guided by: Prof. Murlidharan Kunnumal</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
+    
     # ── HEADER ─────────────────────────────────────────────
     page_header(
         "Introduction",
