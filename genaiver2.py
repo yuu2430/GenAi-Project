@@ -1165,7 +1165,7 @@ elif active == "questionnaire":
         "Items":          [11, 8, 11, 5, 3],
         "Scale":          ["Likert 1–5","Likert 1–5","Comparative 1–5","Likert 1–5","Likert 1–5"],
         "Instrument":     ["GAIDS (Goh et al., 2023)","Custom multi-item scale","K-DOCS (Kaufman, 2012)",
-                           "Custom digital-offloading scale","Study Preferences sub-scale"],
+                           "Gerlich, M. (2025)","Study Preferences sub-scale"],
         "Cronbach α":     [0.8936, 0.9139, 0.9427, 0.8512, 0.8302],
     })
     st.dataframe(cdf.set_index("Construct"), use_container_width=True)
