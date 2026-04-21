@@ -1217,19 +1217,19 @@ elif active == "reliability":
             "AI Dependency (GAIDS)",
             "Critical Thinking",
             "Creativity (K-DOCS)",
-            "Cognitive Offloading",
-            "Independent Learning"
+            "Cognitive Offloading"
+            
         ],
-        "Items": [11, 8, 11, 5, 3],
+        "Items": [11, 8, 11, 5],
         "Scale": [
             "Likert 1–5",
             "Likert 1–5",
             "Comparative 1–5",
-            "Likert 1–5",
             "Likert 1–5"
+            
         ],
-        "Cronbach α": [0.8936, 0.9139, 0.9427, 0.8512, 0.8302],
-        "Reliability": ["Good", "Excellent", "Excellent", "Good", "Good"]
+        "Cronbach α": [0.8936, 0.9139, 0.9427, 0.8512],
+        "Reliability": ["Good", "Excellent", "Excellent", "Good"]
     })
 
     st.dataframe(rel.set_index("Construct"), use_container_width=True)
