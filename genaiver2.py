@@ -889,81 +889,57 @@ if active == "ai_accuracy":
 # OVERVIEW — FIXED: uses Streamlit columns + proper HTML blocks
 # ══════════════════════════════════════════════════════════════
 elif active == "overview":
-    # ── Hero banner — rendered via a single clean HTML block ──
+
+    # ── HEADER ─────────────────────────────────────────────
+    page_header(
+        "Introduction",
+        "Overview of the Study",
+        "Understanding the cognitive and educational impact of Generative AI among university students."
+    )
+
+    # ── ABSTRACT BOX ───────────────────────────────────────
     st.markdown(f"""
-    <div class="hero-banner">
-        <div class="hero-uni">The Maharaja Sayajirao University of Baroda</div>
-        <div class="hero-dept">Faculty of Science · Department of Statistics</div>
-        <div class="hero-year">Academic Year 2025-26</div>
-        <div class="hero-title">
-            Cognitive &amp; Educational Impacts of<br>Generative AI Usage Among University Students
-        </div>
-        <div class="hero-team">
-            <strong style="color:white;">MSc Statistics · Team 4</strong><br>
-            Vaishali Sharma &nbsp;·&nbsp; Ashish Vaghela &nbsp;·&nbsp; Raiwant Kumar &nbsp;·&nbsp; Rohan Shukla<br>
-            <span style="font-size:12px; opacity:0.7;">Guided by: Prof. Murlidharan Kunnumal</span>
-        </div>
+    <div style='background:{C["surface"]}; border:1px solid {C["border"]};
+                border-left:4px solid {C["teal"]};
+                border-radius:8px; padding:24px 26px;
+                font-size:14.5px; line-height:1.9;
+                color:{C["slate"]}; text-align:justify;'>
+
+    This study examines the cognitive and educational implications of Generative Artificial Intelligence (GenAI)
+    usage among university students. With the increasing integration of AI tools such as ChatGPT, Gemini, and
+    Copilot into academic environments, it becomes essential to understand how these technologies influence
+    student learning behavior and intellectual development.
+
+    <br><br>
+
+    Primary data were collected from students across multiple faculties of The Maharaja Sayajirao University
+    of Baroda using a structured questionnaire. The instrument was designed to capture key dimensions of AI
+    usage, including frequency and purpose of use, along with its impact on independent learning, critical
+    thinking, creativity, cognitive offloading, and dependency on AI systems.
+
+    <br><br>
+
+    The study employs statistical techniques to ensure methodological rigor. Reliability analysis is conducted
+    to validate measurement scales, followed by descriptive and inferential methods to explore relationships
+    between variables. In addition, a machine learning approach is incorporated to evaluate whether AI-related
+    behavioral and cognitive factors can predict academic performance.
+
+    <br><br>
+
+    By combining statistical analysis with modern analytical tools, this study aims to provide a comprehensive
+    understanding of how Generative AI is shaping the academic experience of students. The findings are expected
+    to contribute to academic research and support informed decision-making regarding the effective and
+    responsible use of AI in education.
+
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Abstract ──
+    # ── OPTIONAL FOOTNOTE ───────────────────────────────────
     st.markdown(f"""
-    <div style='font-size:14.5px; line-height:1.95; color:{C["slate"]}; margin-bottom:32px;
-                text-align:justify; text-justify:inter-word;'>
-    Primary data were collected from <strong>221 students</strong> across <strong>13 faculties</strong>
-    using a structured questionnaire administered via Probability Proportional to Size (PPS) sampling.
-    Reliability of all psychometric scales was confirmed using Cronbach's Alpha (α ≥ 0.83 across all
-    constructs). The study employs descriptive analysis, normality testing, non-parametric inference,
-    correlation analysis, and supervised machine learning to address six research objectives.<br><br>
-    Findings reveal that students exhibit <strong>moderate, purposeful GenAI use</strong>, with average
-    dependency levels significantly below the neutral benchmark of 3.0. AI usage is positively associated
-    with independent learning (ρ = 0.459) and critical thinking (ρ = 0.466), while no significant
-    relationship is observed between AI dependency and CGPA or creativity. Faculty affiliation — not
-    gender or level of study — is the only significant demographic predictor of AI dependency.
+    <div style='font-size:12px; color:{C["muted"]}; margin-top:12px; text-align:center;'>
+        MSc Statistics Project · The Maharaja Sayajirao University of Baroda · 2025–26
     </div>
     """, unsafe_allow_html=True)
-
-    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-
-    # ── At-a-glance metrics ──
-    st.markdown(f"<div class='overline'>Study at a Glance</div>", unsafe_allow_html=True)
-    cols = st.columns(4)
-    for col, v, l in zip(cols,
-        ["221", "13", "6", "4"],
-        ["Students surveyed", "Faculties covered", "Research objectives", "AI tools studied"]):
-        col.metric(l, v)
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # ── Key Findings ──
-    st.markdown(f"<div class='overline'>Key Findings</div>", unsafe_allow_html=True)
-
-    findings = [
-        ("Mean AI Dependency = 2.63",
-         "Significantly below the neutral midpoint of 3.0 (t = −5.74, p < 0.0001). Students use AI purposefully, not compulsively."),
-        ("Faculty drives dependency differences",
-         "Arts and Technology students show significantly higher AI dependency than smaller faculties (Welch ANOVA p = 0.041)."),
-        ("AI promotes independent learning",
-         "Median Independent Learning Score (3.35) significantly exceeds the neutral benchmark (Wilcoxon W = 13,589, p < 0.001)."),
-        ("Higher AI use → stronger critical thinking",
-         "Spearman ρ = 0.466 between AI usage group and critical thinking score (Kruskal-Wallis H = 49.65, p < 10⁻¹¹)."),
-        ("No significant effect on creativity",
-         "Spearman ρ = 0.087, p = 0.198 — AI usage frequency does not significantly predict creative output."),
-        ("71% predictive accuracy for academic divisions",
-         "KNN (k=5) classifier using five AI-related features achieves 71.1% accuracy on held-out test set."),
-    ]
-
-    for i in range(0, 6, 2):
-        c1, c2 = st.columns(2)
-        for col, (title, desc) in zip([c1, c2], findings[i:i+2]):
-            col.markdown(f"""
-            <div style='background:{C["surface"]}; border:1px solid {C["border"]};
-                        border-radius:8px; padding:20px 22px; margin-bottom:14px;
-                        border-left:3px solid {C["teal"]};'>
-                <div style='font-weight:600; color:{C["ink"]}; font-size:14.5px; margin-bottom:6px;'>{title}</div>
-                <div style='font-size:13.5px; color:{C["muted"]}; line-height:1.65;'>{desc}</div>
-            </div>""", unsafe_allow_html=True)
-
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVES
 # ══════════════════════════════════════════════════════════════
