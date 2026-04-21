@@ -926,28 +926,21 @@ elif active == "overview":
     usage among university students. With the increasing integration of AI tools such as ChatGPT, Gemini, and
     Copilot into academic environments, it becomes essential to understand how these technologies influence
     student learning behavior and intellectual development.
-
     <br><br>
-
     Primary data were collected from students across multiple faculties of The Maharaja Sayajirao University
     of Baroda using a structured questionnaire. The instrument was designed to capture key dimensions of AI
     usage, including frequency and purpose of use, along with its impact on independent learning, critical
     thinking, creativity, cognitive offloading, and dependency on AI systems.
-
     <br><br>
-
     The study employs statistical techniques to ensure methodological rigor. Reliability analysis is conducted
     to validate measurement scales, followed by descriptive and inferential methods to explore relationships
     between variables. In addition, a machine learning approach is incorporated to evaluate whether AI-related
     behavioral and cognitive factors can predict academic performance.
-
     <br><br>
-
     By combining statistical analysis with modern analytical tools, this study aims to provide a comprehensive
     understanding of how Generative AI is shaping the academic experience of students. The findings are expected
     to contribute to academic research and support informed decision-making regarding the effective and
     responsible use of AI in education.
-
     </div>
     """, unsafe_allow_html=True)
 
