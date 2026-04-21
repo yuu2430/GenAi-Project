@@ -1427,7 +1427,7 @@ elif active == "wilcoxon":
     st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>N = 221, nⱼ = group sizes (20, 141, 60), Rⱼ = rank sums. Under H₀, H ~ χ²(k−1) = χ²(2).</div>", unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns(3)
-    c1.metric("H Statistic", "—")
+    c1.metric("H Statistic", "2.6965")
     c2.metric("p-value", "0.2597")
     c3.metric("Decision", "Fail to Reject H₀")
 
