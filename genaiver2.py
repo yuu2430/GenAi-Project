@@ -1211,6 +1211,7 @@ elif active == "reliability":
 
     st.markdown("**Formula:**")
     st.latex(r"\alpha = \frac{k}{k-1} \left(1 - \frac{\sum \sigma_i^2}{\sigma_t^2}\right)")
+    st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:20px;'>k = number of items · σ²yᵢ = item variance · σ²x = total score variance</div>", unsafe_allow_html=True)
 
     # ✅ UPDATED TABLE WITH SCALE COLUMN
     rel = pd.DataFrame({
