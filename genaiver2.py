@@ -1121,98 +1121,138 @@ elif active == "questionnaire":
     page_header("Data Collection", "Questionnaire Design",
                 "Structured self-administered questionnaire delivered via Google Forms — 23 questions across 6 thematic sections.")
 
-    sections = {
-        "Section 1 — Student Profile & AI Usage (Q1–Q14)": [
-            "Demographic variables: Age, Gender, CGPA, Schooling Background, Faculty, Level and Year of Study",
-            "Awareness of GenAI, primary AI tool used, subscription status and monthly expenditure",
-            "Multi-select grid (Q13): AI platform × 6 academic purposes",
-            "Likert frequency grid (Q14): Never → Always across 6 academic purposes",
-        ],
-        "Section 2 — Academic Impact (Q15–Q16)": [
-            "Q15 (3 items): grades change, learning effectiveness, curriculum inclusion — Strongly Disagree to Strongly Agree",
-            "Q16 (6 items): AI vs books, AI vs teacher, critical thinking reduction, AI submission, stress reduction, independent exploration",
-        ],
-        "Section 3 — Cognitive Offloading (Q18)": [
-            "5 items measuring reliance on digital tools for information retrieval and task memory",
-            "Scale: 1 (Never / Not Dependent) to 5 (Always / Very Likely)",
-        ],
-        "Section 4 — Critical Thinking (Q19)": [
-            "8 items: source evaluation, fake-news detection, cross-referencing, author credibility, bias reflection",
-            "Scale: 1 (Never / Not Confident) to 5 (Always / Very Confident)",
-        ],
-        "Section 5 — AI Dependency (Q17, Q20–Q22)": [
-            "Q17: 10-point scale — trust, understanding depth, motivation, anxiety, assignment dependency",
-            "Q20 — Cognitive Preoccupation (3 items): decision influence, urge to use, anticipation",
-            "Q21 — Negative Consequences (4 items): concerns, inability to work without AI, confidence, problem-solving",
-            "Q22 — Withdrawal Symptoms (4 items): restlessness, distraction, disconnection, irritability",
-        ],
-        "Section 6 — Creativity (Q23)": [
-            "11 items adapted from the Kaufman Domains of Creativity Scale (K-DOCS, 2012)",
-            "Scale: 1 (Much Less Creative) to 5 (Much More Creative) — comparative to doing the task without AI",
-            "Tasks: writing, debating, researching, feedback, analysis, argumentation",
-        ],
-    }
+    # ── Reference links ──────────────────────────────────────────
+    st.markdown(f"""
+    <div style='background:{C["surface"]}; border:1px solid {C["border"]};
+                border-left:3px solid {C["amber"]}; border-radius:0 8px 8px 0;
+                padding:14px 20px; margin-bottom:24px;'>
+        <div style='font-size:11px; font-weight:700; text-transform:uppercase;
+                    letter-spacing:1.2px; color:{C["amber"]}; margin-bottom:8px;'>
+            References for Questionnaire
+        </div>
+        <div style='font-size:14px; color:{C["slate"]}; line-height:2;'>
+            &nbsp;<a href='https://www.mdpi.com/2075-4698/15/1/6' target='_blank'
+               style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>
+               Gerlich (2025) — AI Tools in Society
+            </a><br>
+             &nbsp;<a href='https://drive.google.com/file/d/15Za6HQIaUscX2UxEJ9KGEHGxiPG-qQ6E/view' target='_blank'
+               style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>
+               Study Questionnaire — PDF
+            </a>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    for sec, items in sections.items():
-        with st.expander(sec):
-            for item in items:
-                st.markdown(f"<div style='font-size:14px; color:{C['slate']}; padding:3px 0;'>— {item}</div>", unsafe_allow_html=True)
+     # ── Section definitions ───────────────────────────────────────
+    sections = [
+        {
+            "title": "Section 1 — Student Profile & AI Usage (Q1–Q14)",
+            "items": [
+                "Demographic variables: Age, Gender, CGPA, Schooling Background, Faculty, Level and Year of Study",
+                "Awareness of GenAI, primary AI tool used, subscription status and monthly expenditure",
+                "Multi-select grid (Q13): AI platform × 6 academic purposes",
+                "Likert frequency grid (Q14): Never → Always across 6 academic purposes",
+            ]
+        },
+        {
+            "title": "Section 2 — Academic Impact (Q15–Q16)",
+            "items": [
+                "Q15 (3 items): grades change, learning effectiveness, curriculum inclusion — Strongly Disagree to Strongly Agree",
+                "Q16 (6 items): AI vs books, AI vs teacher, critical thinking reduction, AI submission, stress reduction, independent exploration",
+            ]
+        },
+        {
+            "title": "Section 3 — Cognitive Offloading (Q18)",
+            "items": [
+                "5 items measuring reliance on digital tools for information retrieval and task memory",
+                "Scale: 1 (Never / Not Dependent) to 5 (Always / Very Likely)",
+            ]
+        },
+        {
+            "title": "Section 4 — Critical Thinking (Q19)",
+            "items": [
+                "8 items: source evaluation, fake-news detection, cross-referencing, author credibility, bias reflection",
+                "Scale: 1 (Never / Not Confident) to 5 (Always / Very Confident)",
+            ]
+        },
+        {
+            "title": "Section 5 — AI Dependency (Q17, Q20–Q22)",
+            "items": [
+                "Q17: 10-point scale — trust, understanding depth, motivation, anxiety, assignment dependency",
+                "Q20 — Cognitive Preoccupation (3 items): decision influence, urge to use, anticipation",
+                "Q21 — Negative Consequences (4 items): concerns, inability to work without AI, confidence, problem-solving",
+                "Q22 — Withdrawal Symptoms (4 items): restlessness, distraction, disconnection, irritability",
+            ]
+        },
+        {
+            "title": "Section 6 — Creativity (Q23)",
+            "items": [
+                "11 items adapted from the Kaufman Domains of Creativity Scale (K-DOCS, 2012)",
+                "Scale: 1 (Much Less Creative) to 5 (Much More Creative) — comparative to doing the task without AI",
+                "Tasks: writing, debating, researching, feedback, analysis, argumentation",
+            ]
+        },
+    ]
 
-    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-    st.markdown("**Construct Overview**")
-    cdf = pd.DataFrame({
-        "Construct":      ["AI Dependency","Critical Thinking","Creativity","Cognitive Offloading","Independent Learning"],
-        "Items":          [11, 8, 11, 5, 3],
-        "Scale":          ["Likert 1–5","Likert 1–5","Comparative 1–5","Likert 1–5","Likert 1–5"],
-        "Instrument":     ["GAIDS (Goh et al., 2023)","Custom multi-item scale","K-DOCS (Kaufman, 2012)",
-                           "Gerlich, M. (2025)","Study Preferences sub-scale"],
-        "Cronbach α":     [0.8936, 0.9139, 0.9427, 0.8512, 0.8302],
-    })
-    st.dataframe(cdf.set_index("Construct"), use_container_width=True)
+    for sec in sections:
+        st.markdown(f"<div class='q-section-header'>{sec['title']}</div>", unsafe_allow_html=True)
+        for item in sec["items"]:
+            st.markdown(f"<div class='q-item'>— {item}</div>", unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+
 
 # ══════════════════════════════════════════════════════════════
-# RELIABILITY
+# RELIABILITY — UPDATED (Scale ADDED)
 # ══════════════════════════════════════════════════════════════
 elif active == "reliability":
     page_header("Pre-Analysis", "Reliability Analysis — Cronbach's Alpha",
                 "Internal consistency of all multi-item scales verified before inferential analysis.")
 
-    st.markdown(f"""
-    <div style='font-size:14.5px; color:{C["slate"]}; line-height:1.85; max-width:760px; margin-bottom:20px;'>
-    Before computing composite scores or conducting inferential tests, the internal consistency of each
-    multi-item scale was assessed using <strong>Cronbach's Alpha (α)</strong>. A coefficient of <strong>α ≥ 0.70</strong>
-    is the conventional minimum for acceptable research reliability; values above 0.90 indicate excellent reliability.
-    </div>""", unsafe_allow_html=True)
-
     st.markdown("**Formula:**")
-    st.latex(r"\alpha = \frac{k}{k-1} \left(1 - \frac{\sum_{i=1}^{k} \sigma_{y_i}^2}{\sigma_x^2}\right)")
-    st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:20px;'>k = number of items · σ²yᵢ = item variance · σ²x = total score variance</div>", unsafe_allow_html=True)
+    st.latex(r"\alpha = \frac{k}{k-1} \left(1 - \frac{\sum \sigma_i^2}{\sigma_t^2}\right)")
 
+    # ✅ UPDATED TABLE WITH SCALE COLUMN
     rel = pd.DataFrame({
-        "Construct":      ["AI Dependency (GAIDS)","Critical Thinking","Creativity (K-DOCS)","Cognitive Offloading","Independent Learning"],
-        "Items":          [11, 8, 11, 5, 3],
-        "Cronbach α":     [0.8936, 0.9139, 0.9427, 0.8512, 0.8302],
-        "Reliability":    ["Good","Excellent","Excellent","Good","Good"],
+        "Construct": [
+            "AI Dependency (GAIDS)",
+            "Critical Thinking",
+            "Creativity (K-DOCS)",
+            "Cognitive Offloading",
+            "Independent Learning"
+        ],
+        "Items": [11, 8, 11, 5, 3],
+        "Scale": [
+            "Likert 1–5",
+            "Likert 1–5",
+            "Comparative 1–5",
+            "Likert 1–5",
+            "Likert 1–5"
+        ],
+        "Cronbach α": [0.8936, 0.9139, 0.9427, 0.8512, 0.8302],
+        "Reliability": ["Good", "Excellent", "Excellent", "Good", "Good"]
     })
+
     st.dataframe(rel.set_index("Construct"), use_container_width=True)
 
+    # Graph (unchanged)
     fig = go.Figure()
     colors = [C["teal"] if a >= 0.9 else C["navy"] for a in rel["Cronbach α"]]
-    fig.add_bar(x=rel["Construct"], y=rel["Cronbach α"],
-                marker_color=colors,
-                text=[f"{a:.4f}" for a in rel["Cronbach α"]],
-                textposition="outside")
-    fig.add_hline(y=0.70, line_dash="dash", line_color=C["red"],
-                  annotation_text="Acceptable (0.70)", annotation_position="top right")
-    fig.add_hline(y=0.90, line_dash="dot", line_color=C["amber"],
-                  annotation_text="Excellent (0.90)", annotation_position="top right")
+
+    fig.add_bar(
+        x=rel["Construct"],
+        y=rel["Cronbach α"],
+        marker_color=colors,
+        text=[f"{a:.4f}" for a in rel["Cronbach α"]],
+        textposition="outside"
+    )
+
+    fig.add_hline(y=0.70, line_dash="dash", line_color=C["red"])
+    fig.add_hline(y=0.90, line_dash="dot", line_color=C["amber"])
+
     plotly_defaults(fig, h=380)
-    fig.update_layout(yaxis=dict(range=[0.5, 1.02], title="Cronbach's Alpha"),
-                      showlegend=False)
     st.plotly_chart(fig, use_container_width=True)
 
-    result_pass("All five scales achieve Cronbach's Alpha above 0.83, confirming high internal consistency. Composite scores constructed from item averages are statistically reliable and valid for subsequent inferential analysis.")
-
+    result_pass("All scales show strong reliability (α > 0.83).")
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 1 — DESCRIPTIVE
 # ══════════════════════════════════════════════════════════════
