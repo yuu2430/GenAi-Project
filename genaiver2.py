@@ -1597,7 +1597,7 @@ elif active == "kruskal":
         c1, c2 = st.columns(2)
         c1.metric("H Statistic", "49.650")
         c2.metric("p-value", "1.65 × 10⁻¹¹")
-        st.markdown("<br>"); c3, c4 = st.columns(2)
+        st.markdown(""); c3, c4 = st.columns(2)
         c3.metric("Spearman ρ", "0.4656")
         c4.metric("Strength", "Moderate")
     with col_r:
