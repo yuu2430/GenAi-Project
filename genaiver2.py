@@ -1210,7 +1210,7 @@ elif active == "reliability":
                 "Internal consistency of all multi-item scales verified before inferential analysis.")
 
     st.markdown("**Formula:**")
-    st.latex(r"\alpha = \frac{k}{k-1} \left(1 - \frac{\sum \sigma_i^2}{\sigma_t^2}\right)")
+    st.latex(r"\alpha = \frac{k}{k-1} \left(1 - \frac{\sum_{i=1}^{k} \sigma_{y_i}^2}{\sigma_x^2}\right)")
     st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:20px;'>k = number of items · σ²yᵢ = item variance · σ²x = total score variance</div>", unsafe_allow_html=True)
 
     # ✅ UPDATED TABLE WITH SCALE COLUMN
@@ -1782,46 +1782,196 @@ elif active == "correlation":
 # OBJECTIVE 6 — ML
 # ══════════════════════════════════════════════════════════════
 elif active == "ml":
-    page_header("Objective 6", "Predictive Model for Academic Performance",
-                "Can AI-related cognitive and behavioural profiles predict a student's academic performance division?")
 
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("KNN Accuracy", "71.11%")
-    c2.metric("Decision Tree Accuracy", "64.44%")
-    c3.metric("Train / Test Split", "80% / 20%")
-    c4.metric("Test Set (n)", "44 students")
+    page_header(
+        "Objective 6",
+        "Predictive Model for Academic Performance",
+        "Using AI-related cognitive and behavioral features to classify student academic performance."
+    )
+
+    # ─────────────────────────────────────────────
+    # INTRODUCTION
+    # ─────────────────────────────────────────────
+    st.markdown(f"""
+    <div style='font-size:14.5px; color:{C["slate"]}; line-height:1.9; margin-bottom:18px;'>
+    This objective focuses on predicting student academic performance using AI-related behavioral 
+    and cognitive features. A classification approach is adopted where students are categorized 
+    into academic divisions based on their CGPA.
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ─────────────────────────────────────────────
+    # TARGET VARIABLE + DIVISION TABLE
+    # ─────────────────────────────────────────────
+    st.markdown("### 🔹 Target Variable: Academic Division")
+
+    st.markdown(f"""
+    <div style='font-size:14px; color:{C["slate"]}; margin-bottom:12px;'>
+    Academic performance is categorized into divisions based on CGPA, following standard university grading norms.
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ✅ DIVISION TABLE ADDED
+    division_df = pd.DataFrame({
+        "Division": [
+            "Distinction",
+            "First Division",
+            "Second Division",
+            "Third Division",
+            "Fail"
+        ],
+        "CGPA Range": [
+            "8.0 and above",
+            "6.0 to 7.99",
+            "5.0 to 5.99",
+            "4.0 to 4.99",
+            "Below 4.0"
+        ]
+    })
+
+    st.dataframe(division_df, use_container_width=True)
 
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-    tab1, tab2, tab3 = st.tabs(["Model Setup","Confusion Matrices","Feature Importance"])
 
-    with tab1:
-        result_pass("KNN achieves 71.1% accuracy using only five AI-related features — substantially above the 25% chance level for a 4-class problem.")
+    # ─────────────────────────────────────────────
+    # FEATURES USED
+    # ─────────────────────────────────────────────
+    st.markdown("### 🔹 Features Used in the Model")
 
-    with tab2:
-        labels = ["Distinction","First","Second","Third","Fail"]
-        knn_cm = np.array([[3,1,0,0,0],[1,19,2,0,0],[0,2,7,1,0],[0,1,1,4,0],[0,0,0,0,2]])
-        dt_cm  = np.array([[2,2,0,0,0],[2,17,3,0,0],[0,3,5,2,0],[0,1,2,3,0],[0,0,0,0,1]])
-        c1, c2 = st.columns(2)
-        for col, cm, title, cmap in [(c1,knn_cm,"KNN","Blues"),(c2,dt_cm,"Decision Tree","YlOrBr")]:
-            fig, ax = plt.subplots(figsize=(5, 4.2))
-            sns.heatmap(cm, annot=True, fmt="d", xticklabels=labels, yticklabels=labels,
-                        cmap=cmap, linewidths=0.5, ax=ax, cbar=False, annot_kws={"size":11,"weight":"bold"})
-            ax.set_xlabel("Predicted"); ax.set_ylabel("Actual")
-            ax.set_title(title, fontsize=12, fontweight="bold"); plt.tight_layout()
-            col.pyplot(fig, use_container_width=True); plt.close()
+    st.markdown(f"""
+    <div style='background:{C["surface"]}; border:1px solid {C["border"]};
+                border-radius:8px; padding:18px; font-size:14px; line-height:1.8;'>
+    • AI Dependency Score (Composite)<br>
+    • Critical Thinking Score<br>
+    • Creativity Score<br>
+    • Cognitive Offloading Score<br>
+    • AI Usage Frequency
+    </div>
+    """, unsafe_allow_html=True)
 
-    with tab3:
-        fi = pd.DataFrame({
-            "Feature":    ["Critical Thinking Score","AI Dependency Score","Cognitive Offloading",
-                           "Creativity Score","AI Usage Frequency"],
-            "Importance": [0.34, 0.26, 0.18, 0.13, 0.09],
-        }).sort_values("Importance", ascending=True)
-        fig3 = px.bar(fi, x="Importance", y="Feature", orientation="h",
-                      color="Importance", color_continuous_scale=["#bfdbfe", C["navy"]], text_auto=".2f")
-        plotly_defaults(fig3, h=320)
-        fig3.update_layout(coloraxis_showscale=False)
-        st.plotly_chart(fig3, use_container_width=True)
+    # ─────────────────────────────────────────────
+    # MODELS USED
+    # ─────────────────────────────────────────────
+    st.markdown("### 🔹 Models Used")
 
+    st.markdown(f"""
+    <div style='background:{C["surface"]}; border:1px solid {C["border"]};
+                border-radius:8px; padding:18px; font-size:14px; line-height:1.8;'>
+
+    <b>K-Nearest Neighbours (KNN)</b><br>
+    • Classifies based on nearest neighbors<br>
+    • k = 5 used for optimal balance<br><br>
+
+    <b>Decision Tree Classifier</b><br>
+    • Splits data into decision regions<br>
+    • Max depth = 7 to avoid overfitting
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ─────────────────────────────────────────────
+    # PERFORMANCE METRICS
+    # ─────────────────────────────────────────────
+    st.markdown("### 🔹 Model Performance")
+
+    c1, c2, c3 = st.columns(3)
+    c1.metric("KNN Accuracy", "71.11%")
+    c2.metric("Decision Tree Accuracy", "64.44%")
+    c3.metric("Train-Test Split", "80% / 20%")
+
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+
+    # ─────────────────────────────────────────────
+    # CONFUSION MATRICES
+    # ─────────────────────────────────────────────
+    st.markdown("### 🔹 Confusion Matrices")
+
+    labels = ["Distinction","First","Second","Third","Fail"]
+
+    knn_cm = np.array([
+        [3,1,0,0,0],
+        [1,19,2,0,0],
+        [0,2,7,1,0],
+        [0,1,1,4,0],
+        [0,0,0,0,2]
+    ])
+
+    dt_cm = np.array([
+        [2,2,0,0,0],
+        [2,17,3,0,0],
+        [0,3,5,2,0],
+        [0,1,2,3,0],
+        [0,0,0,0,1]
+    ])
+
+    col1, col2 = st.columns(2)
+
+    for col, cm, title in [
+        (col1, knn_cm, "KNN Model"),
+        (col2, dt_cm, "Decision Tree Model")
+    ]:
+        fig, ax = plt.subplots(figsize=(5,4))
+        sns.heatmap(cm, annot=True, fmt="d",
+                    xticklabels=labels, yticklabels=labels,
+                    cmap="Blues", ax=ax)
+
+        ax.set_title(title)
+        ax.set_xlabel("Predicted")
+        ax.set_ylabel("Actual")
+
+        col.pyplot(fig)
+        plt.close()
+
+    st.markdown(f"""
+    <div style='font-size:14px; color:{C["muted"]}; margin-top:10px;'>
+    Values along the diagonal represent correct classifications. 
+    The KNN model shows better accuracy with more correct predictions.
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ─────────────────────────────────────────────
+    # FEATURE IMPORTANCE
+    # ─────────────────────────────────────────────
+    st.markdown("### 🔹 Feature Importance")
+
+    fi = pd.DataFrame({
+        "Feature": [
+            "Critical Thinking",
+            "AI Dependency",
+            "Cognitive Offloading",
+            "Creativity",
+            "AI Usage Frequency"
+        ],
+        "Importance": [0.34, 0.26, 0.18, 0.13, 0.09]
+    }).sort_values("Importance")
+
+    fig = px.bar(fi,
+                 x="Importance",
+                 y="Feature",
+                 orientation="h",
+                 text_auto=".2f",
+                 color="Importance",
+                 color_continuous_scale="Blues")
+
+    plotly_defaults(fig, h=350)
+    st.plotly_chart(fig, use_container_width=True)
+
+    # ─────────────────────────────────────────────
+    # INTERPRETATION
+    # ─────────────────────────────────────────────
+    result_pass("""
+    <b>Key Findings:</b><br><br>
+    • Critical Thinking is the strongest predictor of performance<br>
+    • AI Dependency has meaningful influence<br>
+    • Creativity and usage frequency contribute less<br><br>
+    • KNN performs better than Decision Tree, indicating pattern similarity is important
+    """)
+
+    result_info("""
+    <b>Conclusion:</b><br><br>
+    Academic performance can be reasonably predicted using AI-related behavioral and cognitive features. 
+    This suggests that how students use AI plays a significant role in their academic outcomes.
+    """)
 # ══════════════════════════════════════════════════════════════
 # CONCLUSION — FULLY BALANCED ACROSS ALL 6 OBJECTIVES
 # ══════════════════════════════════════════════════════════════
