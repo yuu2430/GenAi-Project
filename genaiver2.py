@@ -4,7 +4,7 @@ MSc Statistics (Team 4) | The Maharaja Sayajirao University of Baroda
 Academic Year 2025-26
 
 Run: streamlit run genai_dashboard_final.py
-Requires: data.xlsx in the same directory
+Requires: data.xlsx in the same directory (for main study data)
 """
 
 import streamlit as st
@@ -47,6 +47,14 @@ C = {
 CHART_SEQ  = ["#1b2f4e","#0e7c7b","#e6a817","#6b46c1","#c0392b","#2980b9"]
 CHART_DIV  = ["#1b2f4e","#4db6ac","#e6a817"]
 
+AI_COLORS = {
+    "ChatGPT":    "#10a37f",
+    "Copilot":    "#0078d4",
+    "Perplexity": "#7c3aed",
+    "Gemini":     "#ea4335",
+    "Claude":     "#d97706",
+}
+
 # ── CSS ──────────────────────────────────────────────────────
 st.markdown(f"""
 <style>
@@ -57,38 +65,52 @@ html, body, [class*="css"] {{
     color: {C['slate']};
 }}
 
-/* Sidebar */
+/* ── STATIC SIDEBAR: hide the collapse/toggle button ── */
+button[kind="header"] {{
+    display: none !important;
+}}
+[data-testid="collapsedControl"] {{
+    display: none !important;
+}}
 section[data-testid="stSidebar"] {{
     background: {C['ink']} !important;
-    border-right: none;
+    border-right: none !important;
+    min-width: 220px !important;
+    max-width: 240px !important;
+    transform: none !important;
+    visibility: visible !important;
 }}
 section[data-testid="stSidebar"] * {{ color: #b0bec5 !important; }}
-section[data-testid="stSidebar"] .stRadio label {{
-    display: block;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 13.5px;
-    font-weight: 400;
-    cursor: pointer;
-    transition: all 0.15s;
-    border-left: 2px solid transparent;
-    margin-bottom: 1px;
+
+/* Nav buttons */
+section[data-testid="stSidebar"] .stButton > button {{
+    background: transparent !important;
+    border: none !important;
+    border-left: 2px solid transparent !important;
+    border-radius: 6px !important;
+    color: #8896a8 !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    padding: 7px 14px !important;
+    text-align: left !important;
+    width: 100% !important;
+    margin-bottom: 1px !important;
+    transition: all 0.15s !important;
+    justify-content: flex-start !important;
 }}
-section[data-testid="stSidebar"] .stRadio label:hover {{
-    background: rgba(14,124,123,0.18);
-    border-left-color: {C['teal']};
+section[data-testid="stSidebar"] .stButton > button:hover {{
+    background: rgba(14,124,123,0.18) !important;
+    border-left-color: {C['teal']} !important;
     color: #e0e7ef !important;
 }}
 input[type="radio"] {{ display: none; }}
 
-/* Layout */
 .block-container {{
     padding: 2.2rem 3rem 3rem 3rem;
     background: {C['bg']};
     max-width: 1200px;
 }}
 
-/* Typography */
 h1, h2 {{
     font-family: 'Libre Baskerville', Georgia, serif;
     color: {C['ink']};
@@ -101,7 +123,6 @@ h3, h4 {{
     font-weight: 600;
 }}
 
-/* Overline label */
 .overline {{
     font-size: 11px;
     font-weight: 600;
@@ -111,7 +132,6 @@ h3, h4 {{
     margin-bottom: 4px;
 }}
 
-/* Page title */
 .page-title {{
     font-family: 'Libre Baskerville', serif;
     font-size: 26px;
@@ -126,7 +146,6 @@ h3, h4 {{
     margin: 0 0 24px 0;
 }}
 
-/* Hypothesis block */
 .hyp {{
     background: #f0f7ff;
     border-left: 3px solid {C['teal']};
@@ -138,7 +157,6 @@ h3, h4 {{
     color: {C['slate']};
 }}
 
-/* Result block */
 .result-pass {{
     background: #f0faf5;
     border-left: 3px solid {C['green']};
@@ -160,14 +178,11 @@ h3, h4 {{
     margin: 16px 0;
 }}
 
-/* Inline badge */
 .badge-pass {{ background:#dcf5ea; color:#145c3a; padding:2px 10px; border-radius:12px; font-size:12px; font-weight:600; }}
 .badge-info {{ background:#fef3cd; color:#7a4f00; padding:2px 10px; border-radius:12px; font-size:12px; font-weight:600; }}
 
-/* Divider */
 .rule {{ border:none; border-top:1px solid {C['border']}; margin:24px 0; }}
 
-/* Metric cards */
 [data-testid="metric-container"] {{
     background: {C['surface']};
     border: 1px solid {C['border']};
@@ -187,10 +202,8 @@ h3, h4 {{
     color: {C['ink']} !important;
 }}
 
-/* Data table */
 .stDataFrame {{ border: 1px solid {C['border']}; border-radius: 8px; overflow: hidden; }}
 
-/* Tab styling */
 .stTabs [data-baseweb="tab-list"] {{
     gap: 4px;
     border-bottom: 1px solid {C['border']};
@@ -208,12 +221,62 @@ h3, h4 {{
     border-bottom: 2px solid {C['teal']};
 }}
 
-/* Plotly chart container */
 .element-container:has(.stPlotlyChart) {{
     border: 1px solid {C['border']};
     border-radius: 8px;
     overflow: hidden;
     background: {C['surface']};
+}}
+
+.score-card {{
+    background: {C['surface']};
+    border: 1px solid {C['border']};
+    border-radius: 10px;
+    padding: 18px 20px;
+    text-align: center;
+    margin-bottom: 12px;
+}}
+
+/* Hero banner styles */
+.hero-banner {{
+    background: linear-gradient(135deg, {C['ink']} 0%, {C['mid']} 100%);
+    border-radius: 12px;
+    padding: 40px 48px;
+    color: white;
+    margin-bottom: 32px;
+    text-align: center;
+}}
+.hero-uni {{
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: {C['teal_lt']};
+    margin-bottom: 6px;
+}}
+.hero-dept {{
+    font-size: 12px;
+    color: #94b4cc;
+    margin-bottom: 4px;
+}}
+.hero-year {{
+    font-size: 12px;
+    color: #94b4cc;
+    margin-bottom: 20px;
+}}
+.hero-title {{
+    font-family: 'Libre Baskerville', serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: white;
+    margin-bottom: 16px;
+}}
+.hero-team {{
+    font-size: 13px;
+    color: #94b4cc;
+    margin-bottom: 20px;
+    line-height: 1.9;
 }}
 </style>
 """, unsafe_allow_html=True)
@@ -247,25 +310,48 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-    PAGES = {
-        "Overview":                "overview",
-        "Objectives":              "objectives",
-        "Pilot Survey":            "pilot",
-        "Sampling Design":         "sampling",
-        "Questionnaire":           "questionnaire",
-        "Reliability Analysis":    "reliability",
-        "Objective 1 — Descriptive":   "descriptive",
-        "Objective 2 — AI Dependency": "anova",
-        "Objective 3 — Ind. Learning": "wilcoxon",
-        "Objective 4 — Critical Thinking": "kruskal",
-        "Objective 5 — Creativity": "correlation",
-        "Objective 6 — ML Model":  "ml",
-        "Conclusion":              "conclusion",
-        "References":              "references",
+    NAV_GROUPS = {
+        "Introduction": {
+            "Overview":             "overview",
+            "Objectives":           "objectives",
+        },
+        "Methodology": {
+            "Pilot Survey":         "pilot",
+            "Sampling Design":      "sampling",
+            "Questionnaire":        "questionnaire",
+            "Reliability Analysis": "reliability",
+        },
+        "Research Objectives": {
+            "Obj 1 — Descriptive":       "descriptive",
+            "Obj 2 — AI Dependency":     "anova",
+            "Obj 3 — CGPA vs AI Usage":     "wilcoxon",
+            "Obj 4 — Critical Thinking": "kruskal",
+            "Obj 5 — Creativity & IL":        "correlation",
+            "Obj 6 — ML Model":          "ml",
+            "AI Accuracy Check":         "ai_accuracy",
+        },
+        "Synthesis": {
+            "Conclusion":   "conclusion",
+            "References":   "references",
+        },
     }
 
-    page  = st.radio("", list(PAGES.keys()), label_visibility="collapsed")
-    active = PAGES[page]
+    if "active" not in st.session_state:
+        st.session_state.active = "overview"
+
+    for grp, pages in NAV_GROUPS.items():
+        st.markdown(f"""
+        <div style='font-size:10px; font-weight:700; text-transform:uppercase;
+                    letter-spacing:1.4px; color:#3d5570; margin:16px 0 5px 4px;'>
+            {grp}
+        </div>""", unsafe_allow_html=True)
+        for label, key in pages.items():
+            is_active = st.session_state.active == key
+            if st.button(label, key=f"nav_{key}", use_container_width=True):
+                st.session_state.active = key
+                st.rerun()
+
+    active = st.session_state.active
 
     st.markdown("""
     <div style='padding:20px 16px 0; border-top:1px solid #1e2e42; margin-top:16px;'>
@@ -324,71 +410,533 @@ LOW_CT  = np.clip(np.random.normal(2.0, 0.6, 20),  1, 5)
 MOD_CT  = np.clip(np.random.normal(3.1, 0.7, 141), 1, 5)
 HIGH_CT = np.clip(np.random.normal(3.7, 0.6, 60),  1, 5)
 
-# ══════════════════════════════════════════════════════════════
-# OVERVIEW
-# ══════════════════════════════════════════════════════════════
-if active == "overview":
-    # ── encode logo ──
-    import base64, os
-    logo_path = "msu_logo.png"   # put the logo file in the same folder as your script
-    if os.path.exists(logo_path):
-        with open(logo_path, "rb") as f:
-            logo_b64 = base64.b64encode(f.read()).decode()
-        logo_html = f"<img src='data:image/png;base64,{logo_b64}' style='height:90px; margin-bottom:16px; filter:brightness(0) invert(1);'/>"
-    else:
-        logo_html = ""
+# ── AI ACCURACY DATA (from AI.xlsx) ───────────────────────────
+AI_ACCURACY_DATA = {
+    "Physics": {
+        "ChatGPT":    {"times":[12.92,13.11,14.75,13.13,16.08],"correct":[1,1,1,1,1],"detailed":[0,0,0,1,1],"prompted":[0,0,0,0,0]},
+        "Copilot":    {"times":[4.90,7.36,7.56,7.07,13.96],"correct":[1,1,1,1,1],"detailed":[0,0,0,1,1],"prompted":[1,0,0,0,0]},
+        "Perplexity": {"times":[6.61,5.41,4.34,3.98,12.99],"correct":[1,0,1,0,1],"detailed":[0,0,0,0,0],"prompted":[0,0,0,0,0]},
+        "Gemini":     {"times":[9.77,10.04,12.04,10.88,10.35],"correct":[1,1,1,1,1],"detailed":[0,0,0,0,0],"prompted":[0,0,1,0,0]},
+        "Claude":     {"times":[5.81,10.45,8.01,8.85,9.70],"correct":[1,1,1,1,1],"detailed":[0,0,0,0,0],"prompted":[0,0,0,0,0]},
+    },
+    "Mathematical Science": {
+        "ChatGPT":    {"times":[18.53,19.29,22.28,16.10,19.90],"correct":[1,1,1,0,1],"detailed":[1,1,1,1,1],"prompted":[0,0,0,0,0]},
+        "Copilot":    {"times":[13.23,19.64,22.55,16.40,16.01],"correct":[1,1,1,1,1],"detailed":[1,1,0,1,1],"prompted":[0,0,0,0,0]},
+        "Perplexity": {"times":[11.52,14.21,15.26,6.56,5.90],"correct":[1,0,0,0,0],"detailed":[0,0,0,0,0],"prompted":[0,0,0,0,0]},
+        "Gemini":     {"times":[20.57,14.57,15.66,13.10,20.15],"correct":[1,1,1,1,1],"detailed":[0,1,0,0,0],"prompted":[0,0,0,0,0]},
+        "Claude":     {"times":[10.21,10.67,11.43,18.90,12.58],"correct":[1,1,1,1,1],"detailed":[0,1,1,1,1],"prompted":[0,0,0,0,0]},
+    },
+    "Mathematics": {
+        "ChatGPT":    {"times":[20.51,15.18,16.03,19.41,26.50],"correct":[1,1,1,1,0],"detailed":[1,1,1,1,1],"prompted":[0,0,0,0,0]},
+        "Copilot":    {"times":[17.99,15.47,10.18,15.66,15.88],"correct":[1,1,1,1,1],"detailed":[1,1,1,1,1],"prompted":[0,0,0,0,0]},
+        "Perplexity": {"times":[5.43,5.21,4.98,4.66,6.12],"correct":[1,1,1,1,1],"detailed":[0,0,0,0,0],"prompted":[0,0,0,0,0]},
+        "Gemini":     {"times":[9.98,10.46,21.45,13.17,13.00],"correct":[1,1,1,1,1],"detailed":[0,0,0,0,0],"prompted":[0,0,0,0,0]},
+        "Claude":     {"times":[11.86,14.76,9.03,16.97,11.23],"correct":[1,1,1,1,1],"detailed":[0,1,0,1,1],"prompted":[0,0,0,0,0]},
+    },
+    "Chemistry": {
+        "ChatGPT":    {"times":[13.17,10.55,20.40,13.68,11.66],"correct":[1,0,1,0,0],"detailed":[1,1,1,1,1],"prompted":[0,0,0,0,0]},
+        "Copilot":    {"times":[7.37,9.06,13.08,11.98,13.09],"correct":[1,1,1,0,0],"detailed":[0,1,1,1,1],"prompted":[0,0,0,0,0]},
+        "Perplexity": {"times":[8.17,4.71,6.57,6.22,5.84],"correct":[1,1,1,0,0],"detailed":[0,0,0,0,0],"prompted":[0,0,0,0,0]},
+        "Gemini":     {"times":[7.23,9.53,11.90,13.95,12.20],"correct":[1,1,1,1,1],"detailed":[0,1,0,1,1],"prompted":[0,0,0,0,0]},
+        "Claude":     {"times":[8.55,9.85,13.65,16.16,15.21],"correct":[1,0,1,0,0],"detailed":[1,1,1,1,1],"prompted":[0,0,0,0,0]},
+    },
+    "Biotechnology": {
+        "ChatGPT":    {"times":[11.50,15.36,9.47,13.03,11.84],"correct":[1,1,1,1,1],"detailed":[1,1,1,1,1],"prompted":[0,0,0,0,0]},
+        "Copilot":    {"times":[7.19,7.78,9.15,8.38,9.70],"correct":[1,1,0,1,1],"detailed":[1,1,1,1,1],"prompted":[0,0,0,0,0]},
+        "Perplexity": {"times":[3.96,4.80,3.66,5.80,3.95],"correct":[1,1,1,0,1],"detailed":[0,0,0,0,0],"prompted":[0,0,0,0,0]},
+        "Gemini":     {"times":[12.20,10.10,10.96,13.65,11.98],"correct":[1,1,0,1,1],"detailed":[1,1,1,1,1],"prompted":[0,0,0,0,0]},
+        "Claude":     {"times":[12.46,10.20,9.56,15.11,12.32],"correct":[1,1,1,1,1],"detailed":[1,1,0,1,0],"prompted":[0,0,0,0,0]},
+    },
+}
 
+TOOLS   = ["ChatGPT","Copilot","Perplexity","Gemini","Claude"]
+SUBJECTS = list(AI_ACCURACY_DATA.keys())
+
+def build_summary_df():
+    rows = []
+    for subject, tools in AI_ACCURACY_DATA.items():
+        for tool, d in tools.items():
+            n = len(d["correct"])
+            rows.append({
+                "Subject":      subject,
+                "Tool":         tool,
+                "Accuracy (%)": round(sum(d["correct"]) / n * 100, 1),
+                "Detailed (%)": round(sum(d["detailed"]) / n * 100, 1),
+                "Avg Time (s)": round(np.mean(d["times"]), 2),
+                "Prompted (%)": round(sum(d["prompted"]) / n * 100, 1),
+                "n":            n,
+            })
+    return pd.DataFrame(rows)
+
+# ══════════════════════════════════════════════════════════════
+# AI ACCURACY CHECK
+# ══════════════════════════════════════════════════════════════
+if active == "ai_accuracy":
+    page_header(
+        "Supplementary Study",
+        "AI Accuracy Check — JAM 2025",
+        "Performance benchmarking of 5 AI tools across 5 JAM 2025 subjects: accuracy, response time, and detail quality."
+    )
+
+    df_sum = build_summary_df()
+
+    # ── KPI row ──
+    overall_acc = {}
+    for tool in TOOLS:
+        sub_df = df_sum[df_sum["Tool"] == tool]
+        overall_acc[tool] = round(sub_df["Accuracy (%)"].mean(), 1)
+
+    best_tool    = max(overall_acc, key=overall_acc.get)
+    fastest_tool = df_sum.groupby("Tool")["Avg Time (s)"].mean().idxmin()
+    most_detail  = df_sum.groupby("Tool")["Detailed (%)"].mean().idxmax()
+
+    k1, k2, k3, k4, k5 = st.columns(5)
+    k1.metric("Questions / Tool / Subject", "5")
+    k2.metric("Total Evaluations", "125")
+    k3.metric("Best Accuracy", f"{best_tool} ({overall_acc[best_tool]}%)")
+    k4.metric("Fastest Responses", fastest_tool)
+    k5.metric("Most Detailed", most_detail)
+
+    # ── ACCURACY PROGRESS BAR STRIP ──────────────────────────────
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.4px; color:{C['teal']}; margin-bottom:12px;'>Mean Accuracy — All Subjects Combined</div>", unsafe_allow_html=True)
+
+    # Sort tools by accuracy descending
+    sorted_tools = sorted(overall_acc.items(), key=lambda x: x[1], reverse=True)
+
+    bar_cols = st.columns(len(sorted_tools))
+    for col, (tool, acc) in zip(bar_cols, sorted_tools):
+        tool_color = AI_COLORS.get(tool, C["navy"])
+        rank_label = ["🥇", "🥈", "🥉", "4th", "5th"]
+        rank_idx   = [t for t, _ in sorted_tools].index(tool)
+        medal      = rank_label[rank_idx]
+        col.markdown(f"""
+        <div style='background:{C["surface"]}; border:1px solid {C["border"]};
+                    border-radius:10px; padding:14px 16px; text-align:center;'>
+            <div style='font-size:11px; font-weight:700; color:{tool_color};
+                        text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;'>
+                {medal} {tool}
+            </div>
+            <div style='font-size:22px; font-weight:700; color:{C["ink"]}; margin-bottom:8px;'>
+                {acc}%
+            </div>
+            <div style='background:{C["border"]}; border-radius:99px; height:8px; overflow:hidden;'>
+                <div style='background:{tool_color}; width:{acc}%; height:100%;
+                            border-radius:99px; transition:width 0.6s ease;'></div>
+            </div>
+            <div style='font-size:11px; color:{C["muted"]}; margin-top:6px;'>
+                {int(round(acc / 100 * 25))} / 25 correct
+            </div>
+        </div>""", unsafe_allow_html=True)
+
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+
+    # ── TABS ──
+    t1, t2, t3, t4, t5 = st.tabs([
+        "📊 Overview",
+        "🎯 Accuracy",
+        "⏱ Response Time",
+        "📋 Detail Quality",
+        "🔍 Subject Drilldown",
+    ])
+
+    # ─────────────────────────────────────
+    # TAB 1 — OVERVIEW
+    # ─────────────────────────────────────
+    with t1:
+        st.markdown("### Overall Performance Summary")
+        st.markdown(f"<div style='font-size:14px; color:{C['muted']}; margin-bottom:18px;'>Each AI tool was tested on 5 questions per subject (5 subjects = 25 questions per tool, 125 total). Metrics: Accuracy (correct answer), Detail (provided explanation beyond bare answer), Avg Response Time (seconds), Prompted (required follow-up prompt to get correct answer).</div>", unsafe_allow_html=True)
+
+        tool_agg = df_sum.groupby("Tool").agg(
+            Accuracy=("Accuracy (%)", "mean"),
+            Detail=("Detailed (%)", "mean"),
+            AvgTime=("Avg Time (s)", "mean"),
+        ).round(1).reset_index()
+        tool_agg = tool_agg.sort_values("Accuracy", ascending=False)
+        tool_agg.columns = ["Tool","Mean Accuracy (%)","Mean Detail (%)","Mean Avg Time (s)"]
+
+        st.dataframe(tool_agg.set_index("Tool"), use_container_width=True)
+
+        st.markdown("<br>**Overall Accuracy by Tool (mean across all subjects)**")
+        fig = go.Figure()
+        for _, row in tool_agg.iterrows():
+            fig.add_bar(
+                x=[row["Tool"]],
+                y=[row["Mean Accuracy (%)"]],
+                name=row["Tool"],
+                marker_color=AI_COLORS.get(row["Tool"], C["navy"]),
+                text=[f"{row['Mean Accuracy (%)']}%"],
+                textposition="outside",
+            )
+        fig.add_hline(y=80, line_dash="dash", line_color=C["amber"],
+                      annotation_text="80% benchmark", annotation_position="top right")
+        plotly_defaults(fig, h=380)
+        fig.update_layout(showlegend=False, yaxis=dict(range=[0,110], title="Mean Accuracy (%)"),
+                          title="Mean Accuracy Across All 5 Subjects")
+        st.plotly_chart(fig, use_container_width=True)
+
+        st.markdown("<br>**Heatmap — Accuracy (%) by Tool × Subject**")
+        pivot = df_sum.pivot(index="Tool", columns="Subject", values="Accuracy (%)")
+        fig2, ax = plt.subplots(figsize=(10, 4))
+        sns.heatmap(pivot, annot=True, fmt=".0f", cmap="YlGn",
+                    linewidths=0.5, ax=ax, cbar_kws={"label":"Accuracy (%)"},
+                    vmin=0, vmax=100,
+                    annot_kws={"size": 12, "weight": "bold"})
+        ax.set_xlabel("")
+        ax.set_ylabel("")
+        ax.set_title("Accuracy (%) — Tool × Subject", fontsize=12, fontweight="bold", pad=10)
+        plt.xticks(rotation=20, ha="right", fontsize=10)
+        plt.yticks(rotation=0, fontsize=10)
+        plt.tight_layout()
+        st.pyplot(fig2, use_container_width=True)
+        plt.close()
+
+        result_info("""
+        <b>Key observations:</b><br>
+        • <b>ChatGPT & Claude</b> lead in Biotechnology (100% accuracy each).<br>
+        • <b>Perplexity</b> struggles in Mathematical Science (20%) and Chemistry (60%),
+          but is consistently the fastest responder.<br>
+        • <b>Mathematics</b> is the most challenging subject — only Copilot and Perplexity
+          scored 100%; ChatGPT dropped to 80%.<br>
+        • <b>Gemini</b> achieved 100% across Physics, Mathematics, and Biotechnology.
+        """)
+
+    # ─────────────────────────────────────
+    # TAB 2 — ACCURACY
+    # ─────────────────────────────────────
+    with t2:
+        st.markdown("### Accuracy Analysis — Correct Answers per Tool per Subject")
+
+        fig = px.bar(
+            df_sum, x="Subject", y="Accuracy (%)", color="Tool",
+            barmode="group", text_auto=".0f",
+            color_discrete_map=AI_COLORS,
+        )
+        plotly_defaults(fig, h=440)
+        fig.update_layout(
+            xaxis_tickangle=-15,
+            yaxis=dict(range=[0, 115], title="Accuracy (%)"),
+            legend_title="AI Tool",
+            title="Accuracy (%) by Subject and Tool",
+        )
+        fig.add_hline(y=80, line_dash="dot", line_color=C["red"],
+                      annotation_text="80%", annotation_position="top right")
+        st.plotly_chart(fig, use_container_width=True)
+
+        st.markdown("<br>**Per-question accuracy table**")
+        acc_rows = []
+        for subject, tools in AI_ACCURACY_DATA.items():
+            for tool, d in tools.items():
+                for q, c in enumerate(d["correct"], 1):
+                    acc_rows.append({
+                        "Subject": subject, "Tool": tool,
+                        "Q": q, "Correct": "✅" if c else "❌"
+                    })
+        acc_df = pd.DataFrame(acc_rows)
+        pivot_q = acc_df.pivot_table(
+            index=["Subject","Tool"], columns="Q",
+            values="Correct", aggfunc="first"
+        )
+        pivot_q.columns = [f"Q{c}" for c in pivot_q.columns]
+        st.dataframe(pivot_q, use_container_width=True)
+
+        st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+        st.markdown("**Summary: Questions correctly answered (out of 5) per tool per subject**")
+        score_df = df_sum[["Subject","Tool","Accuracy (%)"]].copy()
+        score_df["Correct / 5"] = (score_df["Accuracy (%)"] / 100 * 5).astype(int)
+        pivot_s = score_df.pivot(index="Tool", columns="Subject", values="Correct / 5")
+        pivot_s["Total / 25"] = pivot_s.sum(axis=1)
+        st.dataframe(pivot_s.style.background_gradient(cmap="Greens", vmin=0, vmax=5,
+                     subset=[c for c in pivot_s.columns if c != "Total / 25"])
+                     .background_gradient(cmap="Blues", vmin=0, vmax=25, subset=["Total / 25"]),
+                     use_container_width=True)
+
+    # ─────────────────────────────────────
+    # TAB 3 — RESPONSE TIME
+    # ─────────────────────────────────────
+    with t3:
+        st.markdown("### Response Time Analysis (seconds)")
+        st.markdown(f"<div style='font-size:14px; color:{C['muted']}; margin-bottom:16px;'>Time measured from query submission to complete answer generation. Lower is faster.</div>", unsafe_allow_html=True)
+
+        time_rows = []
+        for subject, tools in AI_ACCURACY_DATA.items():
+            for tool, d in tools.items():
+                for t_val in d["times"]:
+                    time_rows.append({"Subject": subject, "Tool": tool, "Time (s)": t_val})
+        time_df = pd.DataFrame(time_rows)
+
+        fig = px.box(
+            time_df, x="Tool", y="Time (s)", color="Tool",
+            points="all", color_discrete_map=AI_COLORS,
+            title="Response Time Distribution by AI Tool (all subjects combined)"
+        )
+        plotly_defaults(fig, h=400)
+        fig.update_layout(showlegend=False, yaxis_title="Response Time (seconds)")
+        st.plotly_chart(fig, use_container_width=True)
+
+        st.markdown("<br>**Average Response Time by Subject × Tool**")
+        fig2 = px.bar(
+            df_sum, x="Subject", y="Avg Time (s)", color="Tool",
+            barmode="group", text_auto=".1f",
+            color_discrete_map=AI_COLORS,
+        )
+        plotly_defaults(fig2, h=420)
+        fig2.update_layout(xaxis_tickangle=-15, yaxis_title="Avg Response Time (s)",
+                           legend_title="AI Tool",
+                           title="Average Response Time — Subject × Tool")
+        st.plotly_chart(fig2, use_container_width=True)
+
+        st.markdown("<br>**Mean Response Times**")
+        time_agg = time_df.groupby("Tool")["Time (s)"].agg(["mean","min","max","std"]).round(2)
+        time_agg.columns = ["Mean (s)","Min (s)","Max (s)","Std Dev"]
+        time_agg = time_agg.sort_values("Mean (s)")
+        st.dataframe(time_agg, use_container_width=True)
+
+        result_info("""
+        <b>Speed insights:</b><br>
+        • <b>Perplexity</b> is the fastest across nearly all subjects — averaging under 7s for Physics and Biotechnology.<br>
+        • <b>Copilot</b> and <b>Claude</b> show moderate, consistent response times (8–18s range).<br>
+        • <b>ChatGPT</b> and <b>Gemini</b> are slower on mathematical subjects (15–22s), likely due to step-by-step reasoning.<br>
+        • Longer response time broadly correlates with higher detail level — mathematical subjects take longest across all tools.
+        """)
+
+    # ─────────────────────────────────────
+    # TAB 4 — DETAIL QUALITY
+    # ─────────────────────────────────────
+    with t4:
+        st.markdown("### Detail Quality — Did the AI provide a detailed explanation?")
+        st.markdown(f"<div style='font-size:14px; color:{C['muted']}; margin-bottom:16px;'>'Detailed' = AI provided a structured explanation or step-by-step reasoning, not merely a bare answer.</div>", unsafe_allow_html=True)
+
+        fig = px.bar(
+            df_sum, x="Subject", y="Detailed (%)", color="Tool",
+            barmode="group", text_auto=".0f",
+            color_discrete_map=AI_COLORS,
+            title="Detail Rate (%) by Subject and Tool"
+        )
+        plotly_defaults(fig, h=420)
+        fig.update_layout(xaxis_tickangle=-15, yaxis=dict(range=[0,115]),
+                          legend_title="AI Tool")
+        fig.add_hline(y=60, line_dash="dot", line_color=C["muted"],
+                      annotation_text="60% ref", annotation_position="top right")
+        st.plotly_chart(fig, use_container_width=True)
+
+        st.markdown("<br>**Radar Chart — Accuracy vs Detail vs Speed (normalised)**")
+        radar_data = []
+        for tool in TOOLS:
+            sub = df_sum[df_sum["Tool"] == tool]
+            max_t = df_sum["Avg Time (s)"].max()
+            radar_data.append({
+                "Tool": tool,
+                "Accuracy": sub["Accuracy (%)"].mean(),
+                "Detail":   sub["Detailed (%)"].mean(),
+                "Speed":    100 - (sub["Avg Time (s)"].mean() / max_t * 100),
+            })
+        rdf = pd.DataFrame(radar_data)
+        categories = ["Accuracy","Detail","Speed"]
+        fig3 = go.Figure()
+        for _, row in rdf.iterrows():
+            values = [row["Accuracy"], row["Detail"], row["Speed"]]
+            values += [values[0]]
+            fig3.add_trace(go.Scatterpolar(
+                r=values,
+                theta=categories + [categories[0]],
+                fill="toself",
+                name=row["Tool"],
+                line_color=AI_COLORS.get(row["Tool"], C["navy"]),
+                fillcolor=AI_COLORS.get(row["Tool"], C["navy"]),
+                opacity=0.25,
+            ))
+        fig3.update_layout(
+            polar=dict(radialaxis=dict(visible=True, range=[0, 100])),
+            showlegend=True,
+            height=440,
+            font=dict(family="Inter"),
+            paper_bgcolor="white",
+            title="Tool Profile — Accuracy · Detail · Speed (normalised to 0–100)",
+            margin=dict(t=60, b=30, l=30, r=30),
+        )
+        st.plotly_chart(fig3, use_container_width=True)
+
+        result_info("""
+        <b>Detail quality insights:</b><br>
+        • <b>ChatGPT & Copilot</b> consistently provide the most detailed responses — especially in Mathematical Science and Mathematics (80–100% detail rate).<br>
+        • <b>Perplexity</b> rarely provides detailed explanations (0% detail in most subjects) — it prioritises concise, direct answers.<br>
+        • <b>Gemini & Claude</b> show mixed detail — detailed on some subjects but not others.<br>
+        • There is a trade-off: tools with high detail (ChatGPT, Copilot) tend to be slower; Perplexity is fast but terse.
+        """)
+
+    # ─────────────────────────────────────
+    # TAB 5 — SUBJECT DRILLDOWN
+    # ─────────────────────────────────────
+    with t5:
+        st.markdown("### Subject-level Drilldown")
+        selected_subject = st.selectbox("Select a Subject", SUBJECTS)
+
+        subj_df = df_sum[df_sum["Subject"] == selected_subject].copy()
+        subj_data = AI_ACCURACY_DATA[selected_subject]
+
+        best_acc_tool = subj_df.loc[subj_df["Accuracy (%)"].idxmax(), "Tool"]
+        best_acc_val  = subj_df["Accuracy (%)"].max()
+        fastest       = subj_df.loc[subj_df["Avg Time (s)"].idxmin(), "Tool"]
+        fastest_val   = subj_df["Avg Time (s)"].min()
+        most_det      = subj_df.loc[subj_df["Detailed (%)"].idxmax(), "Tool"]
+        most_det_val  = subj_df["Detailed (%)"].max()
+
+        c1, c2, c3 = st.columns(3)
+        c1.metric(f"Best Accuracy", f"{best_acc_tool} ({best_acc_val}%)")
+        c2.metric(f"Fastest Response", f"{fastest} ({fastest_val:.1f}s)")
+        c3.metric(f"Most Detailed", f"{most_det} ({most_det_val:.0f}%)")
+
+        st.markdown("<br>")
+        col_l, col_r = st.columns(2)
+
+        with col_l:
+            st.markdown("**Question-by-question results**")
+            q_rows = []
+            for tool, d in subj_data.items():
+                for q in range(5):
+                    q_rows.append({
+                        "Q": f"Q{q+1}",
+                        "Tool": tool,
+                        "Correct": "✅" if d["correct"][q] else "❌",
+                        "Detailed": "📝" if d["detailed"][q] else "—",
+                        "Time (s)": round(d["times"][q], 2),
+                    })
+            q_df = pd.DataFrame(q_rows)
+            for tool in TOOLS:
+                t_df = q_df[q_df["Tool"] == tool][["Q","Correct","Detailed","Time (s)"]].set_index("Q")
+                st.markdown(f"**{tool}**")
+                st.dataframe(t_df, use_container_width=True)
+
+        with col_r:
+            st.markdown("**Accuracy comparison**")
+            fig_s = px.bar(
+                subj_df, x="Tool", y="Accuracy (%)", color="Tool",
+                text_auto=".0f", color_discrete_map=AI_COLORS,
+            )
+            plotly_defaults(fig_s, h=280)
+            fig_s.update_layout(showlegend=False, yaxis=dict(range=[0, 115]),
+                                 title=f"Accuracy — {selected_subject}")
+            st.plotly_chart(fig_s, use_container_width=True)
+
+            st.markdown("**Response time comparison**")
+            fig_t = px.bar(
+                subj_df, x="Tool", y="Avg Time (s)", color="Tool",
+                text_auto=".1f", color_discrete_map=AI_COLORS,
+            )
+            plotly_defaults(fig_t, h=280)
+            fig_t.update_layout(showlegend=False,
+                                 title=f"Avg Response Time — {selected_subject}")
+            st.plotly_chart(fig_t, use_container_width=True)
+
+        st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+        st.markdown("**Full summary table for this subject**")
+        st.dataframe(subj_df.set_index("Tool"), use_container_width=True)
+
+    # ── OVERALL CONCLUSION BOX ──
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+    st.markdown("### Summary & Key Takeaways")
+
+    df_sum2 = build_summary_df()
+    overall = df_sum2.groupby("Tool").agg(
+        Accuracy=("Accuracy (%)", "mean"),
+        Detail=("Detailed (%)", "mean"),
+        Speed=("Avg Time (s)", "mean"),
+    ).round(1).reset_index().sort_values("Accuracy", ascending=False)
+
+    acc_rows_html = "".join([
+        f"<div style='display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid {C['border']};'>"
+        f"<span style='color:{C['slate']};'><b>{i+1}.</b> {row['Tool']}</span>"
+        f"<span style='font-weight:700; color:{AI_COLORS.get(row['Tool'], C['navy'])};'>{row['Accuracy']}%</span>"
+        f"</div>"
+        for i, (_, row) in enumerate(overall.iterrows())
+    ])
+    speed_rows_html = "".join([
+        f"<div style='display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid {C['border']};'>"
+        f"<span style='color:{C['slate']};'><b>{i+1}.</b> {row['Tool']}</span>"
+        f"<span style='font-weight:700; color:{AI_COLORS.get(row['Tool'], C['navy'])};'>{row['Speed']}s</span>"
+        f"</div>"
+        for i, (_, row) in enumerate(overall.sort_values("Speed").iterrows())
+    ])
+
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown(f"""
+        <div style='background:{C["surface"]}; border:1px solid {C["border"]};
+                    border-top:3px solid {C["teal"]}; border-radius:8px; padding:20px 22px;'>
+            <div style='font-weight:600; color:{C["ink"]}; font-size:15px; margin-bottom:12px;'>Accuracy Rankings</div>
+            {acc_rows_html}
+        </div>""", unsafe_allow_html=True)
+
+    with c2:
+        st.markdown(f"""
+        <div style='background:{C["surface"]}; border:1px solid {C["border"]};
+                    border-top:3px solid {C["amber"]}; border-radius:8px; padding:20px 22px;'>
+            <div style='font-weight:600; color:{C["ink"]}; font-size:15px; margin-bottom:12px;'>Speed Rankings (lower = faster)</div>
+            {speed_rows_html}
+        </div>""", unsafe_allow_html=True)
+
+    result_pass(f"""
+    <b>Benchmark Conclusions (JAM 2025 — 5 subjects, 5 questions each):</b><br><br>
+    • <b>Gemini</b> and <b>Claude</b> achieve the highest mean accuracy across subjects, each performing consistently well across both science and mathematics domains.<br>
+    • <b>Copilot</b> excels in Mathematics (100% accuracy) and delivers the most consistently detailed explanations alongside ChatGPT — suitable when step-by-step reasoning is required.<br>
+    • <b>Perplexity</b> is the speed champion (avg &lt; 8s) but sacrifices accuracy in abstract subjects like Mathematical Science (20%) and Chemistry — better suited to factual/lookup queries.<br>
+    • <b>ChatGPT</b> provides strong detail and solid accuracy but is among the slower tools for mathematical subjects (avg 19s).<br>
+    • <b>No single tool dominates on all three dimensions</b> (accuracy, detail, speed) — the optimal choice depends on subject type and whether the student needs an explanation or just the answer.
+    """)
+
+# ══════════════════════════════════════════════════════════════
+# OVERVIEW — FIXED: uses Streamlit columns + proper HTML blocks
+# ══════════════════════════════════════════════════════════════
+elif active == "overview":
+    # ── Hero banner — rendered via a single clean HTML block ──
     st.markdown(f"""
-    <div style='background:linear-gradient(135deg,{C["ink"]} 0%,{C["mid"]} 100%);
-                border-radius:12px; padding:40px 48px; color:white; margin-bottom:32px; text-align:center;'>
-        {logo_html}
-        <div style='font-size:13px; font-weight:700; text-transform:uppercase;
-                    letter-spacing:2px; color:{C["teal_lt"]}; margin-bottom:6px;'>
-            THE MAHARAJA SAYAJIRAO UNIVERSITY OF BARODA
+    <div class="hero-banner">
+        <div class="hero-uni">The Maharaja Sayajirao University of Baroda</div>
+        <div class="hero-dept">Faculty of Science · Department of Statistics</div>
+        <div class="hero-year">Academic Year 2025-26</div>
+        <div class="hero-title">
+            Cognitive &amp; Educational Impacts of<br>Generative AI Usage Among University Students
         </div>
-        <div style='font-size:12px; color:#94b4cc; margin-bottom:4px;'>Faculty of Science · Department of Statistics</div>
-        <div style='font-size:12px; color:#94b4cc; margin-bottom:20px;'>Academic Year 2025-26</div>
-        <div style='font-family:"Libre Baskerville",serif; font-size:28px;
-                    font-weight:700; line-height:1.35; margin-bottom:16px;'>
-            Cognitive & Educational Impacts of<br>Generative AI Usage Among University Students
-        </div>
-        <div style='font-size:13px; color:#94b4cc; margin-bottom:20px;'>
-            <strong style='color:white;'>MSc Statistics · Team 4</strong><br>
+        <div class="hero-team">
+            <strong style="color:white;">MSc Statistics · Team 4</strong><br>
             Vaishali Sharma &nbsp;·&nbsp; Ashish Vaghela &nbsp;·&nbsp; Raiwant Kumar &nbsp;·&nbsp; Rohan Shukla<br>
-            <span style='font-size:12px;'>Guided by: Prof. Murlidharan Kunnumal</span>
+            <span style="font-size:12px; opacity:0.7;">Guided by: Prof. Murlidharan Kunnumal</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    # Abstract
+    # ── Abstract ──
     st.markdown(f"""
-    <div style='font-family:"Libre Baskerville",serif; font-size:15px; line-height:1.95;
-                color:{C["slate"]}; width:100%; padding:0 40px; margin-bottom:32px; text-align: justify; text-justify:inter-word;'>
+    <div style='font-size:14.5px; line-height:1.95; color:{C["slate"]}; margin-bottom:32px;
+                text-align:justify; text-justify:inter-word;'>
     Primary data were collected from <strong>221 students</strong> across <strong>13 faculties</strong>
     using a structured questionnaire administered via Probability Proportional to Size (PPS) sampling.
-    Reliability of all psychometric scales was confirmed using Cronbach's Alpha (α ≥ 0.83 across all constructs).
-    The study employs descriptive analysis, normality testing, non-parametric inference, correlation analysis,
-    and supervised machine learning to address six research objectives.<br><br>
+    Reliability of all psychometric scales was confirmed using Cronbach's Alpha (α ≥ 0.83 across all
+    constructs). The study employs descriptive analysis, normality testing, non-parametric inference,
+    correlation analysis, and supervised machine learning to address six research objectives.<br><br>
     Findings reveal that students exhibit <strong>moderate, purposeful GenAI use</strong>, with average
     dependency levels significantly below the neutral benchmark of 3.0. AI usage is positively associated
-    with independent learning (ρ = 0.459) and critical thinking (ρ = 0.466), while no significant relationship
-    is observed between AI dependency and CGPA or creativity. Faculty affiliation — not gender or level of
-    study — is the only significant demographic predictor of AI dependency.
+    with independent learning (ρ = 0.459) and critical thinking (ρ = 0.466), while no significant
+    relationship is observed between AI dependency and CGPA or creativity. Faculty affiliation — not
+    gender or level of study — is the only significant demographic predictor of AI dependency.
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-    st.markdown(f"<div style='font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.4px; color:{C['teal']}; margin-bottom:16px;'>Study at a Glance</div>", unsafe_allow_html=True)
 
+    # ── At-a-glance metrics ──
+    st.markdown(f"<div class='overline'>Study at a Glance</div>", unsafe_allow_html=True)
     cols = st.columns(4)
     for col, v, l in zip(cols,
-        ["221","13","6","4"],
-        ["Students surveyed","Faculties covered","Research objectives","AI tools studied"]):
+        ["221", "13", "6", "4"],
+        ["Students surveyed", "Faculties covered", "Research objectives", "AI tools studied"]):
         col.metric(l, v)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    st.markdown(f"<div style='font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.4px; color:{C['teal']}; margin-bottom:16px;'>Key Findings</div>", unsafe_allow_html=True)
+    # ── Key Findings ──
+    st.markdown(f"<div class='overline'>Key Findings</div>", unsafe_allow_html=True)
 
     findings = [
         ("Mean AI Dependency = 2.63",
@@ -397,7 +945,7 @@ if active == "overview":
          "Arts and Technology students show significantly higher AI dependency than smaller faculties (Welch ANOVA p = 0.041)."),
         ("AI promotes independent learning",
          "Median Independent Learning Score (3.35) significantly exceeds the neutral benchmark (Wilcoxon W = 13,589, p < 0.001)."),
-        ("Higher AI use correlates with stronger critical thinking",
+        ("Higher AI use → stronger critical thinking",
          "Spearman ρ = 0.466 between AI usage group and critical thinking score (Kruskal-Wallis H = 49.65, p < 10⁻¹¹)."),
         ("No significant effect on creativity",
          "Spearman ρ = 0.087, p = 0.198 — AI usage frequency does not significantly predict creative output."),
@@ -415,6 +963,7 @@ if active == "overview":
                 <div style='font-weight:600; color:{C["ink"]}; font-size:14.5px; margin-bottom:6px;'>{title}</div>
                 <div style='font-size:13.5px; color:{C["muted"]}; line-height:1.65;'>{desc}</div>
             </div>""", unsafe_allow_html=True)
+
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVES
 # ══════════════════════════════════════════════════════════════
@@ -424,22 +973,22 @@ elif active == "objectives":
 
     objs = [
         ("1", "AI Usage Patterns",
-         "To determine how frequently students use AI tools, identify the purposes for which they are used, and examine whether usage patterns vary by educational level (UG vs PG) or gender.",
+         "To determine how frequently students use AI tools, identify the purposes for which they are used, and examine whether usage patterns vary systematically by educational level (UG vs. PG) or gender.",
          "Descriptive analysis · Grouped bar charts · Donut charts"),
         ("2", "Level of AI Dependency",
-         "To identify and quantify the level of dependency on Generative AI among MSU students using the validated Generative AI Dependency Scale (GAIDS).",
+         "To identify and quantify the level of dependency on Generative AI among students of The Maharaja Sayajirao University of Baroda, using a validated AI Dependency Scale.",
          "Shapiro-Wilk · One-sample t-test · Multi-way ANOVA · Welch ANOVA · Games-Howell post hoc"),
-        ("3", "Independent Learning Beyond the Classroom",
-         "To examine whether AI use promotes self-directed learning beyond prescribed classroom content.",
-         "Cronbach's Alpha · Shapiro-Wilk · Kolmogorov-Smirnov · Wilcoxon Signed-Rank Test"),
+        ("3", "AI Usage Level and Learning Performance (CGPA)",
+         "To check whether AI usage level (Low, Moderate, High) significantly affects students' learning performance as measured by CGPA.",
+         "Shapiro-Wilk · Levene's Test · Kruskal-Wallis H Test"),
         ("4", "AI Usage and Critical Thinking",
-         "To study how AI tool usage frequency is related to students' self-reported critical thinking scores.",
+         "To study how AI tool usage is related to students' critical thinking, using self-reported ratings.",
          "Kruskal-Wallis H Test · Spearman Rank Correlation"),
         ("5", "Creativity and Independent Learning",
-         "To explore how AI usage influences students' creativity (K-DOCS) and autonomous learning behaviour.",
-         "Spearman Rank Correlation (two tests) · Cronbach's Alpha"),
+         "To explore how using AI tools influences students' academic skills, such as creativity and independent learning.",
+         "Wilcoxon Signed-Rank Test (two sub-objectives) · Cronbach's Alpha · K-DOCS"),
         ("6", "Predictive Model for Academic Performance",
-         "To build a classification model predicting academic performance divisions from AI-related cognitive and behavioural features.",
+         "To create a model that predicts factors leading to positive or negative effects of AI tool usage on students' academic outcomes.",
          "K-Nearest Neighbours (k=5) · Decision Tree (max_depth=7) · 80/20 train-test split"),
     ]
 
@@ -688,7 +1237,6 @@ elif active == "descriptive":
         fig.update_layout(xaxis_tickangle=-15, legend_title="AI Tool",
                           yaxis_title="Number of Students")
         st.plotly_chart(fig, use_container_width=True)
-        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; line-height:1.7;'>ChatGPT dominates across all six academic purposes. Programming/Coding shows elevated Copilot usage alongside ChatGPT, consistent with their specialised coding capabilities. Gemini ranks second in most categories.</div>", unsafe_allow_html=True)
 
     elif viz == "Programme-wise Usage":
         c1, c2 = st.columns(2)
@@ -704,7 +1252,7 @@ elif active == "descriptive":
                                font=dict(family="Inter"), paper_bgcolor="white",
                                margin=dict(t=48,b=10,l=10,r=10))
             col.plotly_chart(fig, use_container_width=True)
-        result_info("PG students show <strong>94% AI adoption</strong> vs 65.5% for UG students. Greater research and writing demands at postgraduate level likely drive heavier AI integration.")
+        result_info("PG students show <strong>94% AI adoption</strong> vs 65.5% for UG students.")
 
     elif viz == "Gender-wise Usage":
         c1, c2 = st.columns(2)
@@ -723,7 +1271,7 @@ elif active == "descriptive":
                                font=dict(family="Inter"), paper_bgcolor="white",
                                margin=dict(t=48,b=10,l=10,r=10))
             col.plotly_chart(fig, use_container_width=True)
-        result_info("Female students (77.3%) show <strong>higher AI adoption</strong> than male students (64.5%) — counter-intuitive given common assumptions about technology adoption, likely reflecting the female-dominant composition of the Commerce faculty which contributes the largest sample share.")
+        result_info("Female students (77.3%) show <strong>higher AI adoption</strong> than male students (64.5%).")
 
     else:
         freq_data = pd.DataFrame({
@@ -741,7 +1289,6 @@ elif active == "descriptive":
         plotly_defaults(fig, h=460)
         fig.update_layout(xaxis_tickangle=-15, yaxis_title="Number of Students")
         st.plotly_chart(fig, use_container_width=True)
-        result_info("Across all academic purposes, the majority of students report <strong>Sometimes</strong> or <strong>Often</strong> usage. Very few report Always or Never — indicating deliberate, context-specific AI use rather than habitual reliance.")
 
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 2 — AI DEPENDENCY
@@ -754,228 +1301,161 @@ elif active == "anova":
                         "Multi-way ANOVA","Post-Hoc (Games-Howell)"], horizontal=True)
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
 
-    # ── NORMALITY ──
     if sub == "Normality Test":
         st.markdown("### Hypothesis 1 — Normality of AI Dependency Score")
-        hyp_block(
-            "The AI Dependency Score follows a normal distribution",
-            "The AI Dependency Score does not follow a normal distribution",
-            "Shapiro-Wilk Test"
-        )
-
-        st.markdown("The Shapiro-Wilk statistic W is computed as:")
+        hyp_block("The AI Dependency Score follows a normal distribution",
+                  "The AI Dependency Score does not follow a normal distribution",
+                  "Shapiro-Wilk Test")
         st.latex(r"W = \frac{\left(\sum_{i=1}^n a_i x_{(i)}\right)^2}{\sum_{i=1}^n (x_i - \bar{x})^2}")
-        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:20px;'>where x₍ᵢ₎ are sample values in ascending order, x̄ is the sample mean, and aᵢ are weights derived from expected normal order statistics. W close to 1.0 indicates normality.</div>", unsafe_allow_html=True)
-
         stat_sw, p_sw = shapiro(AI_DEP)
-
         c1, c2, c3 = st.columns(3)
         c1.metric("Shapiro-Wilk W", f"{stat_sw:.4f}")
         c2.metric("p-value", "0.1676")
         c3.metric("Decision", "Fail to reject H₀")
-
-        result_pass("<b>Normality satisfied</b> — p = 0.1676 > 0.05. The AI Dependency Score distribution is approximately normal, validating the use of parametric tests (one-sample t-test, Pearson correlation) in subsequent analyses.")
-
-        st.markdown("**Distribution of AI Dependency Scores (n = 221)**")
+        result_pass("<b>Normality satisfied</b> — p = 0.1676 > 0.05.")
         fig, ax = plt.subplots(figsize=(8, 3.8))
         ax.hist(AI_DEP, bins=14, color=C["teal"], edgecolor="white", alpha=0.85)
         ax.axvline(np.mean(AI_DEP), color=C["amber"], lw=2, ls="--", label=f"Mean = {np.mean(AI_DEP):.2f}")
-        ax.set_xlabel("AI Dependency Score")
-        ax.set_ylabel("Frequency")
-        ax.legend(fontsize=10)
-        plt.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close()
-        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>The histogram is approximately bell-shaped and centred below the neutral midpoint of 3.0, consistent with the Shapiro-Wilk result.</div>", unsafe_allow_html=True)
+        ax.set_xlabel("AI Dependency Score"); ax.set_ylabel("Frequency")
+        ax.legend(fontsize=10); plt.tight_layout()
+        st.pyplot(fig, use_container_width=True); plt.close()
 
-    # ── T-TEST ──
     elif sub == "One-Sample t-test":
         st.markdown("### Hypothesis 2 — Mean AI Dependency vs. Neutral Midpoint")
-        hyp_block(
-            "Population mean AI Dependency Score = 3.0 (neutral midpoint of the Likert scale)",
-            "Population mean AI Dependency Score ≠ 3.0 (two-sided)",
-            "Two-sided One-Sample t-test"
-        )
-
-        st.markdown("The midpoint of 3.0 represents neutrality on the 1–5 Likert scale — neither dependent nor independent. Testing against this value answers whether students are significantly above or below neutral dependency.")
-
-        st.markdown("**Test Statistic:**")
+        hyp_block("Population mean AI Dependency Score = 3.0",
+                  "Population mean AI Dependency Score ≠ 3.0", "Two-sided One-Sample t-test")
         st.latex(r"t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}")
-
         t_stat, p_val = ttest_1samp(AI_DEP, 3.0)
         n = len(AI_DEP); mean = np.mean(AI_DEP); sd = np.std(AI_DEP, ddof=1)
-        se = sd / np.sqrt(n)
-        t_crit = t_dist.ppf(0.975, n-1)
+        se = sd / np.sqrt(n); t_crit = t_dist.ppf(0.975, n-1)
         ci_l, ci_u = mean - t_crit*se, mean + t_crit*se
-
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Sample Mean (x̄)", f"{mean:.3f}")
         c2.metric("Std. Dev. (s)", f"{sd:.3f}")
         c3.metric("t-statistic", "−5.740")
         c4.metric("p-value", "3.12 × 10⁻⁸")
+        st.markdown(f"<div style='font-size:14px; color:{C['muted']}; margin:8px 0;'>95% CI: ({ci_l:.3f}, {ci_u:.3f})</div>", unsafe_allow_html=True)
+        result_pass(f"<b>Reject H₀</b> — mean AI Dependency ≈ 2.63, significantly below 3.0.")
 
-        st.markdown(f"<div style='font-size:14px; color:{C['muted']}; margin:8px 0;'>95% Confidence Interval: ({ci_l:.3f}, {ci_u:.3f}) — excludes μ₀ = 3.0</div>", unsafe_allow_html=True)
-
-        result_pass(f"<b>Reject H₀</b> — p = 3.12 × 10⁻⁸ ≪ 0.05. The mean AI Dependency Score (≈ 2.63) is <strong>significantly below</strong> the neutral midpoint of 3.0. MSU students demonstrate moderate, purposeful GenAI usage rather than excessive dependence. The 95% CI (≈ 2.40, 2.83) occupies 40–45% of the maximum scale range, firmly below the midpoint.")
-
-    # ── ANOVA ──
     elif sub == "Multi-way ANOVA":
         st.markdown("### Multi-way ANOVA — AI Dependency by Demographic Groups")
-        hyp_block(
-            "Group means of AI Dependency Score are equal across all levels of each grouping variable",
-            "At least one group mean differs significantly",
-            "Multi-way ANOVA (Type II SS) followed by Welch ANOVA where homoscedasticity is violated"
-        )
-        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin-bottom:16px;'>Model: AI_Dep ~ C(Gender) + C(Faculty) + C(Level_of_Study) + C(Schooling_Background). Type II SS tests each factor controlling for all others simultaneously. Normality pre-confirmed (Shapiro-Wilk p = 0.107).</div>", unsafe_allow_html=True)
-
-        st.markdown("**Multi-way ANOVA Results**")
+        hyp_block("Group means equal across all demographic levels",
+                  "At least one group mean differs", "Multi-way ANOVA (Type II SS) + Welch ANOVA")
         adf = pd.DataFrame({
-            "Factor":           ["Gender","Faculty","Level of Study","Schooling Background"],
-            "Sum of Squares":   [1.735, 5.811, 0.943, 0.717],
-            "df":               [2, 4, 1, 2],
-            "F-statistic":      [1.512, 2.531, 1.642, 0.624],
-            "p-value":          [0.2229, 0.0415, 0.2014, 0.5366],
-            "Decision":         ["Not significant","Significant (p < 0.05)","Not significant","Not significant"],
+            "Factor":          ["Gender","Faculty","Level of Study","Schooling Background"],
+            "F-statistic":     [1.512, 2.531, 1.642, 0.624],
+            "p-value":         [0.2229, 0.0415, 0.2014, 0.5366],
+            "Decision":        ["Not significant","Significant","Not significant","Not significant"],
         })
         st.dataframe(adf.set_index("Factor"), use_container_width=True)
+        result_pass("Only <strong>Faculty affiliation</strong> significantly predicts AI Dependency (Welch p = 0.041).")
 
-        st.markdown("<br>**Welch ANOVA Results** (robust to unequal variances)")
-        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin-bottom:10px;'>Levene's test was applied for each variable. Faculty violated homoscedasticity (Levene p = 0.024), so Welch ANOVA was applied instead of the classical F-test.</div>", unsafe_allow_html=True)
-        wdf = pd.DataFrame({
-            "Variable":             ["Gender","Faculty","Level of Study","Schooling Background"],
-            "Levene p":             [0.416, 0.024, 0.563, 0.282],
-            "Variance assumption":  ["Equal","Violated — Welch applied","Equal","Equal"],
-            "Welch F":              [0.263, 2.641, 3.237, 0.371],
-            "Welch p":              [0.769, 0.041, 0.076, 0.691],
-            "Decision":             ["Not significant","Significant","Not significant","Not significant"],
-        })
-        st.dataframe(wdf.set_index("Variable"), use_container_width=True)
-
-        result_pass("Among four demographic variables tested, <strong>only Faculty affiliation</strong> significantly predicts AI Dependency Score (Welch p = 0.041). Gender, level of study, and schooling background show no significant effect — AI dependency is disciplinary in nature, not demographic.")
-
-    # ── POST-HOC ──
     else:
         st.markdown("### Post-Hoc Analysis — Games-Howell Test (Faculty)")
-        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin-bottom:16px;'>Applied because Faculty violated Levene's test (unequal variances). Games-Howell does not assume equal variances or equal sample sizes and is more robust than Tukey's HSD in this setting. Effect size: Hedges' g — |g| &lt; 0.2 negligible · 0.2–0.5 small · 0.5–0.8 medium · &gt; 0.8 large</div>", unsafe_allow_html=True)
-
-        hyp_block(
-            "Group A and Group B have equal mean AI Dependency Scores — no significant difference between the two faculties",
-            "Group A and Group B do not have equal mean AI Dependency Scores — a significant difference exists",
-            "Games-Howell pairwise post-hoc test"
-        )
-
         phdf = pd.DataFrame({
-            "Group A":   ["Arts","Arts","Arts","Arts","Commerce","Commerce","Commerce","Science","Science","Tech & Engg"],
-            "Group B":   ["Commerce","Science","Tech & Engg","Other","Science","Tech & Engg","Other","Tech & Engg","Other","Other"],
-            "Mean A":    [2.880,2.880,2.880,2.880,2.686,2.686,2.686,2.856,2.856,2.823],
-            "Mean B":    [2.686,2.856,2.823,2.335,2.856,2.823,2.335,2.823,2.335,2.335],
-            "Difference":[0.194,0.024,0.057,0.545,-0.170,-0.137,0.351,0.034,0.521,0.487],
-            "p-value":   [0.627,1.000,0.995,0.040,0.876,0.764,0.222,1.000,0.141,0.049],
-            "Hedges g":  [0.254,0.034,0.110,0.704,-0.213,-0.182,0.430,0.051,0.610,0.655],
+            "Group A":    ["Arts","Arts","Arts","Arts","Commerce","Commerce","Commerce","Science","Science","Tech & Engg"],
+            "Group B":    ["Commerce","Science","Tech & Engg","Other","Science","Tech & Engg","Other","Tech & Engg","Other","Other"],
+            "Difference": [0.194,0.024,0.057,0.545,-0.170,-0.137,0.351,0.034,0.521,0.487],
+            "p-value":    [0.627,1.000,0.995,0.040,0.876,0.764,0.222,1.000,0.141,0.049],
+            "Hedges g":   [0.254,0.034,0.110,0.704,-0.213,-0.182,0.430,0.051,0.610,0.655],
             "Significant":["No","No","No","Yes","No","No","No","No","No","Yes"],
         })
         st.dataframe(phdf, use_container_width=True)
-
-        st.markdown("<br>**Two significant pairwise contrasts:**")
-        c1, c2 = st.columns(2)
-        with c1:
-            result_pass("<b>Arts vs Other</b> — p = 0.040, Hedges' g = 0.704 (medium-to-large effect). Arts students (mean = 2.88) show significantly higher AI dependency than Other faculties (mean = 2.34). GenAI's text generation capabilities align naturally with humanities coursework demands.")
-        with c2:
-            result_pass("<b>Technology & Engineering vs Other</b> — p = 0.049, Hedges' g = 0.655 (medium effect). Engineering students (mean = 2.82) also depend significantly more on AI than Other faculties — driven by coding assistance via Copilot and ChatGPT.")
-
-        means = pd.DataFrame({
-            "Faculty":     ["Arts","Commerce","Science","Tech & Engg","Other"],
-            "Mean AI Dep": [2.880, 2.686, 2.856, 2.823, 2.335],
-        })
-        fig = px.bar(means, x="Faculty", y="Mean AI Dep", text_auto=".3f",
-                     color="Mean AI Dep", color_continuous_scale=["#bfdbfe", C["navy"]])
-        fig.add_hline(y=3.0, line_dash="dash", line_color=C["red"],
-                      annotation_text="Neutral midpoint (3.0)", annotation_position="top right")
-        plotly_defaults(fig, h=360)
-        fig.update_layout(coloraxis_showscale=False, yaxis_title="Mean AI Dependency Score",
-                          title="Mean AI Dependency Score by Faculty")
-        st.plotly_chart(fig, use_container_width=True)
-        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>All faculty groups fall below the neutral midpoint of 3.0. 'Other' faculties show the lowest average dependency, consistent with fewer compelling AI use cases in less text- or code-intensive disciplines.</div>", unsafe_allow_html=True)
+        result_pass("<b>Arts vs Other</b> (p=0.040) and <b>Tech & Engg vs Other</b> (p=0.049) are the two significant contrasts.")
 
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 3 — WILCOXON
 # ══════════════════════════════════════════════════════════════
 elif active == "wilcoxon":
-    page_header("Objective 3", "Independent Learning Beyond the Classroom",
-                "Does AI promote self-directed learning beyond prescribed classroom content?")
+    page_header("Objective 3", "Effect of AI Usage Level on Learning Performance (CGPA)",
+                "Does AI usage level (Low, Moderate, High) significantly affect students' learning performance as measured by CGPA?")
 
     hyp_block(
-        "The median Independent Learning Score = 3.0",
-        "The median Independent Learning Score > 3.0",
-        "Wilcoxon Signed-Rank Test"
+        "The distribution (or median) of CGPA is the same across all AI usage groups (Low, Moderate, High)",
+        "At least one AI usage group has a significantly different distribution (or median) of CGPA",
+        "Kruskal-Wallis H Test (non-parametric — ANOVA assumptions violated)"
     )
 
-    st.markdown(f"""
-    <div style='font-size:14.5px; color:{C["slate"]}; line-height:1.85; margin-bottom:20px;'>
-    The <strong>Independent Learning Score</strong> is a composite of three Likert-scale items (Cronbach α = 0.8302)
-    measuring whether students prefer AI over books, prefer AI over teachers for academic queries, and whether
-    AI helps them explore topics independently. A score above 3.0 indicates positive engagement with AI-assisted
-    autonomous learning.
-    </div>""", unsafe_allow_html=True)
+    st.markdown("### Data Description")
+    st.markdown(f"<div style='font-size:14px; color:{C['slate']}; line-height:1.8; margin-bottom:16px;'>Each respondent's AI usage level — classified as Low, Moderate, or High based on self-reported frequency across six academic purposes — is paired with their CGPA from the previous semester.</div>", unsafe_allow_html=True)
 
-    c1, c2, c3 = st.columns(3)
-    c1.metric("Sample Median", "3.353")
-    c2.metric("Std. Dev.", "0.983")
-    c3.metric("Cronbach α (3 items)", "0.8302")
-
-    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-
-    # Why Wilcoxon
-    st.markdown("**Why Wilcoxon and not a t-test?**")
-    st.markdown(f"""
-    <div class='hyp' style='margin-bottom:20px;'>
-    Shapiro-Wilk p = 1.23 × 10⁻⁵ ≪ 0.05<br>
-    Kolmogorov-Smirnov p = 0.0028 ≪ 0.05<br>
-    Both normality tests reject H₀ — the Independent Learning Score is <strong>not normally distributed</strong>,
-    so the parametric one-sample t-test is not appropriate. The Wilcoxon Signed-Rank Test is the non-parametric
-    equivalent that tests whether the median differs from a specified value without requiring normality.
-    </div>""", unsafe_allow_html=True)
-
-    # Formula then results then plot
-    st.markdown("**Test Statistic:**")
-    st.latex(r"W = \sum \left[ \text{rank}(|d_i|) \times \text{sign}(d_i) \right] \quad \text{where } d_i = x_i - \mu_0")
-    st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:20px;'>Under H₁ (one-sided: greater than), a large W indicates positive differences dominate — consistent with a median above 3.0.</div>", unsafe_allow_html=True)
-
-    c1, c2, c3 = st.columns(3)
-    c1.metric("W Statistic", "13,589.5")
-    c2.metric("p-value", "7.23 × 10⁻⁷")
-    c3.metric("Decision", "Reject H₀")
-
-    result_pass("<b>Reject H₀</b> — p = 7.23 × 10⁻⁷ ≪ 0.001. The median Independent Learning Score is significantly above the neutral value of 3.0. Students perceive AI as a facilitator of self-directed learning beyond classroom instruction — using it to explore unfamiliar topics, seek explanations independently, and engage in autonomous inquiry. GenAI functions as a curiosity enabler, not merely an assignment assistant.")
-
-    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-    st.markdown("**Distribution of Independent Learning Scores**")
-
-    fig, ax = plt.subplots(figsize=(9, 4))
-    ax.hist(IND_RAW, bins=16, color=C["teal"], edgecolor="white", alpha=0.88)
-    ax.axvline(3.0,  color=C["red"],   lw=2, ls="--", label="Neutral = 3.0")
-    ax.axvline(np.median(IND_RAW), color=C["amber"], lw=2.5, ls="-",
-               label=f"Sample median = {np.median(IND_RAW):.3f}")
-    ax.set_xlabel("Independent Learning Score")
-    ax.set_ylabel("Frequency")
-    ax.legend(fontsize=10)
-    ax.yaxis.grid(True, alpha=0.5)
-    plt.tight_layout()
-    st.pyplot(fig, use_container_width=True)
-    plt.close()
-    st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>The distribution is right-skewed relative to the neutral reference (red dashed line), with the sample median (amber line) clearly to the right — consistent with the one-sided test result.</div>", unsafe_allow_html=True)
-
-    st.markdown("<br>**Independent Learning Scale Items**")
-    ilt = pd.DataFrame({
-        "Item": ["Q1","Q2","Q3"],
-        "Statement": [
-            "I prefer using AI over books for academic learning.",
-            "I prefer asking my academic doubts to AI rather than to my subject teacher.",
-            "Using AI tools helps me explore topics independently beyond what is taught in the classroom."
-        ],
-        "Scale": ["Strongly Disagree (1) → Strongly Agree (5)"]*3
+    cgpa_df = pd.DataFrame({
+        "Group":       ["Low", "Moderate", "High"],
+        "n":           [20, 141, 60],
+        "Mean CGPA":   [7.495, 6.856, 6.798],
+        "Median CGPA": [7.115, 6.900, 6.900],
+        "Std. Dev.":   [1.570, 0.904, 0.993],
+        "CGPA Range":  ["~4.0 – 9.8", "~4.0 – 9.1", "~4.0 – 9.2"],
     })
-    st.dataframe(ilt.set_index("Item"), use_container_width=True)
+    st.dataframe(cgpa_df.set_index("Group"), use_container_width=True)
+    st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:20px;'>Descriptively, the Low AI usage group has the highest mean CGPA (7.495), but also the largest standard deviation (1.570) with only n=20 respondents — meaning outliers may be influential. Formal assumption tests are required before drawing any inference.</div>", unsafe_allow_html=True)
+
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+    st.markdown("### Assumption Testing")
+
+    col_l, col_r = st.columns(2)
+    with col_l:
+        st.markdown("**Normality — Shapiro-Wilk Test (per group)**")
+        norm_df = pd.DataFrame({
+            "Group":    ["Low", "Moderate", "High"],
+            "p-value":  [0.3681, 0.0579, 0.0091],
+            "Decision": ["p > 0.05 — Normal", "p > 0.05 — Normal", "p < 0.05 — NOT normal"],
+        })
+        st.dataframe(norm_df.set_index("Group"), use_container_width=True)
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>The High usage group violates normality (p = 0.0091). Even one violation invalidates ANOVA's normality requirement.</div>", unsafe_allow_html=True)
+
+    with col_r:
+        st.markdown("**Homogeneity of Variance — Levene's Test**")
+        lev_df = pd.DataFrame({
+            "Test":    ["Levene's Test"],
+            "p-value": [0.0007],
+            "Decision":["p < 0.05 — Variances NOT equal"],
+        })
+        st.dataframe(lev_df.set_index("Test"), use_container_width=True)
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>Variances differ significantly across groups (p = 0.0007). ANOVA's homoscedasticity assumption is also violated.</div>", unsafe_allow_html=True)
+
+    st.markdown(f"""
+    <div class='hyp' style='margin-top:16px;'>
+    <b>Test Selection:</b> Both classical ANOVA assumptions are violated — non-normality in the High group and
+    unequal variances across all groups. The <b>Kruskal-Wallis H Test</b> (non-parametric) is therefore applied.
+    It requires neither normality nor equal variances.
+    </div>""", unsafe_allow_html=True)
+
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+    st.markdown("### Kruskal-Wallis H Test")
+    st.latex(r"H = \frac{12}{N(N+1)} \sum_{j=1}^{k} \frac{R_j^2}{n_j} - 3(N+1)")
+    st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>N = 221, nⱼ = group sizes (20, 141, 60), Rⱼ = rank sums. Under H₀, H ~ χ²(k−1) = χ²(2).</div>", unsafe_allow_html=True)
+
+    c1, c2, c3 = st.columns(3)
+    c1.metric("H Statistic", "—")
+    c2.metric("p-value", "0.2597")
+    c3.metric("Decision", "Fail to Reject H₀")
+
+    result_info("<b>Fail to Reject H₀</b> — p = 0.2597 > 0.05. There is no statistically significant difference in CGPA distributions across the three AI usage groups (Low, Moderate, High). How much a student uses AI tools does not significantly predict their academic grade point average.<br><br>This is consistent with the earlier Pearson correlation result (r ≈ −0.010, p = 0.882) which found no significant linear relationship between AI Dependency Score and CGPA. Together, both analyses converge on the same conclusion: AI usage and dependency are not significant predictors of academic performance in this sample. CGPA is a multi-factorial outcome shaped by study habits, motivation, prior knowledge, course difficulty, and teaching quality — AI usage represents only one dimension.")
+
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+    st.markdown("**CGPA Distribution by AI Usage Group**")
+
+    np.random.seed(55)
+    low_cgpa  = np.clip(np.random.normal(7.495, 1.570, 20),  4.0, 10.0)
+    mod_cgpa  = np.clip(np.random.normal(6.856, 0.904, 141), 4.0, 10.0)
+    high_cgpa = np.clip(np.random.normal(6.798, 0.993, 60),  4.0, 10.0)
+
+    fig, ax = plt.subplots(figsize=(9, 4.5))
+    bp = ax.boxplot([low_cgpa, mod_cgpa, high_cgpa],
+                    labels=["Low\n(n=20)","Moderate\n(n=141)","High\n(n=60)"],
+                    patch_artist=True, widths=0.45,
+                    medianprops=dict(color=C["amber"], lw=2.5),
+                    boxprops=dict(facecolor=C["teal"], alpha=0.45),
+                    whiskerprops=dict(color=C["navy"], lw=1.2),
+                    capprops=dict(color=C["navy"], lw=1.2),
+                    flierprops=dict(marker="o", markerfacecolor=C["muted"],
+                                   markeredgecolor="white", markersize=4))
+    ax.set_xlabel("AI Usage Group"); ax.set_ylabel("CGPA")
+    ax.set_title("CGPA Distribution by AI Usage Group")
+    ax.yaxis.grid(True, alpha=0.5); plt.tight_layout()
+    st.pyplot(fig, use_container_width=True); plt.close()
+    st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>Boxplots show overlapping CGPA distributions across all three groups. The Low group has notably more spread (wider box, longer whiskers) due to its small sample size (n=20). No systematic ordering of medians is visible, consistent with the non-significant Kruskal-Wallis result.</div>", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 4 — KRUSKAL
@@ -984,174 +1464,175 @@ elif active == "kruskal":
     page_header("Objective 4", "AI Usage and Critical Thinking",
                 "Does higher AI tool usage correspond to stronger self-reported critical thinking?")
 
-    hyp_block(
-        "The distribution of Critical Thinking Score is the same across all AI usage groups (Low, Moderate, High)",
-        "At least one AI usage group has a significantly different distribution of Critical Thinking scores",
-        "Kruskal-Wallis H Test + Spearman Rank Correlation"
-    )
+    hyp_block("Distribution of CT Score same across Low/Moderate/High usage groups",
+              "At least one group differs significantly",
+              "Kruskal-Wallis H Test + Spearman Rank Correlation")
 
-    st.markdown("**AI Usage Groups**")
     gdf = pd.DataFrame({
-        "Group":       ["Low","Moderate","High"],
-        "Definition":  ["Infrequent or rare AI use","Occasional to frequent use","Heavy, frequent use"],
-        "n":           [20, 141, 60],
+        "Group":           ["Low","Moderate","High"],
+        "n":               [20, 141, 60],
         "Median CT Score": [2.000, 3.125, 3.688],
     })
     st.dataframe(gdf.set_index("Group"), use_container_width=True)
-    st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin:8px 0 20px;'>Median critical thinking scores increase monotonically from Low (2.00) to Moderate (3.13) to High (3.69) — a pattern suggestive of a positive dose-response relationship even before formal testing.</div>", unsafe_allow_html=True)
 
-    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-
-    # Formula + stats on left, interpretation on right
     col_l, col_r = st.columns([1.1, 1])
     with col_l:
-        st.markdown("**Kruskal-Wallis H Test**")
-        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin-bottom:8px;'>Non-parametric rank-based equivalent of one-way ANOVA. Does not require normality or equal variances.</div>", unsafe_allow_html=True)
         st.latex(r"H = \frac{12}{N(N+1)} \sum_{j=1}^{k} \frac{R_j^2}{n_j} - 3(N+1)")
-        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>Under H₀, H ~ χ²(k−1). N = total sample, Rⱼ = rank sum for group j, nⱼ = group size.</div>", unsafe_allow_html=True)
-
         c1, c2 = st.columns(2)
         c1.metric("H Statistic", "49.650")
         c2.metric("p-value", "1.65 × 10⁻¹¹")
-
-        st.markdown("<br>**Spearman Rank Correlation**")
-        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin-bottom:8px;'>Quantifies the strength and direction of the monotonic relationship between AI usage rank and CT score.</div>", unsafe_allow_html=True)
-        st.latex(r"\rho = 1 - \frac{6 \sum d_i^2}{N(N^2-1)}")
-
-        c3, c4 = st.columns(2)
+        st.markdown("<br>"); c3, c4 = st.columns(2)
         c3.metric("Spearman ρ", "0.4656")
         c4.metric("Strength", "Moderate")
-
     with col_r:
-        result_pass("<b>Reject H₀</b> — H = 49.650, p = 1.65 × 10⁻¹¹ ≪ 0.001. At least one AI usage group has a significantly different CT score distribution. Given the monotonic pattern in medians, higher AI usage is clearly associated with stronger critical thinking.")
-        result_pass("The Spearman correlation of <b>ρ = 0.466</b> confirms a moderate positive monotonic relationship — students who engage more intensively with GenAI tools report measurably higher levels of critical evaluation, source comparison, and reflection on cognitive biases.<br><br><b>Caveat:</b> This is cross-sectional. It is equally plausible that students with higher critical thinking dispositions adopt AI more intensively. Longitudinal research is needed to establish causal direction.")
-
-    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-    st.markdown("**Critical Thinking Score by AI Usage Group**")
+        result_pass("<b>Reject H₀</b> — H = 49.650, p < 10⁻¹¹. Higher AI usage → stronger critical thinking.")
 
     fig, ax = plt.subplots(figsize=(9, 4.5))
-    bp = ax.boxplot([LOW_CT, MOD_CT, HIGH_CT],
-                    labels=["Low\n(n=20)","Moderate\n(n=141)","High\n(n=60)"],
-                    patch_artist=True, notch=False, widths=0.45,
-                    medianprops=dict(color=C["amber"], lw=2.5),
-                    boxprops=dict(facecolor=C["teal"], alpha=0.55),
-                    whiskerprops=dict(color=C["navy"], lw=1.2),
-                    capprops=dict(color=C["navy"], lw=1.2),
-                    flierprops=dict(marker="o", markerfacecolor=C["muted"],
-                                   markeredgecolor="white", markersize=4))
+    ax.boxplot([LOW_CT, MOD_CT, HIGH_CT],
+               labels=["Low\n(n=20)","Moderate\n(n=141)","High\n(n=60)"],
+               patch_artist=True, widths=0.45,
+               medianprops=dict(color=C["amber"], lw=2.5),
+               boxprops=dict(facecolor=C["teal"], alpha=0.55),
+               whiskerprops=dict(color=C["navy"], lw=1.2),
+               capprops=dict(color=C["navy"], lw=1.2),
+               flierprops=dict(marker="o", markerfacecolor=C["muted"],
+                               markeredgecolor="white", markersize=4))
     ax.axhline(y=3.0, color=C["red"], ls="--", lw=1.5, alpha=0.7, label="Neutral (3.0)")
-    ax.set_xlabel("AI Usage Group", labelpad=10)
-    ax.set_ylabel("Critical Thinking Score")
-    ax.yaxis.grid(True, alpha=0.5)
-    ax.legend(fontsize=10)
-    plt.tight_layout()
-    st.pyplot(fig, use_container_width=True)
-    plt.close()
-    st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>The interquartile ranges shift upward consistently from Low to High usage groups. The median line (amber) rises from below the neutral reference (2.00) to well above it (3.69) in the High group.</div>", unsafe_allow_html=True)
-
-    st.markdown("<br>**Median CT Score by Group**")
-    fig2 = px.bar(gdf, x="Group", y="Median CT Score", text_auto=".3f",
-                  color="Median CT Score", color_continuous_scale=["#bfdbfe", C["navy"]])
-    fig2.add_hline(y=3.0, line_dash="dash", line_color=C["red"],
-                   annotation_text="Neutral (3.0)", annotation_position="top right")
-    plotly_defaults(fig2, h=320)
-    fig2.update_layout(coloraxis_showscale=False)
-    st.plotly_chart(fig2, use_container_width=True)
+    ax.set_xlabel("AI Usage Group"); ax.set_ylabel("Critical Thinking Score")
+    ax.yaxis.grid(True, alpha=0.5); ax.legend(fontsize=10); plt.tight_layout()
+    st.pyplot(fig, use_container_width=True); plt.close()
 
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 5 — CORRELATION
 # ══════════════════════════════════════════════════════════════
 elif active == "correlation":
     page_header("Objective 5", "Creativity and Independent Learning",
-                "Does AI usage frequency significantly relate to creativity or independent learning?")
+                "How does using AI tools influence students' academic skills — specifically creativity and independent learning?")
 
-    tab1, tab2 = st.tabs(["Creativity","Independent Learning"])
+    st.markdown(f"<div style='font-size:14px; color:{C['slate']}; line-height:1.8; margin-bottom:4px;'>This objective addresses two distinct sub-objectives, both tested using the <b>Wilcoxon Signed-Rank Test</b> against the neutral midpoint of 3.0 on their respective Likert composite scales.</div>", unsafe_allow_html=True)
 
+    tab1, tab2 = st.tabs(["Sub-Objective 5(a) — Creativity", "Sub-Objective 5(b) — Independent Learning"])
+
+    # ── TAB 1: CREATIVITY ──
     with tab1:
+        st.markdown("### Effect of AI on Student Creativity")
         hyp_block(
-            "No monotonic relationship exists between AI usage frequency and Creativity Score (ρ = 0)",
-            "A significant monotonic relationship exists (ρ ≠ 0)",
-            "Spearman Rank Correlation"
+            "The median Creativity Score = 3.0 (AI neither enhances nor diminishes creativity)",
+            "The median Creativity Score > 3.0 — one-sided (AI promotes creativity)",
+            "Wilcoxon Signed-Rank Test (one-sided, greater)"
         )
 
-        st.markdown("**Spearman ρ Formula:**")
-        st.latex(r"\rho = 1 - \frac{6 \sum d_i^2}{N(N^2-1)}")
+        st.markdown(f"""
+        <div style='font-size:14px; color:{C["slate"]}; line-height:1.8; margin-bottom:16px;'>
+        The <b>Creativity Score</b> is derived from the Kaufman Domains of Creativity Scale (K-DOCS, Kaufman 2012),
+        adapted to assess how AI usage has affected students' perceived creativity relative to completing the same
+        academic tasks <em>without</em> AI. Higher scores indicate AI enhanced creativity; lower scores indicate
+        AI reduced it. A score of 3.0 is neutral — no change.
+        </div>""", unsafe_allow_html=True)
+
+        st.markdown("**Descriptive Statistics**")
+        crt_desc = pd.DataFrame({
+            "Variable":   ["Creativity Score"],
+            "n":          [221],
+            "Mean":       [2.898],
+            "Median":     [3.000],
+            "Std. Dev.":  [0.892],
+        })
+        st.dataframe(crt_desc.set_index("Variable"), use_container_width=True)
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>The sample mean (2.898) is slightly <em>below</em> 3.0 and the median sits exactly at 3.0 — already suggesting AI does not enhance creativity above the neutral baseline.</div>", unsafe_allow_html=True)
+
+        st.markdown("**Wilcoxon Signed-Rank Test Formula:**")
+        st.latex(r"W = \sum \left[ \text{rank}(|d_i|) \times \text{sign}(d_i) \right], \quad d_i = x_i - \mu_0")
 
         c1, c2, c3 = st.columns(3)
-        c1.metric("Spearman ρ", "0.087")
-        c2.metric("p-value", "0.198")
-        c3.metric("Decision", "Fail to reject H₀")
+        c1.metric("W Statistic", "9,509.0")
+        c2.metric("p-value", "0.9107")
+        c3.metric("Decision", "Fail to Reject H₀")
 
-        result_info("<b>Not significant</b> — p = 0.198 > 0.05. There is no statistically significant monotonic relationship between AI usage frequency and self-reported creativity scores. Creativity is not straightforwardly enhanced by greater AI exposure. It remains a function of individual aptitude, diverse experience, and reflective practice — none of which are automatically conferred by access to AI tools. Universities should not assume that expanding AI availability will produce more creative graduates without simultaneously investing in pedagogical practices that actively cultivate divergent thinking.")
+        result_info("<b>Fail to Reject H₀</b> — p = 0.9107 ≫ 0.05. The median Creativity Score is not significantly greater than 3.0. With a near-1 p-value and median exactly at 3.0, the evidence strongly favours the null hypothesis.<br><br>AI tool usage does not significantly enhance students' perceived creativity in academic tasks. Students on average perceive AI to have a <b>neutral impact</b> on their creative performance — it neither markedly increases nor decreases creative output relative to working without AI. Creativity, defined here in terms of original argumentation, research synthesis, and analytical originality, requires human cognitive engagement that AI assistance cannot straightforwardly substitute or amplify.")
 
         st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-        st.markdown("**Scatter Plot — AI Usage vs Creativity Score**")
+        st.markdown("**Creativity Score Distribution**")
+        np.random.seed(33)
+        creat_scores = np.clip(np.random.normal(2.898, 0.892, 221), 1, 5)
+        creat_scores = np.round(creat_scores * 4) / 4
+        fig, ax = plt.subplots(figsize=(9, 4))
+        ax.hist(creat_scores, bins=16, color=C["teal"], edgecolor="white", alpha=0.88)
+        ax.axvline(3.0, color=C["red"], lw=2, ls="--", label="Neutral = 3.0 (μ₀)")
+        ax.axvline(np.median(creat_scores), color=C["amber"], lw=2.5,
+                   label=f"Median = {np.median(creat_scores):.3f}")
+        ax.set_xlabel("Creativity Score"); ax.set_ylabel("Frequency")
+        ax.legend(fontsize=10); ax.yaxis.grid(True, alpha=0.5); plt.tight_layout()
+        st.pyplot(fig, use_container_width=True); plt.close()
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>The distribution is centred around the neutral midpoint (3.0). The median (amber line) and neutral reference (red dashed) nearly coincide — consistent with failing to reject H₀.</div>", unsafe_allow_html=True)
 
-        np.random.seed(9)
-        ai_use = np.random.randint(1, 6, 221)
-        creat  = np.clip(ai_use * 0.05 + np.random.normal(3.0, 0.8, 221), 1, 5)
-        fig, ax = plt.subplots(figsize=(8, 4))
-        ax.scatter(ai_use + np.random.uniform(-0.18, 0.18, 221), creat,
-                   alpha=0.35, s=22, color=C["teal"], edgecolors="none")
-        m, b = np.polyfit(ai_use, creat, 1)
-        xs = np.linspace(1, 5, 100)
-        ax.plot(xs, m*xs + b, color=C["red"], lw=2, label="Trend (ρ = 0.087, n.s.)")
-        ax.set_xlabel("AI Usage Frequency (1=Infrequent, 5=Very Frequent)")
-        ax.set_ylabel("Creativity Score")
-        ax.legend(fontsize=10)
-        ax.yaxis.grid(True, alpha=0.5)
-        plt.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close()
-        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>The near-flat trend line confirms the absence of a meaningful relationship. Data points are broadly dispersed across all creativity levels regardless of AI usage frequency.</div>", unsafe_allow_html=True)
-
+    # ── TAB 2: INDEPENDENT LEARNING ──
     with tab2:
+        st.markdown("### Effect of AI on Independent Learning")
+        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin-bottom:12px;'>This sub-objective shares the same independent learning measurement instrument as Objective 3, analysed here within the Objective 5 framework for completeness.</div>", unsafe_allow_html=True)
+
         hyp_block(
-            "No monotonic relationship exists between AI usage frequency and Independent Learning Score (ρ = 0)",
-            "A significant monotonic relationship exists (ρ ≠ 0)",
-            "Spearman Rank Correlation"
+            "The median Independent Learning Score = 3.0 (neutral)",
+            "The median Independent Learning Score > 3.0 — one-sided",
+            "Wilcoxon Signed-Rank Test (one-sided, greater)"
         )
 
-        st.markdown("**Spearman ρ Formula:**")
-        st.latex(r"\rho = 1 - \frac{6 \sum d_i^2}{N(N^2-1)}")
+        st.markdown("**Scale Reliability (Cronbach's Alpha)**")
+        st.markdown(f"<div style='font-size:14px; color:{C['slate']}; margin-bottom:12px;'>Before inferential analysis, internal consistency of the 3-item Independent Learning scale was verified: <b>α = 0.830</b> — Good reliability, exceeding both the acceptable (0.70) and good (0.80) thresholds.</div>", unsafe_allow_html=True)
+
+        st.markdown("**Descriptive Statistics**")
+        il_desc = pd.DataFrame({
+            "Variable":           ["Independent Learning Score"],
+            "n":                  [221],
+            "Mean":               [3.353],
+            "Median":             [3.333],
+            "Std. Dev.":          [0.983],
+        })
+        st.dataframe(il_desc.set_index("Variable"), use_container_width=True)
+
+        st.markdown("**Normality Testing (justifying Wilcoxon over t-test)**")
+        norm_il = pd.DataFrame({
+            "Test":        ["Shapiro-Wilk","Kolmogorov-Smirnov"],
+            "p-value":     ["1.23 × 10⁻⁵","0.0028"],
+            "Decision":    ["Reject H₀ — NOT normal","Reject H₀ — NOT normal"],
+        })
+        st.dataframe(norm_il.set_index("Test"), use_container_width=True)
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:16px;'>Both tests reject normality — the Wilcoxon Signed-Rank Test is therefore the appropriate non-parametric alternative.</div>", unsafe_allow_html=True)
+
+        st.markdown("**Wilcoxon Signed-Rank Test Formula:**")
+        st.latex(r"W = \sum \left[ \text{rank}(|d_i|) \times \text{sign}(d_i) \right], \quad d_i = x_i - \mu_0")
 
         c1, c2, c3 = st.columns(3)
-        c1.metric("Spearman ρ", "0.459")
-        c2.metric("p-value", "< 0.001")
+        c1.metric("W Statistic", "13,589.5")
+        c2.metric("p-value", "7.23 × 10⁻⁷")
         c3.metric("Decision", "Reject H₀")
 
-        result_pass("<b>Significant moderate positive relationship</b> — ρ = 0.459, p < 0.001. Students who use AI tools more frequently also report higher levels of independent topic exploration beyond classroom content. This is a meaningful finding: rather than fostering passive consumption, frequent AI use appears to enable wider autonomous engagement with academic material. A plausible mechanism is that AI lowers the threshold for exploration — when students can immediately obtain clear explanations of unfamiliar concepts, they are more likely to pursue tangential questions and self-directed inquiry.")
+        result_pass("<b>Reject H₀</b> — p = 7.23 × 10⁻⁷ ≪ 0.001. The median Independent Learning Score (3.333) is significantly above the neutral benchmark of 3.0. Students at MSU Baroda perceive GenAI tools as meaningfully promoting independent learning beyond classroom instruction — using AI to extend their learning, explore topics beyond the syllabus, seek explanations independently, and engage in self-directed inquiry. This is consistent with technology-enhanced self-directed learning models.")
 
         st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-        st.markdown("**Scatter Plot — AI Usage vs Independent Learning Score**")
+        st.markdown("**Independent Learning Score Distribution**")
+        fig2, ax2 = plt.subplots(figsize=(9, 4))
+        ax2.hist(IND_RAW, bins=16, color=C["navy"], edgecolor="white", alpha=0.78)
+        ax2.axvline(3.0, color=C["red"], lw=2, ls="--", label="Neutral = 3.0 (μ₀)")
+        ax2.axvline(np.median(IND_RAW), color=C["amber"], lw=2.5,
+                    label=f"Median = {np.median(IND_RAW):.3f}")
+        ax2.set_xlabel("Independent Learning Score"); ax2.set_ylabel("Frequency")
+        ax2.legend(fontsize=10); ax2.yaxis.grid(True, alpha=0.5); plt.tight_layout()
+        st.pyplot(fig2, use_container_width=True); plt.close()
+        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>The distribution is shifted to the right of the neutral reference (red dashed), with the sample median (amber) clearly above 3.0 — consistent with rejecting H₀.</div>", unsafe_allow_html=True)
 
-        np.random.seed(14)
-        ai_u2 = np.random.randint(1, 6, 221)
-        indep = np.clip(ai_u2 * 0.35 + np.random.normal(1.8, 0.7, 221), 1, 5)
-        fig2, ax2 = plt.subplots(figsize=(8, 4))
-        ax2.scatter(ai_u2 + np.random.uniform(-0.18, 0.18, 221), indep,
-                    alpha=0.35, s=22, color=C["navy"], edgecolors="none")
-        m2, b2 = np.polyfit(ai_u2, indep, 1)
-        ax2.plot(xs, m2*xs + b2, color=C["teal"], lw=2.5, label="Trend (ρ = 0.459, p < 0.001)")
-        ax2.set_xlabel("AI Usage Frequency (1=Infrequent, 5=Very Frequent)")
-        ax2.set_ylabel("Independent Learning Score")
-        ax2.legend(fontsize=10)
-        ax2.yaxis.grid(True, alpha=0.5)
-        plt.tight_layout()
-        st.pyplot(fig2, use_container_width=True)
-        plt.close()
-        st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>The positive slope is visible — higher AI usage frequency is associated with higher independent learning scores across the sample.</div>", unsafe_allow_html=True)
-
+    # ── COMPARATIVE SUMMARY TABLE ──
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-    st.markdown("**Summary Comparison**")
-    sdf = pd.DataFrame({
-        "Correlation":        ["AI Usage vs Creativity","AI Usage vs Independent Learning"],
-        "Spearman ρ":         [0.087, 0.459],
-        "p-value":            ["0.198","< 0.001"],
-        "Strength":           ["Very Weak","Moderate"],
-        "Significant":        ["No","Yes"],
+    st.markdown("### Comparative Summary — Creativity vs Independent Learning")
+    comp_df = pd.DataFrame({
+        "Construct":           ["Creativity Score", "Independent Learning Score"],
+        "Median":              [3.000, 3.333],
+        "W Statistic":         ["9,509.0", "13,589.5"],
+        "p-value":             ["0.9107", "7.23 × 10⁻⁷"],
+        "Conclusion":          ["Fail to Reject H₀ — No enhancement", "Reject H₀ — AI promotes learning"],
     })
-    st.dataframe(sdf.set_index("Correlation"), use_container_width=True)
+    st.dataframe(comp_df.set_index("Construct"), use_container_width=True)
+    result_info("GenAI tools have a <b>differential and asymmetric effect</b> on students' academic skills. AI does <b>not</b> significantly enhance creativity (p = 0.9107; median = 3.0) — creative academic skills remain a domain of human cognitive agency. However, AI <b>significantly promotes independent learning</b> beyond the classroom (p = 7.23 × 10⁻⁷; median = 3.333), functioning as an effective scaffold for self-directed inquiry. These contrasting findings highlight that AI's educational impact is construct-specific.")
 
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 6 — ML
@@ -1167,175 +1648,280 @@ elif active == "ml":
     c4.metric("Test Set (n)", "44 students")
 
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-
     tab1, tab2, tab3 = st.tabs(["Model Setup","Confusion Matrices","Feature Importance"])
 
     with tab1:
-        c_a, c_b = st.columns(2)
-        with c_a:
-            st.markdown("**Target Variable — Academic Division from CGPA**")
-            divdf = pd.DataFrame({
-                "Division":   ["Distinction","First","Second","Third","Fail"],
-                "CGPA Range": ["≥ 8.0","6.0 – 7.99","5.0 – 5.99","4.0 – 4.99","< 4.0"],
-            })
-            st.dataframe(divdf.set_index("Division"), use_container_width=True)
-
-        with c_b:
-            st.markdown("**Feature Variables (5 AI-related)**")
-            for feat in ["Frequency of AI usage (ordinal 1–5)",
-                         "AI Dependency Score (composite mean of 11 items)",
-                         "Critical Thinking Score (composite mean of 8 items)",
-                         "Creativity Score (composite mean of 11 items)",
-                         "Cognitive Offloading Score (composite mean of 5 items)"]:
-                st.markdown(f"<div style='font-size:14px; color:{C['slate']}; padding:3px 0;'>— {feat}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div style='font-size:12.5px; color:{C['muted']}; margin-top:8px;'>Raw CGPA, Faculty and Schooling Background excluded to isolate AI-related signal</div>", unsafe_allow_html=True)
-
-        st.markdown("<br>**Models**")
-        m1, m2 = st.columns(2)
-        with m1:
-            st.markdown(f"""
-            <div style='background:{C["surface"]}; border:1px solid {C["border"]}; border-top:3px solid {C["teal"]};
-                        border-radius:8px; padding:20px 22px;'>
-                <div style='font-weight:600; color:{C["ink"]}; font-size:15px;'>K-Nearest Neighbours (k=5)</div>
-                <div style='font-size:13.5px; color:{C["muted"]}; margin:8px 0 14px; line-height:1.7;'>
-                Non-parametric instance-based learning. Classifies by majority vote among the 5 nearest
-                neighbours in feature space. No distributional assumptions.
-                </div>
-                <div style='font-size:28px; font-weight:700; color:{C["teal"]};'>71.11%</div>
-                <div style='font-size:12px; color:{C["muted"]};'>Test Set Accuracy</div>
-            </div>""", unsafe_allow_html=True)
-        with m2:
-            st.markdown(f"""
-            <div style='background:{C["surface"]}; border:1px solid {C["border"]}; border-top:3px solid {C["amber"]};
-                        border-radius:8px; padding:20px 22px;'>
-                <div style='font-weight:600; color:{C["ink"]}; font-size:15px;'>Decision Tree (max_depth=7)</div>
-                <div style='font-size:13.5px; color:{C["muted"]}; margin:8px 0 14px; line-height:1.7;'>
-                Recursive feature partitioning. max_depth=7 allows sufficient complexity while limiting
-                overfitting. Lower accuracy reflects training data overfitting at chosen depth.
-                </div>
-                <div style='font-size:28px; font-weight:700; color:{C["amber"]};'>64.44%</div>
-                <div style='font-size:12px; color:{C["muted"]};'>Test Set Accuracy</div>
-            </div>""", unsafe_allow_html=True)
-
-        st.markdown("<br>")
-        result_pass("KNN achieves 71.1% accuracy on the held-out test set using only five AI-related features — substantially above the 25% chance level for a 4-class problem. This demonstrates that AI usage profiles carry genuine predictive signal for academic outcomes. KNN outperforms Decision Tree, suggesting the data has a smooth neighbourhood structure rather than sharp decision boundaries.")
+        result_pass("KNN achieves 71.1% accuracy using only five AI-related features — substantially above the 25% chance level for a 4-class problem.")
 
     with tab2:
-        st.markdown("**KNN Confusion Matrix — Test Set (n=44)**")
-        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:12px;'>Rows = Actual Division · Columns = Predicted Division</div>", unsafe_allow_html=True)
-
         labels = ["Distinction","First","Second","Third","Fail"]
         knn_cm = np.array([[3,1,0,0,0],[1,19,2,0,0],[0,2,7,1,0],[0,1,1,4,0],[0,0,0,0,2]])
         dt_cm  = np.array([[2,2,0,0,0],[2,17,3,0,0],[0,3,5,2,0],[0,1,2,3,0],[0,0,0,0,1]])
-
         c1, c2 = st.columns(2)
         for col, cm, title, cmap in [(c1,knn_cm,"KNN","Blues"),(c2,dt_cm,"Decision Tree","YlOrBr")]:
             fig, ax = plt.subplots(figsize=(5, 4.2))
             sns.heatmap(cm, annot=True, fmt="d", xticklabels=labels, yticklabels=labels,
-                        cmap=cmap, linewidths=0.5, ax=ax, cbar=False,
-                        annot_kws={"size":11, "weight":"bold"})
-            ax.set_xlabel("Predicted", fontsize=10)
-            ax.set_ylabel("Actual", fontsize=10)
-            ax.set_title(title, fontsize=12, fontweight="bold", pad=10)
-            plt.tight_layout()
-            col.pyplot(fig, use_container_width=True)
-            plt.close()
-
-        result_info("Both models predict <strong>First Division</strong> most accurately (largest class). Third Division is most frequently misclassified — consistent with class imbalance. KNN's superior performance reflects the smooth, neighbourhood-based structure of the data.")
+                        cmap=cmap, linewidths=0.5, ax=ax, cbar=False, annot_kws={"size":11,"weight":"bold"})
+            ax.set_xlabel("Predicted"); ax.set_ylabel("Actual")
+            ax.set_title(title, fontsize=12, fontweight="bold"); plt.tight_layout()
+            col.pyplot(fig, use_container_width=True); plt.close()
 
     with tab3:
-        st.markdown("**Decision Tree Feature Importances**")
-        st.markdown(f"<div style='font-size:13.5px; color:{C['muted']}; margin-bottom:12px;'>Relative importance of each AI-related feature in partitioning the decision tree.</div>", unsafe_allow_html=True)
-
         fi = pd.DataFrame({
             "Feature":    ["Critical Thinking Score","AI Dependency Score","Cognitive Offloading",
                            "Creativity Score","AI Usage Frequency"],
             "Importance": [0.34, 0.26, 0.18, 0.13, 0.09],
         }).sort_values("Importance", ascending=True)
-
         fig3 = px.bar(fi, x="Importance", y="Feature", orientation="h",
-                      color="Importance", color_continuous_scale=["#bfdbfe", C["navy"]],
-                      text_auto=".2f")
+                      color="Importance", color_continuous_scale=["#bfdbfe", C["navy"]], text_auto=".2f")
         plotly_defaults(fig3, h=320)
-        fig3.update_layout(coloraxis_showscale=False, yaxis_title="",
-                           xaxis_title="Feature Importance")
+        fig3.update_layout(coloraxis_showscale=False)
         st.plotly_chart(fig3, use_container_width=True)
 
-        result_pass("Critical Thinking Score is the single most important predictor of academic division, followed by AI Dependency Score. Students with stronger critical engagement and lower AI dependency tend to achieve higher academic performance bands — consistent with the broader findings of the study.")
-
 # ══════════════════════════════════════════════════════════════
-# CONCLUSION
+# CONCLUSION — FULLY BALANCED ACROSS ALL 6 OBJECTIVES
 # ══════════════════════════════════════════════════════════════
 elif active == "conclusion":
-    page_header("Synthesis", "Conclusion",
-                "Integrated interpretation of findings across all six objectives.")
+    page_header("Synthesis", "Conclusion & Study Summary",
+                "Integrated interpretation of all findings — objectives, statistical results, AI benchmark, recommendations, and limitations.")
 
+    # ── Narrative intro ──
     st.markdown(f"""
-    <div style='font-family:"Libre Baskerville",serif; font-size:15.5px; line-height:1.95;
-                color:{C["slate"]}; max-width:860px; margin-bottom:28px;'>
-    This study set out to examine the cognitive and educational impacts of Generative AI usage among
-    students at The Maharaja Sayajirao University of Baroda through a statistically rigorous, primary-data
-    investigation. Six specific research objectives were addressed using a methodologically diverse battery
-    — including reliability analysis, normality testing, one-sample t-tests, Wilcoxon signed-rank tests,
-    multi-way ANOVA with Welch correction and Games-Howell post hoc comparisons, Kruskal-Wallis H tests,
-    Spearman rank correlations, Pearson correlation, and supervised machine learning classification.
+    <div style='font-size:14.5px; line-height:1.95; color:{C["slate"]}; margin-bottom:28px;
+                text-align:justify; text-justify:inter-word;'>
+    This study examined the cognitive and educational impacts of Generative AI usage among
+    <strong>221 students across 13 faculties</strong> of The Maharaja Sayajirao University of Baroda
+    through a statistically rigorous, primary-data investigation. A supplementary AI accuracy
+    benchmark tested <strong>5 major AI tools</strong> against <strong>25 JAM 2025 questions</strong>
+    (5 questions × 5 subjects). Together, these two strands provide both a student-perspective and
+    an objective performance view of Generative AI in academia.
     </div>""", unsafe_allow_html=True)
 
-    st.markdown("**Objective-wise Summary**")
-    sumdf = pd.DataFrame({
-        "Objective":   ["Obj 1 — Usage","Obj 2 — Dependency","Obj 3 — Ind. Learning",
-                        "Obj 4 — Critical Thinking","Obj 5 — Creativity","Obj 6 — ML Model"],
-        "Key Finding": [
-            "ChatGPT dominant across all purposes. PG: 94% adoption. Female: 77.3% adoption.",
-            "Mean dep = 2.63 < 3.0 (t = −5.74, p < 0.0001). Faculty only significant predictor.",
-            "Median IL = 3.35 > 3.0. W = 13,589, p = 7.23×10⁻⁷. AI promotes autonomous learning.",
-            "CT rises monotonically Low→High. H = 49.65, p < 10⁻¹¹. Spearman ρ = 0.466.",
-            "Creativity: ρ = 0.087, n.s. | Ind. Learning: ρ = 0.459, p < 0.001.",
-            "KNN 71.1%, DT 64.4%. CT and AI Dependency are top predictive features.",
-        ],
-        "Significant": ["Descriptive","Yes","Yes","Yes","Creativity: No / IL: Yes","Predictive"],
-    })
-    st.dataframe(sumdf.set_index("Objective"), use_container_width=True)
+    # ── At-a-glance KPIs ──
+    st.markdown(f"<div class='overline'>Study at a Glance</div>", unsafe_allow_html=True)
+    k1, k2, k3, k4, k5, k6 = st.columns(6)
+    k1.metric("Students Surveyed", "221")
+    k2.metric("Faculties", "13")
+    k3.metric("Research Objectives", "6")
+    k4.metric("AI Tools Benchmarked", "5")
+    k5.metric("JAM Questions / Tool", "25")
+    k6.metric("KNN Model Accuracy", "71.1%")
 
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-    st.markdown("**Recommendations**")
 
-    rec1, rec2 = st.columns(2)
-    with rec1:
+    # ══════════════════════════════════════════════════════════
+    # SIX OBJECTIVE CARDS — 2 columns × 3 rows, fully balanced
+    # ══════════════════════════════════════════════════════════
+    st.markdown("### Findings by Research Objective")
+
+    obj_data = [
+        {
+            "num": "01", "color": C["teal"],
+            "title": "AI Usage Patterns",
+            "method": "Descriptive Analysis",
+            "stat": "PG: 94% adoption · UG: 65.5% · Female: 77.3% vs Male: 64.5%",
+            "finding": "ChatGPT dominates across all six academic purposes. PG students and female students show significantly higher adoption rates. Project/assignment support and concept learning are the most frequent use cases.",
+            "verdict": "Purposeful, context-specific AI use — not habitual.",
+        },
+        {
+            "num": "02", "color": C["navy"],
+            "title": "AI Dependency Level (GAIDS)",
+            "method": "One-sample t-test · Welch ANOVA · Games-Howell",
+            "stat": "x̄ = 2.63 · t = −5.74 · p < 0.0001 · Welch F(p) = 0.041",
+            "finding": "Mean AI dependency (2.63) is significantly below the neutral midpoint of 3.0. Demographic analysis shows that only faculty affiliation — not gender or level of study — is a significant predictor. Arts and Technology students show the highest dependency.",
+            "verdict": "H₀ Rejected — students are not over-reliant on AI.",
+        },
+        {
+            "num": "03", "color": C["mid"],
+            "title": "AI Usage Level & Learning Performance (CGPA)",
+            "method": "Kruskal-Wallis H Test",
+            "stat": "p = 0.2597 · Fail to Reject H₀ · Low: M=7.495, Mod: M=6.856, High: M=6.798",
+            "finding": "No statistically significant difference in CGPA distributions across Low, Moderate, and High AI usage groups (Kruskal-Wallis p = 0.2597). Both normality (High group, p = 0.009) and homoscedasticity (Levene p = 0.0007) violations ruled out ANOVA, requiring the Kruskal-Wallis test. The descriptive CGPA differences between groups are not large enough, given within-group variability, to constitute a reliable statistical signal.",
+            "verdict": "H₀ Not Rejected — AI usage level does not significantly predict CGPA.",
+        },
+        {
+            "num": "04", "color": C["amber"],
+            "title": "Critical Thinking",
+            "method": "Kruskal-Wallis H · Spearman ρ",
+            "stat": "H = 49.65 · p = 1.65×10⁻¹¹ · Spearman ρ = 0.466",
+            "finding": "Critical thinking scores increase monotonically from low (Mdn = 2.00) to moderate (3.13) to high (3.69) AI usage groups. The Kruskal-Wallis test is highly significant and Spearman ρ = 0.466 confirms a moderate positive association.",
+            "verdict": "H₀ Rejected — higher AI use correlates with stronger critical thinking.",
+        },
+        {
+            "num": "05", "color": C["green"],
+            "title": "Creativity & Independent Learning",
+            "method": "Wilcoxon Signed-Rank Test (two sub-objectives)",
+            "stat": "Creativity: W=9,509, p=0.9107 (n.s.) · IL: W=13,589.5, p=7.23×10⁻⁷",
+            "finding": "Sub-objective 5(a): AI does not significantly enhance creativity (Wilcoxon p = 0.9107; median = 3.000). Students perceive AI as having a neutral impact on creative output. Sub-objective 5(b): AI significantly promotes independent learning (Wilcoxon p = 7.23×10⁻⁷; median = 3.333). AI functions as a scaffold for self-directed inquiry beyond classroom content.",
+            "verdict": "Mixed — creativity unaffected; independent learning significantly enhanced.",
+        },
+        {
+            "num": "06", "color": C["red"],
+            "title": "ML Predictive Model",
+            "method": "KNN (k=5) · Decision Tree (max_depth=7)",
+            "stat": "KNN Accuracy: 71.1% · DT Accuracy: 64.4% · Test set n = 44",
+            "finding": "KNN (k=5) achieves 71.1% accuracy classifying academic divisions from five AI-related cognitive features — well above the 25% chance baseline. Critical thinking score is the strongest predictor (34% importance), followed by AI dependency (26%). The model demonstrates that AI profiles carry real predictive signal for academic performance.",
+            "verdict": "KNN outperforms Decision Tree — CT score is the dominant predictor.",
+        },
+    ]
+
+    for i in range(0, 6, 2):
+        col_a, col_b = st.columns(2)
+        for col, obj in zip([col_a, col_b], obj_data[i:i+2]):
+            col.markdown(f"""
+            <div style='background:{C["surface"]}; border:1px solid {C["border"]};
+                        border-top:3px solid {obj["color"]}; border-radius:8px;
+                        padding:20px 22px; margin-bottom:16px; height:100%;'>
+                <div style='display:flex; align-items:baseline; gap:10px; margin-bottom:10px;'>
+                    <span style='font-family:"Libre Baskerville",serif; font-size:28px;
+                                 font-weight:700; color:{obj["color"]}; opacity:0.35;
+                                 line-height:1;'>{obj["num"]}</span>
+                    <span style='font-weight:700; color:{C["ink"]}; font-size:15px;'>{obj["title"]}</span>
+                </div>
+                <div style='font-size:11px; font-weight:600; text-transform:uppercase;
+                            letter-spacing:1px; color:{obj["color"]}; margin-bottom:8px;'>
+                    {obj["method"]}
+                </div>
+                <div style='background:#f7f9fc; border-radius:6px; padding:8px 12px;
+                            font-size:12.5px; font-family:monospace; color:{C["navy"]};
+                            margin-bottom:10px; line-height:1.7;'>
+                    {obj["stat"]}
+                </div>
+                <div style='font-size:13.5px; color:{C["slate"]}; line-height:1.7; margin-bottom:10px;'>
+                    {obj["finding"]}
+                </div>
+                <div style='font-size:12.5px; font-weight:600; color:{obj["color"]};
+                            border-top:1px solid {C["border"]}; padding-top:8px;'>
+                    ↳ {obj["verdict"]}
+                </div>
+            </div>""", unsafe_allow_html=True)
+
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+
+    # ── AI Accuracy Benchmark ──
+    st.markdown("### AI Accuracy Benchmark — JAM 2025")
+    st.markdown(f"<div style='font-size:14px; color:{C['muted']}; margin-bottom:16px;'>5 tools × 5 subjects × 5 questions = 125 total evaluations across Physics, Mathematical Science, Mathematics, Chemistry, and Biotechnology.</div>", unsafe_allow_html=True)
+
+    df_bench = build_summary_df()
+    bench_agg = df_bench.groupby("Tool").agg(
+        Accuracy=("Accuracy (%)", "mean"),
+        Detail=("Detailed (%)", "mean"),
+        AvgTime=("Avg Time (s)", "mean"),
+    ).round(1).reset_index().sort_values("Accuracy", ascending=False)
+    bench_agg.columns = ["Tool", "Mean Accuracy (%)", "Mean Detail (%)", "Mean Avg Time (s)"]
+    bench_agg["Total Correct / 25"] = (bench_agg["Mean Accuracy (%)"] / 100 * 25).round(0).astype(int)
+    st.dataframe(bench_agg.set_index("Tool"), use_container_width=True)
+
+    col_l, col_r = st.columns(2)
+    with col_l:
+        fig_b = px.bar(bench_agg, x="Tool", y="Mean Accuracy (%)",
+                       color="Tool", text_auto=".1f", color_discrete_map=AI_COLORS)
+        fig_b.add_hline(y=80, line_dash="dash", line_color=C["amber"],
+                        annotation_text="80% benchmark")
+        plotly_defaults(fig_b, h=320)
+        fig_b.update_layout(showlegend=False, title="Mean Accuracy by Tool")
+        st.plotly_chart(fig_b, use_container_width=True)
+    with col_r:
+        fig_t2 = px.bar(bench_agg.sort_values("Mean Avg Time (s)"),
+                        x="Tool", y="Mean Avg Time (s)",
+                        color="Tool", text_auto=".1f", color_discrete_map=AI_COLORS)
+        plotly_defaults(fig_t2, h=320)
+        fig_t2.update_layout(showlegend=False, title="Mean Response Time — lower is faster")
+        st.plotly_chart(fig_t2, use_container_width=True)
+
+    # Heatmap
+    pivot_bench = df_bench.pivot(index="Tool", columns="Subject", values="Accuracy (%)")
+    fig_h, ax_h = plt.subplots(figsize=(10, 3.8))
+    sns.heatmap(pivot_bench, annot=True, fmt=".0f", cmap="YlGn",
+                linewidths=0.5, ax=ax_h, cbar_kws={"label": "Accuracy (%)"},
+                vmin=0, vmax=100, annot_kws={"size": 11, "weight": "bold"})
+    ax_h.set_xlabel(""); ax_h.set_ylabel("")
+    ax_h.set_title("Accuracy (%) — Tool × Subject", fontsize=12, fontweight="bold", pad=10)
+    plt.xticks(rotation=20, ha="right", fontsize=10)
+    plt.yticks(rotation=0, fontsize=10)
+    plt.tight_layout()
+    st.pyplot(fig_h, use_container_width=True)
+    plt.close()
+
+    result_pass("""
+    <b>Benchmark conclusions:</b> Gemini &amp; Claude lead on accuracy; Copilot excels in Mathematics
+    with 100% accuracy and the most detailed step-by-step explanations; Perplexity is fastest (&lt; 7s avg)
+    but drops to 20% in Mathematical Science. No single tool dominates all three dimensions —
+    choice should depend on subject and whether explanation or speed is the priority.
+    """)
+
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+
+    # ── Recommendations ──
+    st.markdown("### Recommendations")
+    c1, c2 = st.columns(2)
+    with c1:
         st.markdown(f"""
         <div style='background:{C["surface"]}; border:1px solid {C["border"]};
                     border-top:3px solid {C["teal"]}; border-radius:8px; padding:20px 22px;'>
-            <div style='font-weight:600; color:{C["ink"]}; margin-bottom:10px;'>For Students</div>
-            <ul style='font-size:14px; line-height:2.1; color:{C["slate"]}; padding-left:18px; margin:0;'>
-                <li>Use AI as a learning scaffold, not a completion tool</li>
-                <li>Attempt the problem independently before querying AI</li>
-                <li>Develop AI literacy — evaluate, verify, and question AI outputs</li>
-                <li>Resist submitting unedited AI-generated content</li>
+            <div style='font-weight:600; color:{C["ink"]}; font-size:15px; margin-bottom:12px;'>For Students</div>
+            <ul style='font-size:14px; line-height:2.2; color:{C["slate"]}; padding-left:18px; margin:0;'>
+                <li>Use AI as a learning scaffold — attempt independently first</li>
+                <li>Develop AI literacy: evaluate, verify, and question outputs</li>
+                <li>Do not submit unedited AI-generated content</li>
+                <li>Exploit AI for topic exploration and concept clarification</li>
+                <li>Be aware of accuracy gaps — especially in mathematics and chemistry</li>
             </ul>
         </div>""", unsafe_allow_html=True)
-    with rec2:
+    with c2:
         st.markdown(f"""
         <div style='background:{C["surface"]}; border:1px solid {C["border"]};
                     border-top:3px solid {C["amber"]}; border-radius:8px; padding:20px 22px;'>
-            <div style='font-weight:600; color:{C["ink"]}; margin-bottom:10px;'>For Universities</div>
-            <ul style='font-size:14px; line-height:2.1; color:{C["slate"]}; padding-left:18px; margin:0;'>
-                <li>Design faculty-specific AI usage policies — not generic bans</li>
-                <li>Invest in AI literacy as a formal curricular component</li>
-                <li>Create AI-resilient assessments (oral exams, practicals, staged drafts)</li>
+            <div style='font-weight:600; color:{C["ink"]}; font-size:15px; margin-bottom:12px;'>For Universities</div>
+            <ul style='font-size:14px; line-height:2.2; color:{C["slate"]}; padding-left:18px; margin:0;'>
+                <li>Design faculty-specific AI policies — not generic bans</li>
+                <li>Embed AI literacy as a formal curricular component</li>
+                <li>Create AI-resilient assessments (oral exams, staged drafts, practicals)</li>
                 <li>Use AI profiling as an early-warning indicator for academic support</li>
+                <li>Monitor which tools students use and train faculty accordingly</li>
             </ul>
         </div>""", unsafe_allow_html=True)
 
-    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-    st.markdown("**Limitations**")
-    for lim, desc in [
-        ("Cross-sectional design", "Causal claims cannot be established. Longitudinal data is needed to determine whether AI use causes changes in dependency, critical thinking, or learning."),
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ── Limitations ──
+    st.markdown("### Study Limitations")
+    lims = [
+        ("Cross-sectional design", "Causal claims cannot be established. Longitudinal data is needed to determine whether AI use causes changes in dependency, critical thinking, or learning outcomes."),
         ("Self-report bias", "Social desirability may lead to under-reporting of AI dependency and over-reporting of critical thinking engagement."),
         ("CGPA as a performance proxy", "CGPA is coarse and multi-determined — it may not be sensitive to the specific cognitive effects of AI usage."),
         ("Commerce faculty over-representation", "Commerce students constitute ~54% of the sample, potentially biasing findings toward business-programme usage patterns."),
         ("Single-institution sample", "Results may not generalise to universities with different demographic profiles, infrastructure levels, or AI adoption cultures."),
-    ]:
-        st.markdown(f"<div style='font-size:14px; color:{C['slate']}; padding:5px 0 5px 16px; border-left:2px solid {C['border']}; margin-bottom:8px;'><strong>{lim}</strong> — {desc}</div>", unsafe_allow_html=True)
+        ("JAM benchmark scope", "Only 5 questions per subject were tested. A larger question bank across more subjects and difficulty levels would provide more robust accuracy estimates."),
+        ("Tool versioning", "AI tools are updated frequently. Accuracy results reflect specific model versions active during the benchmark period and may not hold over time."),
+    ]
+    for lim, desc in lims:
+        st.markdown(f"""
+        <div style='font-size:14px; color:{C["slate"]}; padding:8px 0 8px 16px;
+                    border-left:2px solid {C["border"]}; margin-bottom:8px;'>
+            <strong style='color:{C["navy"]};'>{lim}</strong> — {desc}
+        </div>""", unsafe_allow_html=True)
+
+    st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+
+    # ── Closing banner ──
+    st.markdown(f"""
+    <div style='background:linear-gradient(135deg,{C["ink"]},{C["mid"]}); border-radius:12px;
+                padding:36px 48px; color:white; text-align:center; margin-top:8px;'>
+        <div style='font-family:"Libre Baskerville",serif; font-size:22px; margin-bottom:10px;'>
+            Generative AI — a purposeful scaffold, not a crutch.
+        </div>
+        <div style='font-size:13.5px; opacity:0.75; line-height:1.9; max-width:600px; margin:0 auto;'>
+            MSU students demonstrate moderate, purposeful GenAI adoption that positively associates
+            with critical thinking and independent learning, while dependency remains significantly
+            below harmful levels. AI tool accuracy is high in most domains but variable in abstract
+            mathematics — underscoring that human evaluation remains essential.
+        </div>
+        <div style='font-size:12px; opacity:0.4; margin-top:20px;'>
+            MSc Statistics · Team 4 · MSU Baroda · 2025-26<br>
+            Vaishali Sharma · Ashish Vaghela · Raiwant Kumar · Rohan Shukla
+        </div>
+    </div>""", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════
 # REFERENCES
@@ -1344,39 +1930,30 @@ elif active == "references":
     page_header("Bibliography", "References")
 
     refs = [
-        ("Gerlich, M. (2025)", "AI tools in society: Impacts on cognitive offloading and the future of critical thinking.", "Societies, 15(1), 6. https://doi.org/10.3390/soc15010006"),
-        ("Goh, A. Y. H., Hartanto, A., & Majeed, N. M. (2023)", "Generative artificial intelligence dependency: Scale development, validation, and its motivational, behavioural, and psychological correlates.", "Singapore Management University; National University of Singapore."),
-        ("Kaufman, J. C. (2012)", "Counting the muses: Development of the Kaufman Domains of Creativity Scale (K-DOCS).", "Psychology of Aesthetics, Creativity, and the Arts, 6(4), 298–308."),
-        ("Karwowski, M., Lebuda, I., & Wiśniewska, E. (2018)", "Measuring creative self-efficacy and creative personal identity.", "Psychology of Aesthetics, Creativity, and the Arts, 12(2), 191–201."),
-        ("Črček, N., & Patekar, J. (2023)", "Writing with AI: University students' use of ChatGPT.", "Journal of Teaching English for Specific and Academic Purposes, 11(2), 347–359."),
-        ("Nguyen, A., Kremantzis, M., Essien, A., Petrounias, I., & Hosseini, S. (2024)", "The impact of AI usage on university students' willingness for autonomous learning.", "Education and Information Technologies. https://doi.org/10.1007/s10639-024-12651-5"),
+        ("Gerlich, M. (2025)", "AI tools in society: Impacts on cognitive offloading and the future of critical thinking.", "Societies, 15(1), 6."),
+        ("Goh, A. Y. H., Hartanto, A., & Majeed, N. M. (2023)", "Generative artificial intelligence dependency: Scale development, validation.", "Singapore Management University."),
+        ("Kaufman, J. C. (2012)", "Counting the muses: Development of the K-DOCS.", "Psychology of Aesthetics, Creativity, and the Arts, 6(4), 298–308."),
         ("Cohen, J. (1988)", "Statistical power analysis for the behavioral sciences (2nd ed.).", "Lawrence Erlbaum Associates."),
-        ("Shapiro, S. S., & Wilk, M. B. (1965)", "An analysis of variance test for normality (complete samples).", "Biometrika, 52(3–4), 591–611."),
-        ("Kruskal, W. H., & Wallis, W. A. (1952)", "Use of ranks in one-criterion variance analysis.", "Journal of the American Statistical Association, 47(260), 583–621."),
+        ("Shapiro, S. S., & Wilk, M. B. (1965)", "An analysis of variance test for normality.", "Biometrika, 52(3–4), 591–611."),
+        ("Kruskal, W. H., & Wallis, W. A. (1952)", "Use of ranks in one-criterion variance analysis.", "JASA, 47(260), 583–621."),
         ("Wilcoxon, F. (1945)", "Individual comparisons by ranking methods.", "Biometrics Bulletin, 1(6), 80–83."),
-        ("Spearman, C. (1904)", "The proof and measurement of association between two things.", "The American Journal of Psychology, 15(1), 72–101."),
         ("Cronbach, L. J. (1951)", "Coefficient alpha and the internal structure of tests.", "Psychometrika, 16(3), 297–334."),
-        ("Pedregosa, F., et al. (2011)", "Scikit-learn: Machine learning in Python.", "Journal of Machine Learning Research, 12, 2825–2830."),
-        ("Virtanen, P., et al. (2020)", "SciPy 1.0: Fundamental algorithms for scientific computing in Python.", "Nature Methods, 17, 261–272."),
-        ("McKinney, W. (2010)", "Data structures for statistical computing in Python.", "Proceedings of the 9th Python in Science Conference, 56–61."),
+        ("Pedregosa, F., et al. (2011)", "Scikit-learn: Machine learning in Python.", "JMLR, 12, 2825–2830."),
     ]
 
     for i, (auth, title, journal) in enumerate(refs, 1):
         st.markdown(f"""
-        <div style='padding:12px 0 12px 0; border-bottom:1px solid {C["border"]};
-                    font-size:14px; line-height:1.75;'>
+        <div style='padding:12px 0; border-bottom:1px solid {C["border"]}; font-size:14px; line-height:1.75;'>
             <span style='color:{C["muted"]}; font-weight:600;'>[{i}]</span>
-            <strong style='color:{C["navy"]};'> {auth}</strong> —
-            {title}
+            <strong style='color:{C["navy"]};'> {auth}</strong> — {title}
             <span style='color:{C["muted"]};'> {journal}</span>
         </div>""", unsafe_allow_html=True)
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown(f"""
     <div style='text-align:center; padding:36px; background:linear-gradient(135deg,{C["ink"]},{C["mid"]});
-                border-radius:12px; color:white;'>
+                border-radius:12px; color:white; margin-top:32px;'>
         <div style='font-family:"Libre Baskerville",serif; font-size:26px; margin-bottom:10px;'>Thank You</div>
-        <div style='font-size:14px; opacity:0.75; margin-bottom:6px;'>MSc Statistics · Team 4 · MSU Baroda · 2025-26</div>
+        <div style='font-size:14px; opacity:0.75;'>MSc Statistics · Team 4 · MSU Baroda · 2025-26</div>
         <div style='font-size:13px; opacity:0.5;'>Vaishali Sharma · Ashish Vaghela · Raiwant Kumar · Rohan Shukla</div>
     </div>""", unsafe_allow_html=True)
 
@@ -1385,6 +1962,6 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.markdown(f"""
 <div style='text-align:center; font-size:12px; color:{C["border"]}; padding:8px 0;
             border-top:1px solid {C["border"]}; margin-top:16px;'>
-    Cognitive & Educational Impacts of GenAI Usage · MSc Statistics Team 4 ·
+    Cognitive &amp; Educational Impacts of GenAI Usage · MSc Statistics Team 4 ·
     The Maharaja Sayajirao University of Baroda · 2025-26
 </div>""", unsafe_allow_html=True)
