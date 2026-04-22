@@ -1204,15 +1204,15 @@ elif active == "anova":
         st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:14px;'>p-values are Bonferroni-corrected. Significant pairs: p < 0.05.</div>", unsafe_allow_html=True)
 
         step("Significant Pairwise Differences")
-        c1,c2,c3,c4 = st.columns(4)
+        c1,c2,c3,c4 = st.columns(1)
         with c1:
-            result_pass("<b>Arts vs Other</b> — p = 0.0.0027 (Significant)")
+            result_pass("<b>Arts vs Other</b> — p = 0.0.0027 (Significant difference)")
         with c2:
-            result_pass("<b>Science vs Other</b> — p = 0.0090 (Significant)")
+            result_pass("<b>Science vs Other</b> — p = 0.0090 (Significant difference)")
         with c3:
-            result_pass("<b>Commerce vs Other</b> — p = 0.0126 (Significant)")
+            result_pass("<b>Commerce vs Other</b> — p = 0.0126 (Significant difference)")
         with c4:
-            result_pass("<b>Tech & Engg vs Other</b> — p = 0.0030 (Significant)")
+            result_pass("<b>Tech & Engg vs Other</b> — p = 0.0030 (Significant difference)")
         result_info("<b>Conclusion:</b> Dunn test reveals differences driven by Arts/Science/Tech & Engg/Commerce vs 'Other' faculties.")
 
 
