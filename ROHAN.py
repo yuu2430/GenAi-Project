@@ -887,19 +887,13 @@ elif active == "sampling":
 
 
 # ══════════════════════════════════════════════════════════════
-# QUESTIONNAIRE
-# ══════════════════════════════════════════════════════════════
 elif active == "questionnaire":
-    page_header("Data Collection","Questionnaire Design","Structured self-administered questionnaire delivered via Google Forms — 23 questions across 6 thematic sections.")
-    st.markdown(f"""
-    <div style='background:{C["surface"]}; border:1px solid {C["border"]}; border-left:3px solid {C["amber"]}; border-radius:0 8px 8px 0; padding:14px 20px; margin-bottom:24px;'>
-        <div style='font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:{C["amber"]}; margin-bottom:8px;'>References for Questionnaire</div>
-        <div style='font-size:14px; color:{C["slate"]}; line-height:2;'>
-            &nbsp;<a href='https://www.mdpi.com/2075-4698/15/1/6' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>Gerlich (2025) — AI Tools in Society</a><br>
-             &nbsp;<a href='https://drive.google.com/file/d/15Za6HQIaUscX2UxEJ9KGEHGxiPG-qQ6E/view' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>Study Questionnaire — PDF</a>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    page_header(
+        "Data Collection",
+        "Questionnaire Design",
+        "Structured self-administered questionnaire delivered via Google Forms — 23 questions across 6 thematic sections."
+    )
+
     sections = [
         {"title":"Section 1 — Student Profile & AI Usage (Q1–Q14)","items":["Demographic variables: Age, Gender, CGPA, Schooling Background, Faculty, Level and Year of Study","Awareness of GenAI, primary AI tool used, subscription status and monthly expenditure","Multi-select grid (Q13): AI platform × 6 academic purposes","Likert frequency grid (Q14): Never → Always across 6 academic purposes"]},
         {"title":"Section 2 — Academic Impact (Q15–Q16)","items":["Q15 (3 items): grades change, learning effectiveness, curriculum inclusion — Strongly Disagree to Strongly Agree","Q16 (6 items): AI vs books, AI vs teacher, critical thinking reduction, AI submission, stress reduction, independent exploration"]},
@@ -908,13 +902,29 @@ elif active == "questionnaire":
         {"title":"Section 5 — AI Dependency (Q17, Q20–Q22)","items":["Q17: 10-point scale — trust, understanding depth, motivation, anxiety, assignment dependency","Q20 — Cognitive Preoccupation (3 items): decision influence, urge to use, anticipation","Q21 — Negative Consequences (4 items): concerns, inability to work without AI, confidence, problem-solving","Q22 — Withdrawal Symptoms (4 items): restlessness, distraction, disconnection, irritability"]},
         {"title":"Section 6 — Creativity (Q23)","items":["11 items adapted from the Kaufman Domains of Creativity Scale (K-DOCS, 2012)","Scale: 1 (Much Less Creative) to 5 (Much More Creative) — comparative to doing the task without AI","Tasks: writing, debating, researching, feedback, analysis, argumentation"]},
     ]
+
+    # Render questionnaire sections
     for sec in sections:
-        st.markdown(f"<div style='font-weight:600; color:{C['ink']}; font-size:14px; margin:16px 0 6px;'>{sec['title']}</div>", unsafe_allow_html=True)
+        st.markdown(
+            f"<div style='font-weight:600; color:{C['ink']}; font-size:14px; margin:16px 0 6px;'>{sec['title']}</div>",
+            unsafe_allow_html=True
+        )
         for item in sec["items"]:
-            st.markdown(f"<div style='font-size:13.5px; color:{C['slate']}; padding:3px 0 3px 16px; border-left:2px solid {C['border']};'>— {item}</div>", unsafe_allow_html=True)
+            st.markdown(
+                f"<div style='font-size:13.5px; color:{C['slate']}; padding:3px 0 3px 16px; border-left:2px solid {C['border']};'>— {item}</div>",
+                unsafe_allow_html=True
+            )
 
-
-# ══════════════════════════════════════════════════════════════
+    # References moved BELOW
+    st.markdown(f"""
+    <div style='background:{C["surface"]}; border:1px solid {C["border"]}; border-left:3px solid {C["amber"]}; border-radius:0 8px 8px 0; padding:14px 20px; margin-top:24px;'>
+        <div style='font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:{C["amber"]}; margin-bottom:8px;'>References for Questionnaire</div>
+        <div style='font-size:14px; color:{C["slate"]}; line-height:2;'>
+            &nbsp;<a href='https://www.mdpi.com/2075-4698/15/1/6' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>Gerlich (2025) — AI Tools in Society</a><br>
+            &nbsp;<a href='https://drive.google.com/file/d/15Za6HQIaUscX2UxEJ9KGEHGxiPG-qQ6E/view' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>Study Questionnaire — PDF</a>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)# ══════════════════════════════════════════════════════════════
 # RELIABILITY
 # ══════════════════════════════════════════════════════════════
 elif active == "reliability":
