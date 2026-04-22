@@ -919,7 +919,7 @@ elif active == "questionnaire":
     st.markdown(f"""
     <div style='background:{C["surface"]}; border:1px solid {C["border"]}; border-left:3px solid {C["amber"]}; border-radius:0 8px 8px 0; padding:14px 20px; margin-bottom:24px;'>
         <div style='font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:{C["amber"]}; margin-bottom:8px;'>References for Questionnaire</div>
-        <div style='font-size:14px; color:{C["slate"]}; line-height:3;'>
+        <div style='font-size:14px; color:{C["slate"]}; line-height:2;'>
             &nbsp;<a href='https://www.mdpi.com/2075-4698/15/1/6' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>AI Tools in Society</a><br>
             &nbsp;<a href='https://drive.google.com/file/d/1o4H5H4K3Ufd6bHuB6JSKZshi2OfptgA6/view?usp=sharing' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>Kaufman Domains of Creativity Scale (K-DOCS)</a><br>
             &nbsp;<a href='https://drive.google.com/file/d/15Za6HQIaUscX2UxEJ9KGEHGxiPG-qQ6E/view' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>Generative Artificial Intelligence Dependency: Scale Development</a><br>
@@ -1147,8 +1147,8 @@ elif active == "anova":
 
             step("Step 5 — Final Test: One-Way ANOVA")
             hyp_block("μ_Gov = μ_Semi-Priv = μ_Priv — No difference across schooling backgrounds","At least one group mean differs","One-Way ANOVA")
-            st.latex(r"F = \frac{\text{MSB}}{\text{MSW}} = \frac{\sum_i n_i(\bar{x}_i - \bar{x})^2 / (k-1)}{\sum_i\sum_j(x_{ij}-\bar{x}_i)^2 / (N-k)}")
-            notation("F = F-statistic · MSB = mean square between groups · MSW = mean square within groups · x̄ᵢ = group mean · x̄ = grand mean · k = number of groups (3) · N = total sample size")
+            st.latex(r"F = \frac{\text{MSSB}}{\text{MSSW}} = \frac{\sum_i n_i(\bar{x}_i - \bar{x})^2 / (k-1)}{\sum_i\sum_j(x_{ij}-\bar{x}_i)^2 / (N-k)}")
+            notation("F = F-statistic · MSSB = mean sum of square between groups · MSSW = mean sum of square within groups · x̄ᵢ = group mean · x̄ = grand mean · k = number of groups (3) · N = total sample size")
             c1,c2,c3 = st.columns(3)
             c1.metric("F-statistic","0.2547"); c2.metric("p-value","0.7754"); c3.metric("Decision","Fail to Reject H₀")
             result_info("<b>Fail to Reject H₀</b> — p = 0.775. Schooling background has no significant effect on AI Dependency.")
@@ -1166,18 +1166,11 @@ elif active == "anova":
             st.dataframe(norm_f.set_index("Faculty"), use_container_width=True)
             result_fail("'Other' faculty group violates normality (p = 0.046 < 0.05).")
 
-            step("Step 3 — Homogeneity of Variance (Levene's Test)")
-            hyp_block("All faculty variances are equal","At least one faculty variance differs","Levene's Test")
-            st.latex(r"L = \frac{(N-k)\sum_i n_i(\bar{Z}_{i.} - \bar{Z}_{..})^2}{(k-1)\sum_i\sum_j(Z_{ij} - \bar{Z}_{i.})^2}")
-            notation("L = Levene statistic · N = 221 · k = 5 faculty groups · Zᵢⱼ = |xᵢⱼ − x̄ᵢ| · Z̄ᵢ. = group mean deviation · Z̄.. = grand mean deviation")
-            lev_f = pd.DataFrame({"Test":["Levene's Test"],"p-value":[0.0235],"Decision":["p < 0.05 — Variances NOT equal ❌"]})
-            st.dataframe(lev_f.set_index("Test"), use_container_width=True)
-            result_fail("Homoscedasticity also violated (p = 0.024 < 0.05).")
-
-            step("Step 4 — Assumption Decision")
+            
+            step("Step 3 — Assumption Decision")
             assumption_decision("Both normality and equal variance violated → <strong>Kruskal-Wallis H Test</strong> (non-parametric) is appropriate.")
 
-            step("Step 5 — Final Test: Kruskal-Wallis H Test")
+            step("Step 4 — Final Test: Kruskal-Wallis H Test")
             hyp_block("All faculty groups have the same distribution of AI Dependency Scores","At least one faculty differs","Kruskal-Wallis H Test")
             st.latex(r"H = \frac{12}{N(N+1)} \sum_{j=1}^{k} \frac{R_j^2}{n_j} - 3(N+1)")
             notation("H = Kruskal-Wallis statistic · N = total observations (221) · k = number of groups (5) · nⱼ = size of group j · Rⱼ = sum of ranks for group j · Under H₀: H ~ χ²(k−1) = χ²(4)")
@@ -1201,22 +1194,26 @@ elif active == "anova":
         step("Dunn Test — p-value Matrix")
         dunn_df = pd.DataFrame({
             "":["Arts","Commerce","Science","Tech & Engg","Other"],
-            "Arts":[1.000,1.000,1.000,1.000,0.034],
-            "Commerce":[1.000,1.000,1.000,1.000,0.102],
-            "Science":[1.000,1.000,1.000,1.000,0.048],
-            "Tech & Engg":[1.000,1.000,1.000,1.000,0.095],
-            "Other":[0.034,0.102,0.048,0.095,1.000],
+            "Arts":[1.000,0.2228,0.96,0.8077,0.0027],
+            "Commerce":[0.2228,1.000,0.2779,0.3711,0.0126],
+            "Science":[0.96,0.2779,1.000,0.6646,0.0090],
+            "Tech & Engg":[0.8077,0.3711,0.6646,1.000,0.0030],
+            "Other":[0.0027,0.0126,0.0090,0.0030,1.000],
         })
         st.dataframe(dunn_df.set_index(""), use_container_width=True)
         st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:14px;'>p-values are Bonferroni-corrected. Significant pairs: p < 0.05.</div>", unsafe_allow_html=True)
 
         step("Significant Pairwise Differences")
-        c1,c2 = st.columns(2)
+        c1,c2,c3,c4 = st.columns(4)
         with c1:
-            result_pass("<b>Arts vs Other</b> — p = 0.034 (Significant)")
+            result_pass("<b>Arts vs Other</b> — p = 0.0.0027 (Significant)")
         with c2:
-            result_pass("<b>Science vs Other</b> — p = 0.048 (Significant)")
-        result_info("<b>Conclusion:</b> Dunn test reveals differences driven by Arts/Science vs 'Other' faculties. Technology & Engineering near significance (p = 0.095).")
+            result_pass("<b>Science vs Other</b> — p = 0.0090 (Significant)")
+        with c3:
+            result_pass("<b>Commerce vs Other</b> — p = 0.0126 (Significant)")
+        with c4:
+            result_pass("<b>Tech & Engg vs Other</b> — p = 0.0030 (Significant)")
+        result_info("<b>Conclusion:</b> Dunn test reveals differences driven by Arts/Science/Tech & Engg/Commerce vs 'Other' faculties.")
 
 
 # ══════════════════════════════════════════════════════════════
