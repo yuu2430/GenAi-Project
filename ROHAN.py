@@ -922,6 +922,8 @@ elif active == "questionnaire":
         <div style='font-size:14px; color:{C["slate"]}; line-height:2;'>
             &nbsp;<a href='https://www.mdpi.com/2075-4698/15/1/6' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>Gerlich (2025) — AI Tools in Society</a><br>
             &nbsp;<a href='https://drive.google.com/file/d/15Za6HQIaUscX2UxEJ9KGEHGxiPG-qQ6E/view' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>Study Questionnaire — PDF</a>
+            &nbsp;<a href='https://drive.google.com/file/d/1o4H5H4K3Ufd6bHuB6JSKZshi2OfptgA6/view?usp=sharing' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>Kaufman Domains of Creativity Scale (K-DOCS)</a><br>
+
         </div>
     </div>
     """, unsafe_allow_html=True)# ══════════════════════════════════════════════════════════════
