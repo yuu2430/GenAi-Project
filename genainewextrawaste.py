@@ -1287,7 +1287,7 @@ elif active == "correlation":
     st.markdown("### Comparative Summary — Creativity vs Independent Learning")
     comp_df = pd.DataFrame({"Construct":["Creativity Score","Independent Learning Score"],"Median":[3.000,3.333],"W Statistic":["9,509.0","13,589.5"],"p-value":["0.9107","7.23 × 10⁻⁷"],"Conclusion":["Fail to Reject H₀ — No enhancement","Reject H₀ — AI supports ind_learning "]})
     st.dataframe(comp_df.set_index("Construct"), use_container_width=True)
-    result_info("AI does <b>not</b> significantly enhance creativity (p = 0.9107; median = 3.0) — creative academic skills remain a domain of human cognitive agency. However, AI <b>significantly promotes independent learning</b> (p = 7.23 × 10⁻⁷; median = 3.333) — functioning as an effective scaffold for self-directed inquiry beyond the classroom. AI's educational impact is construct-specific: it helps in some ways but not others.")
+    result_info("AI does <b>not</b> significantly enhance creativity (p = 0.9107; median = 3.0) — creative academic skills remain a domain of human cognitive agency. However, AI <b>significantly supports independent learning</b> (p = 7.23 × 10⁻⁷; median = 3.333), functioning as an effective scaffold for self-directed inquiry beyond the classroom. AI's educational impact is construct-specific: it helps in some ways but not others.")
 
 
 # ══════════════════════════════════════════════════════════════
@@ -1388,7 +1388,7 @@ elif active == "conclusion":
         st.markdown(f"""<div style='background:{C["surface"]}; border:1px solid {C["border"]}; border-top:3px solid {C["teal"]}; border-radius:8px; padding:20px 22px;'>
         <div style='font-weight:600; color:{C["ink"]}; font-size:15px; margin-bottom:12px;'>For Students</div>
         <ul style='font-size:14px; line-height:2.2; color:{C["slate"]}; padding-left:18px; margin:0;'>
-            <li>Use AI as a learning scaffold — attempt independently first</li>
+            <li>Use AI as a support for learning, attempt independently first</li>
             <li>Develop AI literacy: evaluate, verify, and question AI outputs</li>
             <li>Do not submit unedited AI-generated content</li>
             <li>Use AI for topic exploration and concept clarification</li>
@@ -1411,7 +1411,7 @@ elif active == "conclusion":
         st.markdown(f"<div style='font-size:14px; color:{C['slate']}; padding:8px 0 8px 16px; border-left:2px solid {C['border']}; margin-bottom:8px;'><strong style='color:{C['navy']};'>{lim}</strong> — {desc}</div>", unsafe_allow_html=True)
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
     st.markdown(f"""<div style='background:linear-gradient(135deg,{C["ink"]},{C["mid"]}); border-radius:12px; padding:36px 48px; color:white; text-align:center; margin-top:8px;'>
-        <div style='font-family:"Libre Baskerville",serif; font-size:22px; margin-bottom:10px;'>Generative AI — a purposeful scaffold, not a crutch.</div>
+        <div style='font-family:"Libre Baskerville",serif; font-size:22px; margin-bottom:10px;'>Generative AI a purposeful support, not a crutch.</div>
         <div style='font-size:13.5px; opacity:0.75; line-height:1.9; max-width:600px; margin:0 auto;'>MSU students demonstrate moderate, purposeful GenAI adoption that positively associates with critical thinking and independent learning, while dependency remains significantly below harmful levels.</div>
         <div style='font-size:12px; opacity:0.4; margin-top:20px;'>MSc Statistics · Team 4 · MSU Baroda · 2025-26<br>Vaishali Sharma · Ashish Vaghela · Raiwant Kumar · Rohan Shukla</div>
     </div>""", unsafe_allow_html=True)
