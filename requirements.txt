@@ -8,6 +8,4 @@ seaborn
 python-docx
 openpyxl
 statsmodels
-DecisionTreeClassifier
-sklearn
-tree
+scikit-learn
