@@ -800,7 +800,7 @@ elif active == "pilot":
         and provided the empirical <em>p</em> for Cochran's formula.
         </div>""", unsafe_allow_html=True)
 
-        st.markdown("<br>**Sample Size Calculation — Cochran's Formula:**")
+        st.markdown("**Sample Size Calculation — Cochran's Formula:**")
         st.latex(r"n = \frac{z_{\alpha/2}^2 \cdot p \cdot q}{E^2} = \frac{(1.96)^2 \times 0.827 \times 0.173}{(0.05)^2} \approx \mathbf{221}")
         notation("z<sub>α/2</sub> = critical value at 95% confidence (1.96) · p = pilot proportion (0.827) · q = 1 − p (0.173) · E = margin of error (0.05) · n = required sample size")
 
@@ -1686,7 +1686,7 @@ elif active == "conclusion":
         st.markdown(f"""<div style='background:{C["surface"]}; border:1px solid {C["border"]}; border-top:3px solid {C["teal"]}; border-radius:8px; padding:20px 22px;'>
         <div style='font-weight:600; color:{C["ink"]}; font-size:15px; margin-bottom:12px;'>For Students</div>
         <ul style='font-size:14px; line-height:2.2; color:{C["slate"]}; padding-left:18px; margin:0;'>
-            <li>Use AI as a learning scaffold — attempt independently first</li>
+            <li>Use AI as a support for learning, attempt independently first</li>
             <li>Develop AI literacy: evaluate, verify, and question AI outputs</li>
             <li>Do not submit unedited AI-generated content</li>
             <li>Use AI for topic exploration and concept clarification</li>
@@ -1708,7 +1708,7 @@ elif active == "conclusion":
         st.markdown(f"<div style='font-size:14px; color:{C['slate']}; padding:8px 0 8px 16px; border-left:2px solid {C['border']}; margin-bottom:8px;'><strong style='color:{C['navy']};'>{lim}</strong> — {desc}</div>", unsafe_allow_html=True)
 
     st.markdown(f"""<div style='background:linear-gradient(135deg,{C["ink"]},{C["mid"]}); border-radius:12px; padding:36px 48px; color:white; text-align:center; margin-top:8px;'>
-        <div style='font-family:"Libre Baskerville",serif; font-size:22px; margin-bottom:10px;'>Generative AI — a purposeful scaffold, not a crutch.</div>
+        <div style='font-family:"Libre Baskerville",serif; font-size:22px; margin-bottom:10px;'>Generative AI: a purposeful tool, not a crutch.</div>
         <div style='font-size:12px; opacity:0.4; margin-top:20px;'>MSc Statistics · Team 4 · MSU Baroda · 2025-26</div>
     </div>""", unsafe_allow_html=True)
 
