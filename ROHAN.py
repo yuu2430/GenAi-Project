@@ -891,7 +891,7 @@ elif active == "questionnaire":
     page_header(
         "Data Collection",
         "Questionnaire Design",
-        "Structured self-administered questionnaire delivered via Google Forms — 23 questions across 6 thematic sections."
+        "Structured self-administered questionnaire delivered via Google Forms — 23 questions across 6 sections."
     )
 
     sections = [
