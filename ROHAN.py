@@ -1254,11 +1254,6 @@ elif active == "wilcoxon":
     st.dataframe(snippet_cgpa, use_container_width=True)
     st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>Group definitions — Low: rarely use AI · Moderate: occasionally to frequently · High: very frequently / always. CGPA from the previous semester (scale 0–10).</div>", unsafe_allow_html=True)
 
-    # Summary stats table
-    cgpa_sum = pd.DataFrame({"AI Usage Group":["Low","Moderate","High"],"n":[20,141,60],"Mean CGPA":[7.495,6.856,6.798],"Median CGPA":[7.115,6.900,6.900],"Std. Dev.":[1.570,0.904,0.993]})
-    st.markdown("**Group Summary:**")
-    st.dataframe(cgpa_sum.set_index("AI Usage Group"), use_container_width=True)
-
     step("Step 2 — Normality Check (Shapiro-Wilk, Per Group)")
     hyp_block("CGPA within each AI usage group follows a normal distribution","At least one group is NOT normally distributed","Shapiro-Wilk Test")
     st.latex(r"W = \frac{\left(\sum_{i=1}^n a_i x_{(i)}\right)^2}{\sum_{i=1}^n (x_i - \bar{x})^2}")
