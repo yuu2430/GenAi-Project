@@ -9,3 +9,5 @@ python-docx
 openpyxl
 statsmodels
 DecisionTreeClassifier
+sklearn.tree
+sklearn
