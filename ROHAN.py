@@ -1204,7 +1204,7 @@ elif active == "anova":
         st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:14px;'>p-values are Bonferroni-corrected. Significant pairs: p < 0.05.</div>", unsafe_allow_html=True)
 
         step("Significant Pairwise Differences")
-        c1,c2,c3,c4 = st.columns(1)
+        c1,c2,c3,c4 = st.columns(4)
         with c1:
             result_pass("<b>Arts vs Other</b> — p = 0.0.0027 (Significant difference)")
         with c2:
@@ -1270,7 +1270,7 @@ elif active == "wilcoxon":
     notation("H = Kruskal-Wallis statistic · N = total observations (221) · k = number of groups (3) · nⱼ = size of group j (20, 141, 60) · Rⱼ = sum of ranks for group j · Under H₀: H ~ χ²(k−1) = χ²(2)")
     c1,c2,c3 = st.columns(3)
     c1.metric("H Statistic","2.6965"); c2.metric("p-value","0.2597"); c3.metric("Decision","Fail to Reject H₀")
-    result_info("<b>Fail to Reject H₀</b> — p = 0.2597. No significant difference in CGPA across Low, Moderate, and High AI usage groups. AI usage level does not significantly predict academic performance.")
+    result_info("<b>Fail to Reject H₀</b> — p = 0.2597. No significant difference in CGPA across Low, Moderate, and High AI usage groups.")
 
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
     st.markdown("**CGPA Distribution by AI Usage Group**")
@@ -1306,12 +1306,7 @@ elif active == "kruskal":
     })
     st.dataframe(snippet_ct, use_container_width=True)
 
-    # Summary stats
-    gdf = pd.DataFrame({"AI Usage Group":["Low","Moderate","High"],"n":[20,141,60],"Mean CT Score":[2.025,3.063,3.735],"Median CT Score":[2.000,3.125,3.688]})
-    st.markdown("**Group Summary:**")
-    st.dataframe(gdf.set_index("AI Usage Group"), use_container_width=True)
-    st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:6px;'>Critical Thinking Score: composite of 8 Likert items (scale 1–5). A clear increasing pattern is visible in the medians: Low < Moderate < High.</div>", unsafe_allow_html=True)
-
+    
     fig,ax = plt.subplots(figsize=(9,4.2))
     ax.boxplot(
         [LOW_CT, MOD_CT, HIGH_CT],
@@ -1356,7 +1351,7 @@ elif active == "kruskal":
     notation("Z = standardised JT statistic · μⱼ = expected value of J under H₀ · σⱼ = standard deviation of J under H₀ · N = total sample (221) · nᵢ = group sizes (20, 141, 60)")
     c1,c2,c3,c4 = st.columns(4)
     c1.metric("J Statistic","9,532.0"); c2.metric("Z Value","7.0705"); c3.metric("p-value","< 0.0001"); c4.metric("Decision","Reject H₀ ✓")
-    result_pass("<b>Reject H₀</b> — Z = 7.07, p < 0.0001. Highly significant ordered trend confirmed: Low (Mdn=2.00) < Moderate (Mdn=3.13) < High (Mdn=3.69). Higher AI usage associates with higher critical thinking scores.")
+    result_pass("<b>Reject H₀</b> —  p < 0.0001. Highly significant ordered trend confirmed: Low < Moderate < High . Higher AI usage associates with higher critical thinking scores.")
 
 
 # ══════════════════════════════════════════════════════════════
@@ -1374,8 +1369,7 @@ elif active == "correlation":
         step("Step 1 — Data Snippet")
         snip_c = pd.DataFrame({"Respondent":["R1","R2","R3","R4","R5"],"Creativity Score":[3.636,3.455,3.545,3.636,4.636]})
         st.dataframe(snip_c, use_container_width=True)
-        st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:6px;'>n = 221, Mean = 2.898, Median = 3.000, SD = 0.892. Creativity Score = mean of 11 K-DOCS items (scale 1–5). Score of 3.0 = neutral impact.</div>", unsafe_allow_html=True)
-
+        
         step("Step 2 — Normality Check")
         hyp_block("The Creativity Score follows a normal distribution","The Creativity Score does NOT follow a normal distribution","Shapiro-Wilk Test")
         st.latex(r"W = \frac{\left(\sum_{i=1}^n a_i x_{(i)}\right)^2}{\sum_{i=1}^n (x_i - \bar{x})^2}")
@@ -1436,7 +1430,7 @@ elif active == "correlation":
         assumption_decision("Normality violated → <strong>Wilcoxon Signed-Rank Test</strong> (non-parametric) is used.")
 
         step("Step 4 — Final Test: Wilcoxon Signed-Rank Test (one-sided, greater)")
-        hyp_block("Median Ind_learning Score = 3.0 (neutral)","Median Ind_learning Score > 3.0 — AI promotes independent learning","Wilcoxon Signed-Rank Test")
+        hyp_block("Median Ind_learning Score = 3.0 (neutral)","Median Ind_learning Score > 3.0 — AI supports independent learning","Wilcoxon Signed-Rank Test")
         st.latex(r"W = \sum \left[ \text{rank}(|d_i|) \times \text{sign}(d_i) \right], \quad d_i = x_i - 3.0")
         notation("W = Wilcoxon signed-rank statistic · dᵢ = Ind_learning scoreᵢ − 3.0 · rank(|dᵢ|) = rank of absolute deviation from neutral · sign(dᵢ) = direction of deviation")
         c1,c2,c3 = st.columns(3)
@@ -1447,7 +1441,7 @@ elif active == "correlation":
     st.markdown("### Comparative Summary — Creativity vs Independent Learning")
     comp_df = pd.DataFrame({"Construct":["Creativity Score","Ind_learning Score"],"Median":[3.000,3.333],"W Statistic":["9,509.0","13,589.5"],"p-value":["0.9107","7.23 × 10⁻⁷"],"Conclusion":["Fail to Reject H₀ — No enhancement","Reject H₀ — AI promotes learning ✓"]})
     st.dataframe(comp_df.set_index("Construct"), use_container_width=True)
-    result_info("AI does <b>not</b> enhance creativity (neutral), but <b>significantly promotes</b> independent learning. The educational impact of AI is construct-specific.")
+    result_info("AI does <b>not</b> enhance creativity (neutral), but <b>significantly supports</b> independent learning.")
 
 
 # ══════════════════════════════════════════════════════════════
@@ -1496,8 +1490,8 @@ elif active == "ml":
     
 
     result_pass("""<b>Key Findings:</b><br><br>
-    • Critical Thinking is the strongest splitting feature at the root node<br>
-    • AI Dependency and Creativity appear at deeper splits<br>
+    • AI Dependency is the strongest splitting feature at the root node<br>
+    • Critical Thinking and AI usage appear at deeper splits<br>
     • KNN (71.1%) outperforms Decision Tree (64.4%) — pattern similarity matters more than rule-based separation<br>
     • Academic performance can be reasonably predicted from AI-related cognitive features""")
 
@@ -1514,7 +1508,7 @@ elif active == "conclusion":
     </div>""", unsafe_allow_html=True)
     k1,k2,k3,k4,k5,k6 = st.columns(6)
     k1.metric("Students Surveyed","221"); k2.metric("Faculties","13"); k3.metric("Research Objectives","6")
-    k4.metric("AI Tools Benchmarked","5"); k5.metric("JAM Questions / Tool","25"); k6.metric("KNN Model Accuracy","71.1%")
+    k4.metric("AI Tools Benchmarked","5"); k5.metric("JAM Questions","25"); k6.metric("KNN Model Accuracy","71.1%")
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
     st.markdown("### Findings by Research Objective")
     obj_data = [
