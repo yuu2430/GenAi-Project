@@ -1285,7 +1285,7 @@ elif active == "correlation":
 
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
     st.markdown("### Comparative Summary — Creativity vs Independent Learning")
-    comp_df = pd.DataFrame({"Construct":["Creativity Score","Independent Learning Score"],"Median":[3.000,3.333],"W Statistic":["9,509.0","13,589.5"],"p-value":["0.9107","7.23 × 10⁻⁷"],"Conclusion":["Fail to Reject H₀ — No enhancement","Reject H₀ — AI promotes learning ✓"]})
+    comp_df = pd.DataFrame({"Construct":["Creativity Score","Independent Learning Score"],"Median":[3.000,3.333],"W Statistic":["9,509.0","13,589.5"],"p-value":["0.9107","7.23 × 10⁻⁷"],"Conclusion":["Fail to Reject H₀ — No enhancement","Reject H₀ — AI supports ind_learning "]})
     st.dataframe(comp_df.set_index("Construct"), use_container_width=True)
     result_info("AI does <b>not</b> significantly enhance creativity (p = 0.9107; median = 3.0) — creative academic skills remain a domain of human cognitive agency. However, AI <b>significantly promotes independent learning</b> (p = 7.23 × 10⁻⁷; median = 3.333) — functioning as an effective scaffold for self-directed inquiry beyond the classroom. AI's educational impact is construct-specific: it helps in some ways but not others.")
 
