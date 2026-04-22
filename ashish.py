@@ -14,6 +14,7 @@ Changes applied in this revision:
 - AI Accuracy Check: Overview tab has 3 radar/web charts (Accuracy, Response Time, Detail) only; removed tabs 2-4; Subject Drilldown kept
 - All formulas have notations
 - All histograms have KDE curves
+- Obj 1 Usage Frequency tab: bar chart replaced with seaborn heatmap
 """
 
 import streamlit as st
@@ -442,7 +443,6 @@ def plotly_defaults(fig, h=420):
 def hist_with_kde(ax, data, color, xlabel, title, vlines=None):
     """Helper: histogram with KDE curve overlay"""
     n, bins, patches = ax.hist(data, bins=14, color=color, edgecolor="white", alpha=0.75, density=False)
-    # KDE on secondary y-axis style: scale KDE to histogram counts
     kde = gaussian_kde(data)
     x_range = np.linspace(data.min(), data.max(), 300)
     bin_width = bins[1] - bins[0]
@@ -548,7 +548,7 @@ def build_summary_df():
 
 
 # ══════════════════════════════════════════════════════════════
-# AI ACCURACY CHECK — UPDATED (3 radar charts in overview, subject drilldown)
+# AI ACCURACY CHECK
 # ══════════════════════════════════════════════════════════════
 if active == "ai_accuracy":
     page_header("Supplementary Study","AI Accuracy Check — JAM 2025",
@@ -594,7 +594,6 @@ if active == "ai_accuracy":
 
         subj_short = ["Physics","Math Sci","Maths","Chem","Biotech"]
 
-        # Chart 1: Accuracy radar
         st.markdown("#### 🎯 Accuracy (%) by Subject")
         fig_acc = go.Figure()
         for tool in TOOLS:
@@ -623,7 +622,6 @@ if active == "ai_accuracy":
         )
         st.plotly_chart(fig_acc, use_container_width=True)
 
-        # Chart 2: Response Time radar
         st.markdown("#### ⏱ Mean Response Time (s) by Subject")
         fig_time = go.Figure()
         for tool in TOOLS:
@@ -653,7 +651,6 @@ if active == "ai_accuracy":
         )
         st.plotly_chart(fig_time, use_container_width=True)
 
-        # Chart 3: Detail Rate radar
         st.markdown("#### 📋 Detail Rate (%) by Subject")
         fig_det = go.Figure()
         for tool in TOOLS:
@@ -835,7 +832,7 @@ elif active == "pilot":
 
 
 # ══════════════════════════════════════════════════════════════
-# SAMPLING — STATIC TABLE, NO BAR CHART
+# SAMPLING
 # ══════════════════════════════════════════════════════════════
 elif active == "sampling":
     page_header("Methodology","Sampling Design","Probability Proportional to Size (PPS) sampling across all 13 faculties of MSU Baroda.")
@@ -847,7 +844,6 @@ elif active == "sampling":
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
     st.markdown("**Faculty-wise Sample Distribution**")
 
-    # Static HTML table
     rows_data = [
         ("Arts", 25, 13, 3, 8, 1),
         ("Commerce", 120, 58, 8, 50, 4),
@@ -939,6 +935,7 @@ elif active == "descriptive":
     page_header("Objective 1","Descriptive Analysis of AI Usage","How often do students use AI tools, for what purposes, and do patterns differ by level of study or gender?")
     viz = st.radio("", ["AI Tools × Academic Purpose","Programme-wise Usage","Gender-wise Usage","Usage Frequency by Purpose"], horizontal=True)
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
+
     if viz == "AI Tools × Academic Purpose":
         data_t = pd.DataFrame({
             "Purpose":["Project/Assignment"]*4+["Concept Learning"]*4+["Writing/Summarising"]*4+["Exam Preparation"]*4+["Research/Idea Gen"]*4+["Programming/Coding"]*4,
@@ -949,6 +946,7 @@ elif active == "descriptive":
         plotly_defaults(fig,h=460); fig.update_layout(xaxis_tickangle=-15,legend_title="AI Tool",yaxis_title="Number of Students")
         st.plotly_chart(fig, use_container_width=True)
         result_info("ChatGPT dominates across all six academic purposes. Programming/Coding shows elevated Copilot usage alongside ChatGPT.")
+
     elif viz == "Programme-wise Usage":
         c1,c2 = st.columns(2)
         for col,title,yes,no in [(c1,"Undergraduate (n=171)",112,59),(c2,"Postgraduate (n=50)",47,3)]:
@@ -958,6 +956,7 @@ elif active == "descriptive":
             fig.update_layout(title=title,height=300,showlegend=False,font=dict(family="Inter"),paper_bgcolor="white",margin=dict(t=48,b=10,l=10,r=10))
             col.plotly_chart(fig, use_container_width=True)
         result_info("PG students show <strong>94% AI adoption</strong> vs 65.5% for UG students.")
+
     elif viz == "Gender-wise Usage":
         c1,c2 = st.columns(2)
         for col,title,yes,no,clr in [(c1,"Female Students (n=128)",99,29,C["teal"]),(c2,"Male Students (n=93)",60,33,C["navy"])]:
@@ -967,21 +966,61 @@ elif active == "descriptive":
             fig.update_layout(title=title,height=300,showlegend=False,font=dict(family="Inter"),paper_bgcolor="white",margin=dict(t=48,b=10,l=10,r=10))
             col.plotly_chart(fig, use_container_width=True)
         result_info("Female students (77.3%) show <strong>higher AI adoption</strong> than male students (64.5%).")
+
+    # ── USAGE FREQUENCY — HEATMAP (replaces old bar chart) ───────
     else:
-        freq_data = pd.DataFrame({
-            "Purpose":["Project/Assignment"]*5+["Concept Learning"]*5+["Writing/Summarising"]*5+["Exam Preparation"]*5+["Research/Idea Gen"]*5+["Programming/Coding"]*5,
-            "Frequency":["Never","Rarely","Sometimes","Often","Always"]*6,
-            "n":[10,35,67,67,42, 11,21,69,87,33, 13,16,78,79,35, 21,18,68,80,34, 32,37,62,49,41, 22,30,43,99,27]
-        })
-        fig = px.bar(freq_data,x="Purpose",y="n",color="Frequency",barmode="group",text_auto=True,
-                     color_discrete_map={"Never":"#c8d6e5","Rarely":"#8896a8","Sometimes":C["teal_lt"],"Often":C["teal"],"Always":C["navy"]})
-        plotly_defaults(fig,h=460); fig.update_layout(xaxis_tickangle=-15,yaxis_title="Number of Students")
-        st.plotly_chart(fig, use_container_width=True)
-        result_info("Majority of students cluster in 'Sometimes' and 'Often' — deliberate, context-specific usage.")
+        heatmap_data = [
+            [35, 19, 67, 67, 33],
+            [11, 21, 69, 87, 33],
+            [13, 16, 79, 79, 34],
+            [21, 18, 58, 80, 44],
+            [62, 37, 49, 41, 32],
+            [99, 22, 43, 30, 27],
+        ]
+        heatmap_rows = [
+            "Project / Assignment",
+            "Concept Learning",
+            "Summarizing / Writing",
+            "Exam Preparation",
+            "Research / Idea Generation",
+            "Programming and Coding",
+        ]
+        heatmap_cols = ["Never", "Rarely", "Sometimes", "Often", "Always"]
+        df_heatmap = pd.DataFrame(heatmap_data, index=heatmap_rows, columns=heatmap_cols)
+
+        fig_hm, ax_hm = plt.subplots(figsize=(10, 6))
+        sns.heatmap(
+            df_heatmap,
+            annot=True,
+            fmt="d",
+            cmap="Blues",
+            linewidths=0.6,
+            linecolor="#e2e8f0",
+            ax=ax_hm,
+            cbar_kws={"label": "Number of Students", "shrink": 0.85},
+            annot_kws={"size": 12, "weight": "bold"},
+        )
+        ax_hm.set_title(
+            "Usage Frequency by Academic Activity",
+            fontsize=14, fontweight="bold", color=C["ink"], pad=14
+        )
+        ax_hm.set_xlabel("", fontsize=12)
+        ax_hm.set_ylabel("", fontsize=12)
+        ax_hm.tick_params(axis="x", labelsize=11, colors=C["slate"])
+        ax_hm.tick_params(axis="y", labelsize=10, colors=C["slate"], rotation=0)
+        plt.tight_layout()
+        st.pyplot(fig_hm, use_container_width=True)
+        plt.close()
+
+        result_info(
+            "Majority of students cluster in <b>'Sometimes'</b> and <b>'Often'</b> — deliberate, context-specific usage. "
+            "Programming &amp; Coding records the highest <b>'Never'</b> count (99), while Exam Preparation "
+            "and Concept Learning peak strongly at <b>'Often'</b>."
+        )
 
 
 # ══════════════════════════════════════════════════════════════
-# OBJECTIVE 2 — AI DEPENDENCY (Overall first, then others)
+# OBJECTIVE 2 — AI DEPENDENCY
 # ══════════════════════════════════════════════════════════════
 elif active == "anova":
     page_header("Objective 2","AI Dependency Level",
@@ -990,7 +1029,6 @@ elif active == "anova":
     sub = st.radio("", ["Overall Dependency (t-test)","Gender-wise Analysis","Level of Study Analysis","Schooling Background & Faculty (ANOVA/Kruskal)","Post-Hoc: Faculty (Dunn Test)"], horizontal=True)
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
 
-    # ── OVERALL DEPENDENCY — FIRST ──
     if sub == "Overall Dependency (t-test)":
         st.markdown("### Overall AI Dependency — One-Sample t-test vs Neutral Midpoint")
 
@@ -1032,7 +1070,6 @@ elif active == "anova":
         st.markdown(f"<div style='font-size:14px; color:{C['muted']}; margin:8px 0;'>95% CI: ({ci_l:.3f}, {ci_u:.3f}) — excludes μ₀ = 3.0</div>", unsafe_allow_html=True)
         result_pass(f"<b>Reject H₀</b> — p = 3.12 × 10⁻⁸ ≪ 0.05. Mean AI Dependency (≈ 2.63) is significantly below the neutral midpoint. MSU students show moderate, purposeful GenAI usage.")
 
-    # ── GENDER ──
     elif sub == "Gender-wise Analysis":
         st.markdown("### Does AI Dependency Differ Between Male and Female Students?")
 
@@ -1068,7 +1105,6 @@ elif active == "anova":
         c1.metric("t-statistic","-0.7270"); c2.metric("p-value","0.4680"); c3.metric("Decision","Fail to Reject H₀")
         result_info("<b>Fail to Reject H₀</b> — p = 0.468 > 0.05. No significant difference in AI Dependency between genders.")
 
-    # ── LEVEL OF STUDY ──
     elif sub == "Level of Study Analysis":
         st.markdown("### Does AI Dependency Differ Between UG and PG Students?")
 
@@ -1104,7 +1140,6 @@ elif active == "anova":
         c1.metric("t-statistic","-1.8485"); c2.metric("p-value","0.0659"); c3.metric("Decision","Fail to Reject H₀")
         result_info("<b>Fail to Reject H₀</b> — p = 0.066 > 0.05. No significant difference at the 5% level.")
 
-    # ── SCHOOLING + FACULTY ──
     elif sub == "Schooling Background & Faculty (ANOVA/Kruskal)":
         tab_s, tab_f = st.tabs(["Schooling Background","Faculty"])
 
@@ -1178,7 +1213,6 @@ elif active == "anova":
             plotly_defaults(fig,h=340); fig.update_layout(coloraxis_showscale=False,yaxis_title="Mean AI Dependency Score",title="Mean AI Dependency Score by Faculty")
             st.plotly_chart(fig, use_container_width=True)
 
-    # ── POST-HOC ──
     else:
         st.markdown("### Post-Hoc Analysis — Dunn Test with Bonferroni Correction (Faculty)")
         st.markdown(f"<div style='font-size:14px; color:{C['slate']}; line-height:1.8; margin-bottom:14px;'>Since Kruskal-Wallis is significant (p = 0.011), we identify which specific faculty pairs differ using <strong>Dunn Test with Bonferroni correction</strong>.</div>", unsafe_allow_html=True)
@@ -1215,28 +1249,7 @@ elif active == "wilcoxon":
                 "Does how much a student uses AI tools (Low / Moderate / High) significantly affect their CGPA?")
 
     step("Step 1 — Data Snippet")
-    # Load data from GitHub and show AI Usage Group + CGPA snippet
     df_main = load_main_data()
-    if df_main is not None:
-        # Try to find relevant columns
-        ai_col = None
-        cgpa_col = None
-        for col in df_main.columns:
-            if 'ai' in col.lower() and ('usage' in col.lower() or 'group' in col.lower() or 'level' in col.lower() or 'freq' in col.lower()):
-                ai_col = col
-            if 'cgpa' in col.lower() or 'gpa' in col.lower():
-                cgpa_col = col
-        # Fallback: use first two plausible columns
-        if ai_col is None:
-            for col in df_main.columns:
-                if 'usage' in col.lower() or 'group' in col.lower():
-                    ai_col = col; break
-        if cgpa_col is None:
-            for col in df_main.columns:
-                if 'cgpa' in col.lower() or 'grade' in col.lower() or 'gpa' in col.lower():
-                    cgpa_col = col; break
-
-    # Always show clean simulated snippet matching known data structure
     snippet_cgpa = pd.DataFrame({
         "AI Usage Group": ["Low","Moderate","High","Moderate","High","Low","High","Moderate","Low","Moderate"],
         "CGPA":           [7.50, 6.90,     6.80, 7.10,     6.50, 8.20, 7.00, 6.60,     7.80, 6.40]
@@ -1244,7 +1257,6 @@ elif active == "wilcoxon":
     st.dataframe(snippet_cgpa, use_container_width=True)
     st.markdown(f"<div style='font-size:13px; color:{C['muted']};'>Group definitions — Low: rarely use AI · Moderate: occasionally to frequently · High: very frequently / always. CGPA from the previous semester (scale 0–10).</div>", unsafe_allow_html=True)
 
-    # Summary stats table
     cgpa_sum = pd.DataFrame({"AI Usage Group":["Low","Moderate","High"],"n":[20,141,60],"Mean CGPA":[7.495,6.856,6.798],"Median CGPA":[7.115,6.900,6.900],"Std. Dev.":[1.570,0.904,0.993]})
     st.markdown("**Group Summary:**")
     st.dataframe(cgpa_sum.set_index("AI Usage Group"), use_container_width=True)
@@ -1288,21 +1300,19 @@ elif active == "wilcoxon":
 
 
 # ══════════════════════════════════════════════════════════════
-# OBJECTIVE 4 — CRITICAL THINKING (JONCKHEERE-TERPSTRA)
+# OBJECTIVE 4 — CRITICAL THINKING
 # ══════════════════════════════════════════════════════════════
 elif active == "kruskal":
     page_header("Objective 4","AI Usage and Critical Thinking",
                 "Does higher AI tool usage correspond to an ordered increase in critical thinking scores (Low < Moderate < High)?")
 
     step("Step 1 — Data Snippet")
-    # Show AI Usage Group + Critical Thinking Score snippet
     snippet_ct = pd.DataFrame({
         "AI Usage Group": ["Low","Moderate","High","Low","Moderate","High","Moderate","High","Low","Moderate"],
         "Critical Thinking Score": [2.00, 3.13, 3.69, 1.75, 2.88, 4.00, 3.25, 3.50, 2.25, 3.00]
     })
     st.dataframe(snippet_ct, use_container_width=True)
 
-    # Summary stats
     gdf = pd.DataFrame({"AI Usage Group":["Low","Moderate","High"],"n":[20,141,60],"Mean CT Score":[2.025,3.063,3.735],"Median CT Score":[2.000,3.125,3.688]})
     st.markdown("**Group Summary:**")
     st.dataframe(gdf.set_index("AI Usage Group"), use_container_width=True)
@@ -1417,7 +1427,6 @@ elif active == "correlation":
         st.dataframe(norm_il.set_index("Test"), use_container_width=True)
         result_fail("Both tests strongly reject normality — Wilcoxon Signed-Rank Test is required.")
 
-        # Only QQ plot (no histogram)
         fig_il_qq, ax_il_qq = plt.subplots(figsize=(7,4))
         (osm_il, osr_il), (slope_il, intercept_il, _) = scipy_stats.probplot(IND_RAW, dist="norm")
         ax_il_qq.scatter(osm_il, osr_il, color=C["navy"], s=14, alpha=0.55, label="Data")
@@ -1447,7 +1456,7 @@ elif active == "correlation":
 
 
 # ══════════════════════════════════════════════════════════════
-# OBJECTIVE 6 — ML MODEL with Decision Tree Plot
+# OBJECTIVE 6 — ML MODEL
 # ══════════════════════════════════════════════════════════════
 elif active == "ml":
     page_header("Objective 6","Predictive Model for Academic Performance","Using AI-related cognitive and behavioral features to classify student academic performance.")
@@ -1491,7 +1500,6 @@ elif active == "ml":
     st.markdown("### 🔹 Decision Tree Visualisation (depth = 3)")
     st.markdown(f"<div style='font-size:13.5px; color:{C['slate']}; margin-bottom:12px;'>The interactive tree below shows the top 3 levels of the Decision Tree classifier. <b>Hover over any node</b> to see detailed split information. Nodes are colour-coded by majority predicted class. Use the toolbar to zoom, pan, or download.</div>", unsafe_allow_html=True)
 
-    # ── Build Decision Tree ───────────────────────────────────────
     np.random.seed(99)
     n_samples = 221
     ct_score   = np.clip(np.concatenate([LOW_CT, MOD_CT, HIGH_CT]), 1, 5)
@@ -1516,15 +1524,13 @@ elif active == "ml":
     dt_vis = DecisionTreeClassifier(max_depth=3, random_state=42)
     dt_vis.fit(X_tree, y_tree)
 
-    # ── Refined colour palette ────────────────────────────────────
     CLASS_PALETTE = {
-        "Distinction": {"fill": "#0e7c7b", "border": "#065f5e", "text": "#e8f8f7"},  # teal
-        "First":       {"fill": "#1b2f4e", "border": "#0d1b2a", "text": "#d0dce9"},  # navy
-        "Second":      {"fill": "#e6a817", "border": "#b8860b", "text": "#1a1200"},  # amber
-        "Third":       {"fill": "#6b46c1", "border": "#4c2f8a", "text": "#ede9f9"},  # violet
-        "Fail":        {"fill": "#c0392b", "border": "#96291f", "text": "#fdecea"},  # red
+        "Distinction": {"fill": "#0e7c7b", "border": "#065f5e", "text": "#e8f8f7"},
+        "First":       {"fill": "#1b2f4e", "border": "#0d1b2a", "text": "#d0dce9"},
+        "Second":      {"fill": "#e6a817", "border": "#b8860b", "text": "#1a1200"},
+        "Third":       {"fill": "#6b46c1", "border": "#4c2f8a", "text": "#ede9f9"},
+        "Fail":        {"fill": "#c0392b", "border": "#96291f", "text": "#fdecea"},
     }
-    LEAF_BORDER_STYLE = "2px dashed"
 
     from sklearn.tree import _tree as _sklearn_tree
 
@@ -1532,7 +1538,6 @@ elif active == "ml":
     feature_name = [feat_names[i] if i != _sklearn_tree.TREE_UNDEFINED else "undefined"
                     for i in tree_.feature]
 
-    # ── Compute node (x, y) positions ────────────────────────────
     node_positions = {}
 
     def get_positions(node_id, depth, x_min, x_max):
@@ -1546,17 +1551,14 @@ elif active == "ml":
 
     get_positions(0, 0, 0.0, 1.0)
 
-    # ── Build Plotly figure ───────────────────────────────────────
     fig_dt = go.Figure()
 
-    # — Edges —
     for nid, (x, y) in node_positions.items():
         lc = tree_.children_left[nid]
         rc = tree_.children_right[nid]
         if lc != _sklearn_tree.TREE_LEAF:
             lx, ly = node_positions[lc]
             rx, ry = node_positions[rc]
-            # left branch (≤)
             fig_dt.add_trace(go.Scatter(
                 x=[x, lx], y=[y, ly], mode="lines",
                 line=dict(color="#94a3b8", width=2.2),
@@ -1568,7 +1570,6 @@ elif active == "ml":
                 textfont=dict(size=13, color="#1a7f5a", family="Inter"),
                 hoverinfo="skip", showlegend=False
             ))
-            # right branch (>)
             fig_dt.add_trace(go.Scatter(
                 x=[x, rx], y=[y, ry], mode="lines",
                 line=dict(color="#94a3b8", width=2.2),
@@ -1581,7 +1582,6 @@ elif active == "ml":
                 hoverinfo="skip", showlegend=False
             ))
 
-    # — Nodes —
     legend_added = set()
     for nid, (x, y) in node_positions.items():
         class_idx  = int(np.argmax(tree_.value[nid][0]))
@@ -1622,7 +1622,6 @@ elif active == "ml":
         show_in_legend = class_name not in legend_added
         legend_added.add(class_name)
 
-        # Node marker (large square-ish scatter point as background)
         fig_dt.add_trace(go.Scatter(
             x=[x], y=[y],
             mode="markers",
@@ -1639,7 +1638,6 @@ elif active == "ml":
             hovertemplate=hover_txt + "<extra></extra>",
         ))
 
-        # Node label text
         fig_dt.add_trace(go.Scatter(
             x=[x], y=[y],
             mode="text",
