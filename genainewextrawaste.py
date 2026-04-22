@@ -1249,7 +1249,7 @@ elif active == "correlation":
 
         step("Step 1 — Data Snippet")
         snip_il = pd.DataFrame({"Respondent":["R1","R2","R3","R4","R5"],"Independent Learning Score":[4,3.3,4.6,2.6,5]})
-        st.dataframe(snip_il.set_index("Item"), use_container_width=True)
+        st.dataframe(snip_il.set_index("Respondent"), use_container_width=True)
         st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:6px;'>Cronbach's α = 0.830 — Good reliability. n = 221, Mean = 3.353, Median = 3.333, SD = 0.983. The composite Ind_learning score is the mean of 3 Likert items.</div>", unsafe_allow_html=True)
 
         step("Step 2 — Normality Check")
