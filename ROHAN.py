@@ -919,7 +919,8 @@ elif active == "questionnaire":
     st.markdown(f"""
     <div style='background:{C["surface"]}; border:1px solid {C["border"]}; border-left:3px solid {C["amber"]}; border-radius:0 8px 8px 0; padding:14px 20px; margin-bottom:24px;'>
         <div style='font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:{C["amber"]}; margin-bottom:8px;'>References for Questionnaire</div>
-        <div style='font-size:14px; color:{C["slate"]}; line-height:2;'>
+        <div style='font-size:14px; color:{C["slate"]}; line-height:3;'>
+            &nbsp;<a href='https://www.mdpi.com/2075-4698/15/1/6' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>Gerlich (2025) — AI Tools in Society</a><br>
             &nbsp;<a href='https://www.mdpi.com/2075-4698/15/1/6' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>Gerlich (2025) — AI Tools in Society</a><br>
              &nbsp;<a href='https://drive.google.com/file/d/15Za6HQIaUscX2UxEJ9KGEHGxiPG-qQ6E/view' target='_blank' style='color:{C["teal"]}; font-weight:500; text-decoration:none;'>Study Questionnaire — PDF</a>
         </div>
