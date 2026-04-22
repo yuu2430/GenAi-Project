@@ -1191,7 +1191,7 @@ elif active == "kruskal":
     <b>Interpretation:</b> Students who use AI tools more intensively tend to report higher critical thinking skills. 
     This may reflect that frequent AI users develop stronger AI literacy — they learn to evaluate, question, and verify AI outputs — which generalises to broader critical thinking habits. 
     Alternatively, students who are already more analytically inclined may adopt AI tools more strategically and intensively. 
-    Caution: this is a cross-sectional, correlational finding — causality cannot be established without longitudinal data.""")
+    """)
 
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 5 — CREATIVITY + INDEPENDENT LEARNING (UPDATED SEQUENCE)
@@ -1281,13 +1281,13 @@ elif active == "correlation":
         st.latex(r"W = \sum \left[ \text{rank}(|d_i|) \times \text{sign}(d_i) \right], \quad d_i = x_i - 3.0")
         c1,c2,c3 = st.columns(3)
         c1.metric("W Statistic","13,589.5"); c2.metric("p-value","7.23 × 10⁻⁷"); c3.metric("Decision","Reject H₀ ✓")
-        result_pass("<b>Reject H₀</b> — p = 7.23 × 10⁻⁷ ≪ 0.001. The median Independent Learning Score (3.333) is significantly above the neutral benchmark of 3.0. Students at MSU Baroda perceive GenAI tools as meaningfully promoting independent learning beyond classroom instruction — using AI to explore topics beyond the syllabus, seek explanations on their own, and engage in self-directed inquiry. This is consistent with AI functioning as a <b>learning scaffold</b>, not a replacement for intellectual effort.")
+        result_pass("<b>Reject H₀</b> — p = 7.23 × 10⁻⁷ ≪ 0.001. The median Independent Learning Score (3.333) is significantly above the neutral benchmark of 3.0. Students at MSU Baroda perceive GenAI tools as meaningfully promoting independent learning beyond classroom instruction — using AI to explore topics beyond the syllabus, seek explanations on their own, and engage in self-directed inquiry.")
 
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
     st.markdown("### Comparative Summary — Creativity vs Independent Learning")
     comp_df = pd.DataFrame({"Construct":["Creativity Score","Independent Learning Score"],"Median":[3.000,3.333],"W Statistic":["9,509.0","13,589.5"],"p-value":["0.9107","7.23 × 10⁻⁷"],"Conclusion":["Fail to Reject H₀ — No enhancement","Reject H₀ — AI promotes learning ✓"]})
     st.dataframe(comp_df.set_index("Construct"), use_container_width=True)
-    result_info("GenAI tools have a <b>differential and asymmetric effect</b> on students' academic skills. AI does <b>not</b> significantly enhance creativity (p = 0.9107; median = 3.0) — creative academic skills remain a domain of human cognitive agency. However, AI <b>significantly promotes independent learning</b> (p = 7.23 × 10⁻⁷; median = 3.333) — functioning as an effective scaffold for self-directed inquiry beyond the classroom. AI's educational impact is construct-specific: it helps in some ways but not others.")
+    result_info("AI does <b>not</b> significantly enhance creativity (p = 0.9107; median = 3.0) — creative academic skills remain a domain of human cognitive agency. However, AI <b>significantly promotes independent learning</b> (p = 7.23 × 10⁻⁷; median = 3.333) — functioning as an effective scaffold for self-directed inquiry beyond the classroom. AI's educational impact is construct-specific: it helps in some ways but not others.")
 
 
 # ══════════════════════════════════════════════════════════════
