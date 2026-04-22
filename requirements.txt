@@ -8,3 +8,4 @@ seaborn
 python-docx
 openpyxl
 statsmodels
+DecisionTreeClassifier
