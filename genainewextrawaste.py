@@ -1248,7 +1248,7 @@ elif active == "correlation":
         st.markdown("### Does AI Promote Independent Learning Beyond the Classroom?")
 
         step("Step 1 — Data Snippet")
-        snip_il = pd.DataFrame({"Item":["I prefer using AI over books","I prefer AI over subject teacher","AI helps me explore topics independently"],"Scale":["1 (SD) to 5 (SA)"]*3,"Sample Mean":[3.2,3.1,3.7]})
+        snip_il = pd.DataFrame({"Respondent":["R1","R2","R3","R4","R5"],"Independent Learning Score":[4,3.3,4.6,2.6,5]})
         st.dataframe(snip_il.set_index("Item"), use_container_width=True)
         st.markdown(f"<div style='font-size:13px; color:{C['muted']}; margin-bottom:6px;'>Cronbach's α = 0.830 — Good reliability. n = 221, Mean = 3.353, Median = 3.333, SD = 0.983. The composite Ind_learning score is the mean of 3 Likert items.</div>", unsafe_allow_html=True)
 
