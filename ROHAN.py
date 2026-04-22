@@ -1498,8 +1498,6 @@ elif active == "ml":
         col.pyplot(fig); plt.close()
 
     st.markdown("<hr class='rule'>", unsafe_allow_html=True)
-    st.markdown("### 🔹 Decision Tree Visualisation (depth = 3)")
-    st.markdown(f"<div style='font-size:13.5px; color:{C['slate']}; margin-bottom:12px;'>The tree below shows the top 3 levels of the Decision Tree classifier. Splits are based on the most informative AI-related features. Node colors reflect the majority predicted class — matching the dashboard's navy/teal/amber palette.</div>", unsafe_allow_html=True)
 
     
 
