@@ -731,8 +731,8 @@ elif active == "overview":
     Primary data were collected from <strong>221 students</strong> across <strong>13 faculties</strong> of The Maharaja Sayajirao University of Baroda
     using a structured questionnaire. The instrument captures key dimensions: frequency and purpose of AI use, and its impact on independent learning,
     critical thinking, creativity, cognitive offloading, and AI dependency.<br><br>
-    The study employs a progression of statistical techniques — from reliability analysis and descriptive methods through formal hypothesis testing
-    (t-tests, ANOVA, Kruskal-Wallis, Wilcoxon, Jonckheere-Terpstra) — and a machine learning component to evaluate whether AI-related behavioral
+    The study employs a progression of statistical techniques from reliability analysis and descriptive methods through formal hypothesis testing
+    (t-tests, ANOVA, Kruskal-Wallis, Wilcoxon, Jonckheere-Terpstra) and a machine learning component to evaluate whether AI-related behavioral
     and cognitive factors can predict academic performance.
     </div>
     """, unsafe_allow_html=True)
