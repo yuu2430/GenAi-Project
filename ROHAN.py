@@ -749,7 +749,7 @@ elif active == "objectives":
         ("3","AI Usage Level and Learning Performance (CGPA)","To check whether AI usage level (Low, Moderate, High) significantly affects students' learning performance as measured by CGPA.","Shapiro-Wilk · Levene's Test · Kruskal-Wallis H Test"),
         ("4","AI Usage and Critical Thinking","To study how AI tool usage is related to students' critical thinking, using self-reported ratings, and to determine whether there is an ordered trend.","Shapiro-Wilk · Levene's Test · Jonckheere-Terpstra Test (ordered trend)"),
         ("5","Creativity and Independent Learning","To explore how using AI tools influences students' academic skills — specifically creativity and independent learning beyond the classroom.","Normality (Shapiro-Wilk) · Wilcoxon Signed-Rank Test (two sub-objectives) · Cronbach's Alpha"),
-        ("6","Predictive Model for Academic Performance","To create a model that predicts factors leading to positive or negative effects of AI tool usage on students' academic outcomes.","K-Nearest Neighbours (k=5) · Decision Tree (max_depth=7) · 80/20 train-test split"),
+        ("6","Predictive Model for Academic Performance","To create a model that predicts factors leading to positive or negative effects of AI tool usage on students' academic outcomes.","K-Nearest Neighbours · Decision Tree"),
     ]
     for num,title,desc,methods in objs:
         st.markdown(f"""
