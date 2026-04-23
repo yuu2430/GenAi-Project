@@ -163,7 +163,7 @@ c1.metric("H Statistic","2.6965"); c2.metric("p-value","0.2597"); c3.metric("Dec
 st.markdown("<hr class='rule'>", unsafe_allow_html=True)
 st.markdown("**CGPA Distribution by AI Usage Group**")
 @@ -1306,12 +1306,7 @@
-})
+)
 st.dataframe(snippet_ct, use_container_width=True)
 
     # Summary stats
