@@ -979,18 +979,40 @@ elif active == "descriptive":
             fig.update_layout(title=title,height=300,showlegend=False,font=dict(family="Inter"),paper_bgcolor="white",margin=dict(t=48,b=10,l=10,r=10))
             col.plotly_chart(fig, use_container_width=True)
         result_info("Female students (77.3%) show <strong>higher AI adoption</strong> than male students (64.5%).")
-    else:
-        freq_data = pd.DataFrame({
-            "Purpose":["Project/Assignment"]*5+["Concept Learning"]*5+["Writing/Summarising"]*5+["Exam Preparation"]*5+["Research/Idea Gen"]*5+["Programming/Coding"]*5,
-            "Frequency":["Never","Rarely","Sometimes","Often","Always"]*6,
-            "n":[10,35,67,67,42, 11,21,69,87,33, 13,16,78,79,35, 21,18,68,80,34, 32,37,62,49,41, 22,30,43,99,27]
-        })
-        fig = px.bar(freq_data,x="Purpose",y="n",color="Frequency",barmode="group",text_auto=True,
-                     color_discrete_map={"Never":"#c8d6e5","Rarely":"#8896a8","Sometimes":C["teal_lt"],"Often":C["teal"],"Always":C["navy"]})
-        plotly_defaults(fig,h=460); fig.update_layout(xaxis_tickangle=-15,yaxis_title="Number of Students")
-        st.plotly_chart(fig, use_container_width=True)
-        result_info("Majority of students cluster in 'Sometimes' and 'Often' — deliberate, context-specific usage.")
+heatmap_data = [
+            [35, 19, 67, 67, 33],
+            [11, 21, 69, 87, 33],
+            [13, 16, 79, 79, 34],
+            [21, 18, 58, 80, 44],
+            [62, 37, 49, 41, 32],
+            [99, 22, 43, 30, 27]
+        ]
+        heatmap_rows = [
+            "Project / Assignment",
+            "Concept Learning",
+            "Summarizing / Writing",
+            "Exam Preparation",
+            "Research / Idea Generation",
+            "Programming and Coding"
+        ]
+        heatmap_cols = ["Never", "Rarely", "Sometimes", "Often", "Always"]
+        df_hm = pd.DataFrame(heatmap_data, index=heatmap_rows, columns=heatmap_cols)
 
+        fig, ax = plt.subplots(figsize=(10, 8))
+        sns.heatmap(
+            df_hm,
+            annot=True,
+            fmt="d",
+            cmap="Blues",
+            linewidths=0.5,
+            cbar_kws={"label": "Number of Students"},
+            ax=ax
+        )
+        ax.set_title("Usage Frequency by Activity", fontsize=14, pad=14)
+        ax.set_xlabel(""); ax.set_ylabel("")
+        plt.tight_layout()
+        st.pyplot(fig, use_container_width=True)
+        plt.close()
 
 # ══════════════════════════════════════════════════════════════
 # OBJECTIVE 2 — AI DEPENDENCY (Overall first, then others)
