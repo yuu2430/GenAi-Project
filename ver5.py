@@ -1489,7 +1489,7 @@ elif active == "ml":
     st.markdown("### 🔹 Models Used")
     st.markdown(f"""<div style='background:{C["surface"]}; border:1px solid {C["border"]}; border-radius:8px; padding:18px; font-size:14px; line-height:1.8;'>
     <b>K-Nearest Neighbours (KNN)</b> — k = 5<br>
-    <b>Decision Tree Classifier</b> — max_depth = 7 (visualised below at depth = 3)</div>""", unsafe_allow_html=True)
+    <b>Decision Tree Classifier</b> — max_depth = 7 </div>""", unsafe_allow_html=True)
 
     st.markdown("### 🔹 Model Performance")
     c1,c2,c3 = st.columns(3)
